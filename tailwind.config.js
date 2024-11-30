@@ -1,4 +1,3 @@
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -9,8 +8,4 @@ export default {
     extend: {},
   },
   plugins: [],
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> a185592e6bc3c9e7db0e1ddf003de5565e98998c
