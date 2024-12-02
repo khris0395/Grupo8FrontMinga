@@ -1,3 +1,5 @@
-export default function AdminPanel(){
+function AdminPanel(){
 
 }
+
+export default AdminPanel
