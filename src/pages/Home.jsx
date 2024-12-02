@@ -1,13 +1,23 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar/Navbar';
+import { NavLink, Route } from "react-router-dom";
 
 function Home() {
+
+    const routes = [
+
+        { to: "/", text: "Home", unrequireAuth:false },
+        { to: "/editAuthor", text: "Sing In", unrequireAuth:true },
+        { to: "/singUp", text: "Sing Up", unrequireAuth:true },
+        
+      ]
+
     const [currentSlide, setCurrentSlide] = useState(0);
 
     return (
-        <div className="min-h-screen md:w-full bg-[#EBEBEB] overflow-hidden">
+        <div className="md:w-full bg-[#EBEBEB] overflow-hidden">
             {/* Hero Section */}
-            <section className="relative h-[100vh] overflow-hidden">
+            <section className="relative overflow-hidden">
                 {/* Background image */}
                 <div className="absolute inset-0 overflow-hidden">
                     <img
@@ -41,14 +51,14 @@ function Home() {
                             Explore our catalog to live the adventure of your life
                         </span>
                     </p>
-                    <button className="bg-[#4338CA] w-full max-w-[260px] py-3 rounded-full text-white font-medium md:w-auto md:px-8 hover:bg-[#3730A3] transition-colors">
+                    <NavLink to={"/signIn"} className="bg-[#4338CA] w-full max-w-[260px] py-3 rounded-full text-white font-medium md:w-auto md:px-8 hover:bg-[#3730A3] transition-colors">
                         Let's go!
-                    </button>
+                    </NavLink>
                 </div>
             </section>
 
             {/* Carousel Section - Solo visible en desktop */}
-            <section className="hidden md:flex w-full py-16 px-8 bg-[#F4F4F4] justify-center items-center">
+            <section className="hidden md:flex py-16 px-8 bg-[#F4F4F4] justify-center items-center">
                 <div className="w-[1258px] h-[265px] bg-[#4338CA] flex items-center p-6">
                     {/* Botón Izquierdo */}
                     <button
