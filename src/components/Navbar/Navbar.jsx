@@ -8,7 +8,7 @@ function Navbar() {
         <nav className="absolute top-0 left-0 w-full z-20 bg-transparent">
             <div className="w-full">
                 <div className="flex justify-between items-center h-16 px-4">
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+                    <button onClick={() => setIsOpen(!isOpen)} className="text-[#4338CA]">
                         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -22,6 +22,38 @@ function Navbar() {
                         />
                     </Link>
                 </div>
+
+                {isOpen && (
+                    <div className="fixed top-0 left-0 w-full md:w-64 h-full bg-[#4338CA]">
+                        <div className="p-6">
+                            <div className="flex items-center gap-4 mb-8">
+                                <img
+                                    src="https://i.pravatar.cc/150"
+                                    alt="Profile"
+                                    className="w-12 h-12 rounded-full"
+                                />
+                                <p className="text-white flex-1">mail@gmail.com</p>
+                                <button onClick={() => setIsOpen(false)} className="text-white">
+                                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+                                        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div className="flex flex-col gap-6">
+                                <Link to="/" className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                    Home
+                                </Link>
+                                <Link to="/register" className="text-white text-xl px-6">
+                                    Register
+                                </Link>
+                                <Link to="/signin" className="text-white text-xl px-6">
+                                    Log in
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </nav>
     );
