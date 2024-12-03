@@ -62,7 +62,7 @@ function Mangas() {
                     <input
                         type="text"
                         placeholder="Search for manga..."
-                        className="my-6 px-4 py-2 w-3/5 bg-white           rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="my-6 px-4 py-2 w-3/5 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onChange={handleTextChange}
                     />
                 </div>

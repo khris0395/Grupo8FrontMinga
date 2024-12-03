@@ -12,16 +12,15 @@ function Reactions({ mangaId }) {
 
   const handleReaction = (type) => {
     setSelectedReaction(type);
-    // Aquí puedes guardar la reacción en Redux o enviarla al backend
     console.log(`Reacción seleccionada para manga ${mangaId}: ${type}`);
   };
 
   return (
-    <div className="flex gap-4 mt-4">
+    <div className="flex gap-4 mt-4 justify-end">
       {reactions.map((reaction) => (
         <button
           key={reaction.type}
-          className={`px-4 py-2 rounded-md text-white ${
+          className={`p-2 text-white text-2xl rounded-full ${
             selectedReaction === reaction.type ? reaction.bgColor : "bg-gray-300"
           }`}
           onClick={() => handleReaction(reaction.type)}
