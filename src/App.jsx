@@ -15,6 +15,7 @@ import AdminPanel from './pages/AdminPanel'
 import EditCompany from './pages/EditCompany'
 import EditAuthor from './pages/EditAuthor'
 import MangaForm from './pages/MangaForm'
+import Manga from './pages/Manga'
 import ChapterForm from './pages/ChapterForm'
 import AuthorForm from './pages/AuthorForm'
 import CompanyForm from './pages/CompanyForm'
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       {path: '/', element: <Home> </Home>},
       {path: '/home', element: <Home> </Home>},
       {path: '/mangas', element: <Mangas></Mangas>},
+      {path: '/Manga/:id', element: <Manga></Manga>},
       {path: '/manager', element: <Manager></Manager>},
       {path: '/editChapter', element: <EditChapter></EditChapter>},
       {path: '/signUp', element: <SignUp></SignUp>},
