@@ -47,7 +47,7 @@ function Navbar() {
                                 <Link to="/register" className="text-white text-xl px-6">
                                     Register
                                 </Link>
-                                <Link to="/signin" className="text-white text-xl px-6">
+                                <Link to="/SignIn" className="text-white text-xl px-6">
                                     Log in
                                 </Link>
                             </div>

@@ -1,13 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setUser } from '../../store/actions/authActions';
 import Navbar from '../components/Navbar/Navbar';
 import { NavLink, Route } from "react-router-dom";
+import axios from 'axios';
+
+const loginWithToken = async (token) => {
+    try {
+  
+      const response = await axios.get(
+        "http://localhost:8080/api/users/validateToken",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.response;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
 function Home() {
+    
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+        if (token) {
+  
+          localStorage.setItem("token", token);
+    
+          loginWithToken(token).then((user) => {
+            dispatch(setUser({ user, token }));
+          });
+          
+        }
+        navigate("/")
+      }, [dispatch,navigate]);
 
     const routes = [
 
         { to: "/", text: "Home", unrequireAuth:false },
-        { to: "/editAuthor", text: "Sing In", unrequireAuth:true },
+        { to: "/Mangas", text: "Sing In", unrequireAuth:true },
         { to: "/singUp", text: "Sing Up", unrequireAuth:true },
         
       ]
@@ -51,7 +91,7 @@ function Home() {
                             Explore our catalog to live the adventure of your life
                         </span>
                     </p>
-                    <NavLink to={"/signIn"} className="bg-[#4338CA] w-full max-w-[260px] py-3 rounded-full text-white font-medium md:w-auto md:px-8 hover:bg-[#3730A3] transition-colors">
+                    <NavLink to={"/Mangas"} className="bg-[#4338CA] w-full max-w-[260px] py-3 rounded-full text-white font-medium md:w-auto md:px-8 hover:bg-[#3730A3] transition-colors">
                         Let's go!
                     </NavLink>
                 </div>
