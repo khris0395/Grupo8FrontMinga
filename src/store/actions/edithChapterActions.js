@@ -11,6 +11,29 @@ export const fetchChapter = createAsyncThunk(
     }
 );
 
+export const createChapter = createAsyncThunk(
+    "chapters/createChapter",
+    async (chapterData) => {
+        try {
+            console.log('Sending data:', chapterData);
+            const response = await axios.post(
+                'http://localhost:8080/api/chapters/createChapter', // URL corregida
+                chapterData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            console.log('Create Chapter Response:', response.data);
+            return response.data.chapter
+        } catch (error) {
+            console.log('Error details:', error.response?.data);
+            throw error;
+        }
+    }
+);
+
 export const updateChapter = createAsyncThunk(
     "editChapter/updateChapter",
     async (chapter) => {
