@@ -1,7 +1,9 @@
+import EdithAuthor from "../components/EditAuthor/EdithAuthor";
+
 export default function EditAuthor() {
     return (
         <>
-            <h1>EditAuthor</h1>
+            <EdithAuthor />
         </>
     );
 }
