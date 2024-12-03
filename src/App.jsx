@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       {path: '/manager', element: <Manager></Manager>},
       {path: '/editChapter', element: <EditChapter></EditChapter>},
       {path: '/signUp', element: <SignUp></SignUp>},
-      {path: '/signIn', element: <PrivateLogin><SignIn></SignIn></PrivateLogin>},
+      {path: '/signIn', element: <SignIn></SignIn>},
       {path: '/newRole', element: <NewRole></NewRole>},
       {path: '/adminPanel', element: <AdminPanel></AdminPanel>},
       {path: '/editCompany', element: <EditCompany></EditCompany>},

@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import Navbar from '../components/Navbar/Navbar'
-import { createManga } from '../../store/actions/mangaActions'
+import { createManga } from '../store/actions/mangaActions'
 
 const MangaForm = () => {
     const dispatch = useDispatch()
