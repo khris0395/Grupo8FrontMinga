@@ -1,61 +1,72 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import MainLayoud from "./layouts/MainLayout"
-import SecondLayout from "./layouts/SecondLayout";
-import Home from './pages/Home';
-import AdminPanel from "./pages/AdminPanel";
-import AuthorForm from "./pages/AuthorForm";
-import AuthorProfile from "./pages/AuthorProfile";
-import Chapter from "./pages/Chapter"
-import ChapterForm from "./pages/EditAuthor"
-import CompanyForm from "./pages/CompanyForm"
-import CompanyProfile from "./pages/CompanyProfile";
-import EditAuthor from "./pages/EditAuthor"
-import EditChapter from "./pages/EditChapter";
-import EditCompany from "./pages/EditCompany"
-import Favourites from "./pages/Favourites"
-import Manager from "./pages/Manager"
-import MangaForm from "./pages/Favourites"
-import Mangas from "./pages/Mangas"
-import NewRole from "./pages/NewRole"
-import SignIn from "./pages/SignIn"
-import SignUp from "./pages/SignUp"
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import MainLayout from './layouts/MainLayout'
+import PrivateLogin from './components/PrivateLogin'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import Mangas from './pages/Mangas'
+import Manager from './pages/Manager'
+import EdithChapter from './pages/EdithChapter'
+import SignUp from './pages/SignUp'
+import SignIn from './pages/SignIn'
+import NewRole from './pages/NewRole'
+import AdminPanel from './pages/AdminPanel'
+import EditCompany from './pages/EditCompany'
+import EditAuthor from './pages/EditAuthor'
+import MangaForm from './pages/MangaForm'
+import ChapterForm from './pages/ChapterForm'
+import AuthorForm from './pages/AuthorForm'
+import CompanyForm from './pages/CompanyForm'
+import AuthorProfile from './pages/AuthorProfile'
+import CompanyProfile from './pages/CompanyProfile'
+import Chapter from './pages/Chapter'
+import Favourites from './pages/Favourites'
 
 const router = createBrowserRouter([
   {
-    element: <MainLayoud></MainLayoud>,
+    element: <MainLayout> </MainLayout>,
     children: [
-      { path: "/", element: <Home></Home> },
-      { path: "/home", element: <Home></Home> },
-      { path: "/adminPanel", element: <AdminPanel></AdminPanel>},
-      { path: "/authorForm", element: <AuthorForm></AuthorForm>},
-      { path: "/authorProfile", element: <AuthorProfile></AuthorProfile>},
-      { path: "/chapter", element: <Chapter></Chapter>},
-      { path: "/chapterForm", element: <ChapterForm></ChapterForm>},
-      { path: "/companyForm", element: <CompanyForm></CompanyForm>},
-      { path: "/companyProfile", element: <CompanyProfile></CompanyProfile>},
-      { path: "/editAuthor", element: <EditAuthor></EditAuthor>},
-      { path: "/editCompany", element: <EditCompany></EditCompany>},
-      { path: "/editChapter", element: <EditChapter></EditChapter>},
-      { path: "/favourites", element: <Favourites></Favourites>},
-      { path: "/manager", element: <Manager></Manager>},
-      { path: "/mangaForm", element: <MangaForm></MangaForm>},
-      { path: "/mangas", element: <Mangas></Mangas>},
-      { path: "/newRole", element: <NewRole></NewRole>},
-      { path: "/signIn", element: <SignIn></SignIn>},
-      { path: "/signUp", element: <SignUp></SignUp>}
-    ]},{
-    element: <SecondLayout></SecondLayout>,
-    children: []
-    }
+      {path: '/', element: <Home> </Home>},
+      {path: '/Home', element: <Home> </Home>},
+      {path: '/Mangas', element: <Mangas></Mangas>},
+      {path: '/Manager', element: <Manager></Manager>},
+      {path: '/EdithChapter', element: <EdithChapter></EdithChapter>},
+      {path: '/SignUp', element: <SignUp></SignUp>},
+      {path: '/SignIn', element: <PrivateLogin><SignIn></SignIn></PrivateLogin>},
+      {path: '/NewRole', element: <NewRole></NewRole>},
+      {path: '/AdminPanel', element: <AdminPanel></AdminPanel>},
+      {path: '/EditCompany', element: <EditCompany></EditCompany>},
+      {path: '/EditAuthor', element: <EditAuthor></EditAuthor>},
+      {path: '/MangaForm', element: <MangaForm></MangaForm>},
+      {path: '/ChapterForm', element: <ChapterForm></ChapterForm>},
+      {path: '/AuthorForm', element: <AuthorForm></AuthorForm>},
+      {path: '/CompanyForm', element: <CompanyForm></CompanyForm>},
+      {path: '/AuthorProfile', element: <AuthorProfile></AuthorProfile>},
+      {path: '/CompanyProfile', element: <CompanyProfile></CompanyProfile>},
+      {path: '/Chapter', element: <Chapter></Chapter>},
+      {path: '/Favourites', element: <Favourites></Favourites>},
+      {path: '/*', element: <NotFound> </NotFound>},
+    ]
+  }
+])
+
+export default function App() {
+
   
-  ]);
+  // const token = localStorage.getItem("token");
+  // const dispatch = useDispatch();
 
-function App() {
+  // if(token){
+  //   loginWithToken(token).then((user)=>{
+  //     dispatch(setUser({user, token}));
+  //   })
+  // } 
+
+
   return (
-
-    <RouterProvider router={router}></RouterProvider>
-
-  );
+    // 
+    <>
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
-export default App;

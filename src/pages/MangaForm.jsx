@@ -1,5 +1,7 @@
-function MangaForm(){
-
+export default function MangaForm() {
+    return (
+        <>
+            <h1>MangaForm</h1>
+        </>
+    );
 }
-
-export default MangaForm

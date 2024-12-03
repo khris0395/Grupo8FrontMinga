@@ -1,5 +1,7 @@
-function CompanyProfile(){
-
+export default function CompanyProfile() {
+    return (
+        <>
+            <h1>CompanyProfile</h1>
+        </>
+    );
 }
-
-export default CompanyProfile

@@ -1,5 +1,7 @@
-function AuthorProfile(){
-
+export default function AuthorProfile() {
+    return (
+        <>
+            <h1>AuthorProfile</h1>
+        </>
+    );
 }
-
-export default AuthorProfile
