@@ -4,6 +4,7 @@ import authReducer from "./reducer/authReducer.js"
 import { categoryReducer } from './reducer/categoryReducer.js'
 import { EditChapter } from "./reducer/edithChapterReducer.js"
 import { authorReducer } from "./reducer/authorReducer.js"
+import { adminPanelReducer } from "./reducer/adminPanelReducer.js"
 // import { chapterReducer } from "./reducer/chapterRecuer.js"
 
 const store = configureStore({
@@ -12,7 +13,8 @@ const store = configureStore({
     authStore: authReducer,
     categories: categoryReducer,
     editChapter: EditChapter,
-    author: authorReducer
+    author: authorReducer,
+    adminPanel: adminPanelReducer
     //   chapter: chapterReducer
   }
 })
