@@ -3,6 +3,7 @@ import MainLayout from './layouts/MainLayout'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
+import Manga from './pages/Manga'
 import Manager from './pages/Manager'
 import EdithChapter from './pages/EdithChapter'
 import SignUp from './pages/SignUp'
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       {path: '/', element: <Home> </Home>},
       {path: '/Home', element: <Home> </Home>},
       {path: '/Mangas', element: <Mangas></Mangas>},
+      {path: '/Manga/:id', element: <Manga></Manga>},
       {path: '/Manager', element: <Manager></Manager>},
       {path: '/EdithChapter', element: <EdithChapter></EdithChapter>},
       {path: '/SignUp', element: <SignUp></SignUp>},

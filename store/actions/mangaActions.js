@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
     async (search) => {
-        const response = await axios.get(`http://localhost:8080/api/mangas/mangaByTitle${search? '/'+search : ''}`
+        const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle${search? '/'+search : ''}`
         )
 console.log(response);
 console.log(response.data);
@@ -13,3 +13,11 @@ console.log(response.data);
 )
 
 export const Setsearch = createAction('mangas/search')
+
+export const fetchMangaDetails = createAsyncThunk(
+    "mangas/fetchMangaDetails",
+    async (mangaId) => {
+      const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`);
+      return response.data.manga;
+    }
+  );
