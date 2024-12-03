@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMangas, Setsearch } from "../store/actions/mangaActions";
+import { useNavigate } from "react-router-dom";
 
 function Mangas() {
     const dispatch = useDispatch(); // Necesario para despachar la acción
+    const navigate = useNavigate();
+
     const mangas = useSelector((state) => state.mangas.mangas)
     const loading = useSelector((state) => state.mangas.loading)
     const search = useSelector((state) => state.mangas.search)
@@ -20,14 +23,19 @@ function Mangas() {
 
     const handleTextChange = (e) => {
         dispatch(Setsearch(e.target.value));
-        
+
     };
-        console.log(search);
+    console.log(search);
 
     useEffect(() => {
         // Despachar la acción fetchMangas
         dispatch(fetchMangas(search));
     }, [search]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
+
+    const handleRead = (manga) => {
+        navigate(`/Manga/${manga._id}`);
+    };
+
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -95,7 +103,10 @@ function Mangas() {
 
                                     <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
                                     <p className="text-sm text-violet-500">Type</p>
-                                    <button className="mt-3 px-4 py-2 bg-green-200 text-green-800 text-sm font-semibold rounded-full hover:bg-green-300 w-20">
+                                    <button
+                                        className="mt-3 px-4 py-2 bg-green-200 text-green-800 text-sm font-semibold rounded-full hover:bg-green-300 w-20"
+                                        onClick={() => handleRead(manga)}
+                                        >
                                         Read
                                     </button>
                                 </div>
