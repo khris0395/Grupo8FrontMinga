@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMangas, Setsearch } from "../../store/actions/mangaActions";
+import { fetchMangas, Setsearch } from "../store/actions/mangaActions";
 
 function Mangas() {
     const dispatch = useDispatch(); // Necesario para despachar la acción

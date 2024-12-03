@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { get_categories } from "../../store/actions/categoryActions"
 import { useNavigate } from 'react-router-dom';
-import { setUser } from '../../store/actions/authActions';
+import { setUser } from "../store/actions/authActions";
 import Navbar from "../components/Navbar/Navbar"
 import axios from 'axios';
 

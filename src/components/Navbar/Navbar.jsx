@@ -44,10 +44,10 @@ function Navbar() {
                                 <Link to="/" className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                     Home
                                 </Link>
-                                <Link to="/register" className="text-white text-xl px-6">
+                                <Link to="/signUp" className="text-white text-xl px-6">
                                     Register
                                 </Link>
-                                <Link to="/SignIn" className="text-white text-xl px-6">
+                                <Link to="/signIn" className="text-white text-xl px-6">
                                     Log in
                                 </Link>
                             </div>
