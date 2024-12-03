@@ -5,7 +5,7 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
 import Manager from './pages/Manager'
-import EdithChapter from './pages/EdithChapter'
+import EditChapter from './pages/EditChapter'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
 import NewRole from './pages/NewRole'
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       {path: '/Home', element: <Home> </Home>},
       {path: '/Mangas', element: <Mangas></Mangas>},
       {path: '/Manager', element: <Manager></Manager>},
-      {path: '/EdithChapter', element: <EdithChapter></EdithChapter>},
+      {path: '/EditChapter', element: <EditChapter></EditChapter>},
       {path: '/SignUp', element: <SignUp></SignUp>},
       {path: '/SignIn', element: <PrivateLogin><SignIn></SignIn></PrivateLogin>},
       {path: '/NewRole', element: <NewRole></NewRole>},
