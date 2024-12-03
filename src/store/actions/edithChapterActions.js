@@ -17,7 +17,7 @@ export const createChapter = createAsyncThunk(
         try {
             console.log('Sending data:', chapterData);
             const response = await axios.post(
-                'http://localhost:8080/api/chapters/createChapter', // URL corregida
+                'http://localhost:8080/api/chapters/createChapter',
                 chapterData,
                 {
                     headers: {

@@ -12,7 +12,7 @@ const ChapterForm = () => {
 
     const [successMessage, setSuccessMessage] = useState('')
     const [formData, setFormData] = useState({
-        manga_id: "674a4ad09bfc2a1b87eea87d", //para pruebas debe ser el id del manga seleccionado por el usario
+        manga_id: "674a4ad09bfc2a1b87eea87d", // TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
         title: '',
         order: '',
         pages: [],
@@ -47,7 +47,7 @@ const ChapterForm = () => {
             await dispatch(createChapter(formData))
             setSuccessMessage('Chapter successfully created!')
             setFormData({
-                manga_id: "674a4ad09bfc2a1b87eea87d", // para pruebas debe ser el id del manga seleccionado por el autor
+                manga_id: "674a4ad09bfc2a1b87eea87d",// TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
                 title: '',
                 order: '',
                 pages: [],
