@@ -1,4 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../store/actions/authActions'
 import MainLayout from './layouts/MainLayout'
 import PrivateLogin from './components/PrivateLogin'
 import Home from './pages/Home'
@@ -49,17 +51,33 @@ const router = createBrowserRouter([
   }
 ])
 
+const loginWithToken = async (token) => {
+  try {
+
+    const response = await axios.get(
+      "http://localhost:8080/api/users/validateToken",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.response;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
 export default function App() {
 
   
-  // const token = localStorage.getItem("token");
-  // const dispatch = useDispatch();
-
-  // if(token){
-  //   loginWithToken(token).then((user)=>{
-  //     dispatch(setUser({user, token}));
-  //   })
-  // } 
+  const dispatch = useDispatch();
+  let token = localStorage.getItem("token");
+  if (token) {
+    loginWithToken(token).then((user) => {
+      dispatch(setUser({ user, token }));
+    });
+  }
 
 
   return (
