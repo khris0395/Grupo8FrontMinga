@@ -4,21 +4,19 @@ import { useParams } from "react-router-dom";
 import { fetchMangaDetails } from "../store/actions/mangaActions";
 import Reactions from "../components/Reactions";
 import Statistics from "../components/Statistics";
-import Modal from "../components/Modal";
 
 function Manga() {
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    const loading = useSelector((state) => state.mangas.loading)
-    const error = useSelector((state) => state.mangas.error)
-    const manga = useSelector((state) => state.mangas.selectedManga); // Seleccionar manga actual desde Redux
+    const loading = useSelector((state) => state.mangas.loading);
+    const error = useSelector((state) => state.mangas.error);
+    const manga = useSelector((state) => state.mangas.selectedManga);
+    // const chapter = useSelector((state) => state.chapter.fetchChapter);
 
-    const [showModal, setShowModal] = useState(false);
     const [activeTab, setActiveTab] = useState("description"); // "description" o "chapters"
 
     useEffect(() => {
-        // Despachar la acción para obtener los detalles del manga cuando el componente se monte
         if (id) {
             dispatch(fetchMangaDetails(id));
         }
@@ -37,9 +35,15 @@ function Manga() {
                 <div className="w-4/5 bg-white shadow-md rounded-lg overflow-hidden">
                     <img src={manga.cover_photo} alt={manga.title} className="w-full h-80 object-cover" />
                     <div className="p-6">
-                        <h1 className="text-2xl font-bold mb-4">{manga.title}</h1>
-                        <p className="text-sm text-gray-500 mb-2">Categoría: {manga.category_id}</p>
-                        <p className="text-sm text-gray-500 mb-4">Autor: {manga.author_id}</p>
+                        <h1 className="text-2xl font-bold mb-4 text-center">{manga.title}</h1>
+                        <div className="flex flex-row md:m-10 items-center justify-between">
+                            <span
+                                className="px-4 py-2 bg-green-200 text-green-800 text-sm font-semibold rounded-full w-auto"
+                            >
+                                {manga.category_id}
+                            </span>
+                            <p className="text-sm text-gray-500">{manga.author_id}</p>
+                        </div>
                         <Reactions mangaId={manga.id} />
                     </div>
                 </div>
@@ -47,24 +51,62 @@ function Manga() {
                 {/* Cuadro de estadísticas */}
                 <Statistics manga={manga} />
 
-                {/* Botón para abrir el modal */}
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="mt-6 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                >
-                    Ver más detalles
-                </button>
-            </div>
+                {/* Botones para cambiar entre Descripción y Capítulos */}
+                <div className="flex justify-center mt-4">
+                    <button
+                        className={`p-3 w-40 sm:w-60 lg:w-80 -mr-10 rounded-full ${
+                            activeTab === "description"
+                                ? "bg-blue-500 z-10 text-white"
+                                : "bg-gray-200 text-gray-700"
+                        }`}
+                        onClick={() => setActiveTab("description")}
+                    >
+                        Manga
+                    </button>
+                    <button
+                        className={`p4 w-40 sm:w-60 lg:w-80 rounded-full ${
+                            activeTab === "chapters"
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-200 text-gray-700"
+                        }`}
+                        onClick={() => setActiveTab("chapters")}
+                    >
+                        Chapters
+                    </button>
+                </div>
 
-            {/* Modal */}
-            {showModal && (
-                <Modal
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
-                    manga={manga}
-                    onClose={() => setShowModal(false)}
-                />
-            )}
+                {/* Contenido dinámico */}
+                <div className="w-4/5 bg-white shadow-md rounded-lg mt-4 p-6">
+                    {activeTab === "description" ? (
+                        <p>{manga.description || "No hay descripción disponible."}</p>
+                    ) : (
+                        <div>
+                            {manga.chapters && manga.chapters.length > 0 ? (
+                                manga.chapters.map((chapter) => (
+                                    <div
+                                        key={chapter._id}
+                                        className="flex items-center justify-between mb-4 border-b pb-2"
+                                    >
+                                        <img
+                                            src={chapter.cover_photo}
+                                            alt={chapter.title}
+                                            className="w-16 h-16 object-cover rounded-md"
+                                        />
+                                        <div className="flex-1 ml-4">
+                                            <h3 className="font-bold">{chapter.title}</h3>
+                                            <p className="text-sm text-gray-500">
+                                                {chapter.pages} páginas
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No hay capítulos disponibles.</p>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }
