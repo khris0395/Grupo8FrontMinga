@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { login } from "../../../store/actions/authActions";
+import { login } from "../../store/actions/authActions";
 import { NavLink } from "react-router-dom";
 
 const SignInComponent = () => {
