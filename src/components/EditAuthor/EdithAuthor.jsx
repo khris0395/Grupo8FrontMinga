@@ -5,12 +5,14 @@ import './EdithAuthor.css'
 function EdithAuthor() {
     return (
         <>
-            <div className="relative bg-cover bg-center h-64" style={{ backgroundImage: "url('https://source.unsplash.com/random/1600x900')" }}>
-                <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-                <h1 className="relative z-10 text-white text-center text-4xl font-bold pt-20">Profile</h1>
+            <div className="relative bg-cover bg-center w-[1440px] h-[638px] flex items-center justify-center" style={{ backgroundImage: "url('https://s3-alpha-sig.figma.com/img/10b2/d5ee/20210b0eea83b4ff7cf04e7d9e72c1a2?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NK823jbakqxJ4VAwfZgCsQQt-aRhdKMwp65SMiVSLkGTgB~sPwtwJj~j78wYc7nHw1F0Q7DxN3tIYcojpUCr2tqdEk21fJLQNmK7TwYeDTjXfOLS361su3033WsKOylILzA8DOtvjQU9Bq3xuYKnwdMqiDWdm6YSq9YTMS8D3r6jZbKXZgen3af9JxpjgMzxB-lLNGCgL817~4Zak~2fMJsKSWb264wJXr7q4uOx1DtSCYHqs1qPi4JFY4fwsw9iPksACL9iPW0YEtWXn2Nzy9DYTRFp8VOVU~u9v1E0CQzvikTjTp~9k3WpJV353y~l1mxB45HKhxJU1TxaCsUm~A__')" }}>
+                <div className="absolute inset-0 bg-black bg-opacity-50 w-[1440] h-[638px]"></div>
+                <h1 className="relative z-10 text-white font-roboto text-[64px] font-bold">Profile</h1>
             </div>
 
-            <div className="bg-white  rounded-t-2xl mx-11 mt-[462px] ">
+            
+
+            <div className="bg-white rounded-t-2xl mx-11 -mt-[176px] z-20 relative  ">
 
                 <section className="flex flex-col md:flex-row h-screen items-center">
 
@@ -29,6 +31,7 @@ function EdithAuthor() {
                                             id="name"
                                             name="name"
                                             placeholder="Name"
+                                            required
                                             className="font-roboto flex-1 py-2 border-b-2 border-gray-400 focus:border-[#424242] text-gray-600 placeholder-gray-400 outline-none" />
                                     </div>
 
@@ -39,6 +42,7 @@ function EdithAuthor() {
                                             id="lastName"
                                             name="lastName"
                                             placeholder="LastName"
+                                            required
                                             className="font-roboto flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none" />
                                     </div>
                                     <div className="flex items-center mb-5 ">
@@ -48,6 +52,7 @@ function EdithAuthor() {
                                             id="city"
                                             name="city"
                                             placeholder="City"
+                                            required
                                             className="font-roboto flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none" />
                                     </div>
                                     <div className="flex items-center mb-5 ">
@@ -57,6 +62,7 @@ function EdithAuthor() {
                                             id="birthdate"
                                             name="birthdate"
                                             placeholder="birthdate"
+                                            required
                                             className="font-roboto flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none appearance-none" />
                                     </div>
                                     <div className="flex items-center mb-5">
@@ -66,6 +72,7 @@ function EdithAuthor() {
                                             id="URLProfileImage"
                                             name="URLProfileImage"
                                             placeholder="URL Profile Image"
+                                            required
                                             className="font-roboto flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none" />
                                     </div>
                                     <div>
@@ -86,7 +93,7 @@ function EdithAuthor() {
                         <div className='flex items-center justify-center px-[30px] '>
                             <img
                                 src="https://s3-alpha-sig.figma.com/img/d771/e8ee/4d516f000e29670bda6ceb5a6c836183?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=eLwYCN-8mR4Gid6w2ArEj9XNZ6~SkEYnz-44vxHXmD0sVFWCopHO-AS0ILvEg6QDmhi9~yFMorE8l2gN7Nx8FsQ85JGguAVYJCHccKR-68oAA6t5L53hh-Wqxax1fnNNBVk2SKmzbLcpMLdwDMmNgAUbtJQX~KrVRwpTjRa1YvTbsUx-MvzFXLLdhLBcaEcQjTuHnfG70gTotrQmr5TWRK1cjcFlRfjGeW44g4Q3mV01JXvsbLoGY8umEiX-5~MeEhA9CytZnDBnA5R~KvBsQKo8CbdRDlJQTJkwGFAWGwXkSeDWdFw9woVhKymqDQ3JRoe~aoSDkUuSOCjKiaJSyQ__"
-                                alt=""
+                                alt="Profile Image"
                                 className="rounded-full w-[179px] h-[178px] " />
                         </div>
 
@@ -117,83 +124,6 @@ function EdithAuthor() {
                 </section>
             </div>
 
-
-
-
-
-
-            <div className="min-h-screen bg-gray-100">
-                {/* Header */}
-                <div className="relative bg-cover bg-center h-64" style={{ backgroundImage: "url('https://source.unsplash.com/random/1600x900')" }}>
-                    <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-                    <h1 className="relative z-10 text-white text-center text-4xl font-bold pt-20">Profile</h1>
-                </div>
-
-                {/* Profile Content */}
-                <div className="max-w-4xl mx-auto mt-8 bg-white shadow-md rounded-lg p-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Left Section */}
-                        <div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium">First Name</label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
-                                    defaultValue="Lucas Ezequiel"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium">Last Name</label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
-                                    defaultValue="Silva"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium">City</label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
-                                    defaultValue="Caseros, Buenos Aires"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium">Date of Birth</label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
-                                    defaultValue="28/12/2022"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 font-medium">Profile Image URL</label>
-                                <input
-                                    type="text"
-                                    className="w-full border border-gray-300 rounded-md p-2 mt-1 focus:ring-2 focus:ring-blue-400"
-                                    defaultValue="https://via.placeholder.com/150"
-                                />
-                            </div>
-                            <div className="flex justify-between">
-                                <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Save</button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Delete Account</button>
-                            </div>
-                        </div>
-
-                        {/* Right Section */}
-                        <div className="flex flex-col items-center">
-                            <img
-                                src="https://via.placeholder.com/150"
-                                alt="Profile"
-                                className="w-32 h-32 rounded-full mb-4"
-                            />
-                            <h2 className="text-xl font-bold">Lucas Ezequiel Silva</h2>
-                            <p className="text-gray-500">Caseros, Buenos Aires</p>
-                            <p className="text-gray-500">16/02/2000</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </>
     )
 }

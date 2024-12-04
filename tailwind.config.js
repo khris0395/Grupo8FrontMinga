@@ -6,10 +6,7 @@ export default {
   ],
   theme: {
     extend: {
-      backgroundImage:{
-        edithAuthorImg:"url('assets/edithAuthoBG.jpeg')"
-
-      },
+      
       fontFamily:{
         "roboto":["Roboto", "sans-serif"]
       }
