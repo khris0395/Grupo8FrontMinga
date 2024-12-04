@@ -1,11 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit"
-import { mangaReducer } from "./reducer/mangaRecuer.js"
-import authReducer from "./reducer/authReducer.js"
-import { categoryReducer } from './reducer/categoryReducer.js'
-import { EditChapter } from "./reducer/edithChapterReducer.js"
-import { authorReducer } from "./reducer/authorReducer.js"
-import { adminPanelReducer } from "./reducer/adminPanelReducer.js"
-import { companyReducer } from "./reducer/companyReducer.js"
+import { configureStore } from "@reduxjs/toolkit";
+import { mangaReducer } from "./reducer/mangaRecuer";
+import authReducer from "./reducer/authReducer";
+import { categoryReducer } from './reducer/categoryReducer';
+import { EditChapter } from "./reducer/edithChapterReducer";
+import { authorReducer } from "./reducer/authorReducer";
+import { adminPanelReducer } from "./reducer/adminPanelReducer";
+import { companyReducer } from "./reducer/companyReducer";
 
 const store = configureStore({
   reducer: {
@@ -17,5 +17,6 @@ const store = configureStore({
     adminPanel: adminPanelReducer,
     company: companyReducer
   }
-})
-export default store 
+});
+
+export default store;
