@@ -16,7 +16,7 @@ const store = configureStore({
     EditChapter: EditChapter,
     author: authorReducer,
     adminPanel: adminPanelReducer,
-    company: companyReducer
+    company: companyReducer,
     //   chapter: chapterReducer
   }
 })

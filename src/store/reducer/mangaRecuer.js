@@ -1,10 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { fetchMangas, Setsearch, createManga, fetchCategories, fetchAuthors, fetchMangaDetails } from "../actions/mangaActions"
+import { fetchMangas, Setsearch, createManga, fetchCategories, fetchAuthors, fetchMangaDetails, fetchChapters } from "../actions/mangaActions"
 
 const initialState = {
     mangas: [],
     mangaDetails: [],
     categories: [],
+    chapters: [],
     authors: [],
     search: '',
     loading: false,
@@ -65,5 +66,15 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-
+        .addCase(fetchChapters.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(fetchChapters.fulfilled, (state, action) => {
+            state.loading = false;
+            state.chapters = action.payload;
+        })
+        .addCase(fetchChapters.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
 })
