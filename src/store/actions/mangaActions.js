@@ -48,9 +48,19 @@ export const createManga = createAsyncThunk(
 export const fetchMangaDetails = createAsyncThunk(
     "mangas/fetchMangaDetails",
     async (mangaId) => {
-      const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`);
-      return response.data.response;
+        const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`);
+        return response.data.response;
     }
-  );
+);
+
+export const fetchChapters = createAsyncThunk(
+    "chapters/fetchChapters",
+    async (mangaId) => {
+        const response = await axios.get(`http://localhost:8080/api/mangas/${mangaId}/chapters`);
+        console.log("Respuesta de fetchChapters:", response.data.response);
+        return response.data.response;
+    }
+);
+
 
 export const Setsearch = createAction('mangas/search')

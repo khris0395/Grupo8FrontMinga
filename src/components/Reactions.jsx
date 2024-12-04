@@ -16,7 +16,7 @@ function Reactions({ mangaId }) {
   };
 
   return (
-    <div className="flex gap-4 mt-4 justify-end">
+    <div className="flex gap-4 mt-4 justify-center md:justify-end">
       {reactions.map((reaction) => (
         <button
           key={reaction.type}
