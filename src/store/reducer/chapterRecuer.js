@@ -1,11 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { fetchChapter, createChapter } from "../actions/chapterActions" // Actualizado el import
+import { fetchChapter } from "../actions/chapterActions"
 
 const initialState = {
     chapter: [],
     loading: false,
     error: null,
-    createSuccess: false // Agregado para manejar el éxito de la creación
+    createSuccess: false
 }
 
 export const chapterReducer = createReducer(initialState, (builder) => {
@@ -23,21 +23,4 @@ export const chapterReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-        // Agregados los casos para createChapter
-        .addCase(createChapter.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-            state.createSuccess = false;
-        })
-        .addCase(createChapter.fulfilled, (state, action) => {
-            state.chapter.push(action.payload);
-            state.loading = false;
-            state.error = null;
-            state.createSuccess = true;
-        })
-        .addCase(createChapter.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
-            state.createSuccess = false;
-        })
-})
+});
