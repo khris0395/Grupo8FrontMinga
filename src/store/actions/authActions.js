@@ -2,10 +2,10 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
-const setUser = createAction("setUser", (datos)=>{
-    return {
-        payload:datos,
-    }
+const setUser = createAction("setUser", (datos) => {
+  return {
+    payload: datos,
+  }
 
 })
 
@@ -74,13 +74,19 @@ const registerUser = createAsyncThunk(
     } catch (error) {
 
       return rejectWithValue(
-        error.response?.data?.message || 
-        error.response?.data?.error || 
+        error.response?.data?.message ||
+        error.response?.data?.error ||
         "Unknown error"
       );
     }
+  })
+
+export const fetchMangaDetails = createAsyncThunk(
+  "mangas/fetchMangaDetails",
+  async (mangaId) => {
+    const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`);
+    return response.data.manga;
   }
 );
-
 
 export {login, setUser, logOut, registerUser, loginWithGoogle};

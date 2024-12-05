@@ -1,126 +1,94 @@
-import { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { get_categories } from "../store/actions/categoryActions";
-import { useNavigate } from 'react-router-dom';
-import { setUser } from "../store/actions/authActions";
-import Navbar from "../components/Navbar/Navbar"
-import axios from 'axios';
-
-const loginWithToken = async (token) => {
-    try {
-  
-      const response = await axios.get(
-        "http://localhost:8080/api/users/validateToken",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data.response;
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+import Navbar from "../components/Navbar/Navbar";
 
 function Home() {
-    
-    const navigate = useNavigate();
-
     const dispatch = useDispatch();
+    const categories = useSelector((state) => state?.categories?.categories || []);
+    const [isMobile, setIsMobile] = useState(false);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
+    // Detecta si el dispositivo es móvil
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get("token");
-        if (token) {
-  
-          localStorage.setItem("token", token);
-    
-          loginWithToken(token).then((user) => {
-            dispatch(setUser({ user, token }));
-          });
-          
-        }
-        navigate("/")
-      }, [dispatch,navigate]);
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
 
-    const categories = useSelector(state => {
-        return state?.categories?.categories || []
-    });
+        handleResize(); // Configuración inicial
+        window.addEventListener("resize", handleResize);
 
-    const routes = [
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
-        { to: "/", text: "Home", unrequireAuth: false },
-        { to: "/editAuthor", text: "Sing In", unrequireAuth: true },
-        { to: "/singUp", text: "Sing Up", unrequireAuth: true },
-
-    ]
-
-    const [currentSlide, setCurrentSlide] = useState(0)
-
+    // Obtiene las categorías desde el store
     useEffect(() => {
-        dispatch(get_categories())
-    }, [dispatch])
+        dispatch(get_categories());
+    }, [dispatch]);
 
+    // Cambia de diapositiva automáticamente
     useEffect(() => {
         if (categories.length > 0) {
             const timer = setInterval(() => {
-                setCurrentSlide(prev =>
-                    prev === categories.length - 1 ? 0 : prev + 1
-                )
-            }, 5000)
-
-            return () => clearInterval(timer)
+                setCurrentSlide((prev) => (prev === categories.length - 1 ? 0 : prev + 1));
+            }, 5000);
+            return () => clearInterval(timer);
         }
-    }, [categories])
+    }, [categories]);
 
     const nextSlide = () => {
-        setCurrentSlide(prev =>
-            prev < categories.length - 1 ? prev + 1 : prev
-        )
-    }
+        setCurrentSlide((prev) => (prev < categories.length - 1 ? prev + 1 : prev));
+    };
 
     const prevSlide = () => {
-        setCurrentSlide(prev => Math.max(prev - 1, 0))
-    }
+        setCurrentSlide((prev) => Math.max(prev - 1, 0));
+    };
 
     return (
-        <div className="min-h-screen w-full bg-[#EBEBEB] overflow-hidden">
-            {/* Hero Section */}
-            <section className="relative h-[644px] overflow-hidden">
-                {/* Background image */}
-                <div className="absolute inset-0 overflow-hidden">
+        <div className="min-h-screen bg-[#EBEBEB]">
+            <div className="relative h-screen md:h-[644px]">
+                {/* Imagen de fondo */}
+                <div className="absolute inset-0">
                     <img
                         src="https://s3-alpha-sig.figma.com/img/9e1b/0909/605c4919d06e9e4c2973cbfcca57c35d?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GQSFmbbIfg2OKcXHveX4vlqfuxaetKTeavDnSRC8E9oTS4WVdouy3p7PmtfaUcNXdZo6TStVtjp~ZaRxzh4l3olr1P-ftY1andYm6N4ZknuAfyyQp12ODAHr6BLBOuabjCrsAxwPdHfT8Uxw442JPt8j6BtbX8sblDmibVvfc67tY0njvtfa2uVHfYbuDH1WGGCeziB7iGH~BrJVrled2JNf1La7KwgOvJbVCRvq91C7wpn6RbKoDYd9LGz63PnlkFv5vhPPU9S33xYzkPfy9Db7EvgDUEg8KuWHdJgPI2ukTJNPwByQGP6pBw14YiHwsupW4Ja50vrz-YM4DCfTrA__"
                         alt="Comic Books Background"
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-black/60"></div>
                 </div>
 
-                {/* Navbar */}
-                <div className="relative z-20 px-12 pt-8">
-                    <Navbar />
-                </div>
+                {/* Contenido principal */}
+                <div className="relative h-full flex flex-col">
+                    <div className="z-20 px-4 pt-8">
+                        <Navbar
+                            routes={[
+                                { to: "/", text: "Home", unrequireAuth: false },
+                                { to: "/editAuthor", text: "Sign In", unrequireAuth: true },
+                                { to: "/signUp", text: "Sign Up", unrequireAuth: true },
+                            ]}
+                        />
+                    </div>
 
-                {/* Hero content */}
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4">
-                    <div className="max-w-[723px] w-full">
-                        <h1 className="text-[48px] leading-[56px] font-bold font-roboto mb-4">
-                            Your favorite comic book store ✨
+                    <div className="flex-1 flex flex-col items-center justify-center text-center text-white px-6 py-10 md:px-12 md:py-20">
+                        <h1 className="text-3xl md:text-[48px] font-bold font-roboto mb-4">
+                            {isMobile ? "Your favorite comic book store" : "Your favorite comic book store ✨"}
                         </h1>
-                        <p className="max-w-[456px] mx-auto text-[24px] leading-[28px] font-roboto mb-8">
-                            Explore our catalog to live the adventure of your life
+                        <p className="text-base md:text-[24px] font-roboto mb-8">
+                            {isMobile
+                                ? "From classics to novelties, we have everything you need to immerse yourself in your favorite universes. Explore our catalog and live the adventure of your life."
+                                : "Explore our catalog to live the adventure of your life."}
                         </p>
-                        <button className="w-[240px] h-[55px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] font-roboto font-medium text-[24px] hover:opacity-90 transition-opacity mx-auto">
-                            Let's go!
+                        <button className="w-full md:w-[240px] h-[55px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] font-roboto font-medium text-xl">
+                            {isMobile ? "Lets go!" : "Let's go!"}
                         </button>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Carousel Section */}
-            <section className="w-full py-14 px-4 flex justify-center">
+            {/* Carrusel (sólo para escritorio) */}
+            <section className="hidden md:flex w-full py-14 px-4 justify-center h-[500px]">
                 <div className="max-w-[1258px] w-full h-[265px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] flex items-center px-8">
                     <button
                         onClick={prevSlide}
@@ -141,7 +109,6 @@ function Home() {
                                     className="w-[276px] h-[255px] object-cover absolute -top-[75px]"
                                 />
                             </div>
-
                             <div className="relative">
                                 <img
                                     src={categories[currentSlide].cover_photo}
@@ -149,7 +116,6 @@ function Home() {
                                     className="w-[180px] h-[255px] object-cover absolute -top-[75px] left-1/2 -translate-x-1/2"
                                 />
                             </div>
-
                             <div className="text-white pt-[75px]">
                                 <h2 className="text-[24px] font-medium font-roboto mb-[10px]" style={{ color: categories[currentSlide].hover }}>
                                     {categories[currentSlide].name}:
@@ -173,8 +139,7 @@ function Home() {
                 </div>
             </section>
         </div>
-    )
+    );
 }
 
-
-export default Home
+export default Home;
