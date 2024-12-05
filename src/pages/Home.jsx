@@ -2,12 +2,49 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_categories } from "../store/actions/categoryActions";
 import Navbar from "../components/Navbar/Navbar";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { setUser } from "../store/actions/authActions";
+
+const loginWithToken = async (token) => {
+    try {
+  
+      const response = await axios.get(
+        "http://localhost:8080/api/users/validateToken",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data.response;
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
 function Home() {
+
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const categories = useSelector((state) => state?.categories?.categories || []);
     const [isMobile, setIsMobile] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+        if (token) {
+  
+          localStorage.setItem("token", token);
+    
+          loginWithToken(token).then((user) => {
+            dispatch(setUser({ user, token }));
+          });
+          
+        }
+        navigate("/")
+      }, [dispatch,navigate]);
 
     // Detecta si el dispositivo es móvil
     useEffect(() => {

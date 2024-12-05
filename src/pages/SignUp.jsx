@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/actions/authActions";
+import { loginWithGoogle } from "../store/actions/authActions";
 
 export default function SignUp() {
 
@@ -177,6 +178,7 @@ export default function SignUp() {
                 {/* Botón de Google */}
               </form>
               <button
+                  onClick={()=>dispatch(loginWithGoogle)}
                   type="button"
                   className="w-full mt-4 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md flex items-center justify-center hover:bg-gray-100 transition"
                 >

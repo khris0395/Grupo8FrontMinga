@@ -15,11 +15,6 @@ const SignInComponent = () => {
     dispatch(login({ email, password }));
   };
 
-  const handleGoogle = (e) => {
-
-    dispatch(loginWithGoogle);
-  }
-
   const loading = authStore.loading;
   const error = authStore.error;
 
@@ -110,7 +105,7 @@ const SignInComponent = () => {
               {/* Botón de Google */}
               <button
 
-                onClick={handleGoogle}
+                onClick={()=>dispatch(loginWithGoogle)}
                 type="button"
                 className="w-full mt-4 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md flex items-center justify-center hover:bg-gray-100 transition"
               >
