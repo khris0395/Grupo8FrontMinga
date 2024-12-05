@@ -1,25 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchComments, createComment } from "../store/actions/chapterActions"
-import { fetchChapters } from "../store/actions/mangaActions"
+import { fetchChapter, createComment } from "../store/actions/chapterActions"
 import { useParams } from "react-router-dom";
-import { fromJSON } from "postcss";
+
+// import {fetchChapters}  from "../store/actions/mangaActions";
+// import { fromJSON } from "postcss";
+
 
 
 const Chapter = () => {
     const { chapterId } = useParams();
-    const dispatch = useDispatch();
-    const chapter = useSelector((state) => state.mangas.selectedChapter);
-    const comments = useSelector((state) => state.mangas.comments);
+    const dispatch = useDispatch()
+
+
+    // Extraer el capítulo y los comentarios del estado
+    const { chapter, comments, loading, error } = useSelector((state) => state.chapter);
+
+    console.log("Estado actual del capítulo:", chapter);
+    console.log("Comentarios actuales:", comments);
+
     const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
 
     useEffect(() => {
         if (chapterId) {
-            dispatch(fetchChapters(chapterId));
+            console.log("Desencadenando fetchChapter con ID:", chapterId);
+            dispatch(fetchChapter(chapterId));
         }
     }, [dispatch, chapterId]);
+
+
 
     const handlePreviousPage = () => {
         if (currentPage > 0) setCurrentPage((prev) => prev - 1);
@@ -36,17 +47,20 @@ const Chapter = () => {
             dispatch(
                 createComment({
                     chapterId,
-                    comment: newComment,
-                    author: "User123", // Reemplazar con el usuario autenticado
-                    avatar: "/default-avatar.png", // Reemplazar con el avatar del usuario
+                    commentData: {
+                        text: newComment,
+                        author: "User123",
+                        avatar: "/default-avatar.png",
+                        timestamp: new Date().toISOString(),
+                    },
                 })
             );
             setNewComment("");
         }
     };
 
-
-    if (!chapter) return <div>Loading...</div>;
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -69,7 +83,7 @@ const Chapter = () => {
                     className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-3xl"
                     onClick={handlePreviousPage}
                 >
-                    ◀
+                    🡠
                 </button>
                 <img
                     src={chapter.pages[currentPage]}
@@ -80,7 +94,7 @@ const Chapter = () => {
                     className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-3xl"
                     onClick={handleNextPage}
                 >
-                    ▶
+                    🡢
                 </button>
             </div>
 
