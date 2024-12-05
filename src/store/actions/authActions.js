@@ -46,6 +46,7 @@ const login = createAsyncThunk("login", async({email,password}, { rejectWithValu
     const response = await axios.post("http://localhost:8080/api/auth/signin",credentials)
     
     localStorage.setItem("token",response.data.response.token)
+    console.log(response.data);
     return response.data.response
 
   } catch (error) {

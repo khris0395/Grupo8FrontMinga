@@ -6,6 +6,7 @@ import { EditChapter } from "./reducer/edithChapterReducer";
 import { authorReducer } from "./reducer/authorReducer";
 import { adminPanelReducer } from "./reducer/adminPanelReducer";
 import { companyReducer } from "./reducer/companyReducer";
+import { managerReducer } from "./reducer/managerReducer";
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     EditChapter: EditChapter,
     author: authorReducer,
     adminPanel: adminPanelReducer,
-    company: companyReducer
+    company: companyReducer,
+    manager: managerReducer
   }
 });
 

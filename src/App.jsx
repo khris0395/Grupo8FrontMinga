@@ -24,7 +24,6 @@ import AuthorProfile from './pages/AuthorProfile'
 import CompanyProfile from './pages/CompanyProfile'
 import Chapter from './pages/Chapter'
 import Favourites from './pages/Favourites'
-import MangaDetails from './pages/MangaDetails'
 
 const router = createBrowserRouter([
   {

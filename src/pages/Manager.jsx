@@ -1,7 +1,25 @@
+import { useDispatch, useSelector } from "react-redux";
 import MangaCard from "../components/MangaCard";
+import { useEffect } from "react";
+import { getManagerProfile } from "../store/actions/managerActions";
 
 
 export default function Manager() {
+
+    const dispatch = useDispatch();
+    const {profile, mangas, role, loading, error} = useSelector((state) => state.manager)
+    console.log(profile);
+    console.log(mangas);
+    console.log( role);
+    console.log( loading);
+    console.log( error);
+    
+
+    useEffect(() => {
+        dispatch(getManagerProfile())
+    },[dispatch])
+    
+
     const inputs =
         [
             { label: 'Todos', bgColor: 'bg-gray-400', textColor: 'text-white' },
