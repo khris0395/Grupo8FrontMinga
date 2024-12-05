@@ -1,101 +1,139 @@
-import { useState } from 'react';
-import Navbar from '../components/Navbar/Navbar';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { get_categories } from "../store/actions/categoryActions";
+import Navbar from "../components/Navbar/Navbar";
 
 function Home() {
+    const dispatch = useDispatch();
+    const categories = useSelector((state) => state?.categories?.categories || []);
+    const [isMobile, setIsMobile] = useState(false);
     const [currentSlide, setCurrentSlide] = useState(0);
 
+    // Detecta si el dispositivo es móvil
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize(); // Configuración inicial
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    // Obtiene las categorías desde el store
+    useEffect(() => {
+        dispatch(get_categories());
+    }, [dispatch]);
+
+    // Cambia de diapositiva automáticamente
+    useEffect(() => {
+        if (categories.length > 0) {
+            const timer = setInterval(() => {
+                setCurrentSlide((prev) => (prev === categories.length - 1 ? 0 : prev + 1));
+            }, 5000);
+            return () => clearInterval(timer);
+        }
+    }, [categories]);
+
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev < categories.length - 1 ? prev + 1 : prev));
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => Math.max(prev - 1, 0));
+    };
+
     return (
-        <div className="min-h-screen md:w-full bg-[#EBEBEB] overflow-hidden">
-            {/* Hero Section */}
-            <section className="relative h-[100vh] overflow-hidden">
-                {/* Background image */}
-                <div className="absolute inset-0 overflow-hidden">
+        <div className="min-h-screen bg-[#EBEBEB]">
+            <div className="relative h-screen md:h-[644px]">
+                {/* Imagen de fondo */}
+                <div className="absolute inset-0">
                     <img
                         src="https://s3-alpha-sig.figma.com/img/9e1b/0909/605c4919d06e9e4c2973cbfcca57c35d?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GQSFmbbIfg2OKcXHveX4vlqfuxaetKTeavDnSRC8E9oTS4WVdouy3p7PmtfaUcNXdZo6TStVtjp~ZaRxzh4l3olr1P-ftY1andYm6N4ZknuAfyyQp12ODAHr6BLBOuabjCrsAxwPdHfT8Uxw442JPt8j6BtbX8sblDmibVvfc67tY0njvtfa2uVHfYbuDH1WGGCeziB7iGH~BrJVrled2JNf1La7KwgOvJbVCRvq91C7wpn6RbKoDYd9LGz63PnlkFv5vhPPU9S33xYzkPfy9Db7EvgDUEg8KuWHdJgPI2ukTJNPwByQGP6pBw14YiHwsupW4Ja50vrz-YM4DCfTrA__"
                         alt="Comic Books Background"
-                        className="w-full h-full object-cover object-center md:object-top"
+                        className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-black/60"></div>
                 </div>
 
-                {/* Navbar superpuesto */}
-                <div className="relative z-20">
-                    <Navbar />
-                </div>
+                {/* Contenido principal */}
+                <div className="relative h-full flex flex-col">
+                    <div className="z-20 px-4 pt-8">
+                        <Navbar
+                            routes={[
+                                { to: "/", text: "Home", unrequireAuth: false },
+                                { to: "/editAuthor", text: "Sign In", unrequireAuth: true },
+                                { to: "/signUp", text: "Sign Up", unrequireAuth: true },
+                            ]}
+                        />
+                    </div>
 
-                {/* Hero content */}
-                <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-6">
-                    <h1 className="text-3xl md:text-5xl font-bold mb-4">
-                        <span className="md:hidden">
-                            Your favorite comic book store
-                        </span>
-                        <span className="hidden md:block">
-                            Your favorite comic book store ✨
-                        </span>
-                    </h1>
-                    <p className="text-base md:text-xl mb-8 max-w-md md:max-w-xl">
-                        <span className="md:hidden">
-                            From classics to novelties, we have everything you need to immerse yourself in your favorite universes. Explore our catalog and live the adventure of your life.
-                        </span>
-                        <span className="hidden md:block">
-                            Explore our catalog to live the adventure of your life
-                        </span>
-                    </p>
-                    <button className="bg-[#4338CA] w-full max-w-[260px] py-3 rounded-full text-white font-medium md:w-auto md:px-8 hover:bg-[#3730A3] transition-colors">
-                        Let's go!
-                    </button>
+                    <div className="flex-1 flex flex-col items-center justify-center text-center text-white px-6 py-10 md:px-12 md:py-20">
+                        <h1 className="text-3xl md:text-[48px] font-bold font-roboto mb-4">
+                            {isMobile ? "Your favorite comic book store" : "Your favorite comic book store ✨"}
+                        </h1>
+                        <p className="text-base md:text-[24px] font-roboto mb-8">
+                            {isMobile
+                                ? "From classics to novelties, we have everything you need to immerse yourself in your favorite universes. Explore our catalog and live the adventure of your life."
+                                : "Explore our catalog to live the adventure of your life."}
+                        </p>
+                        <button className="w-full md:w-[240px] h-[55px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] font-roboto font-medium text-xl">
+                            {isMobile ? "Lets go!" : "Let's go!"}
+                        </button>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Carousel Section - Solo visible en desktop */}
-            <section className="hidden md:flex w-full py-16 px-8 bg-[#F4F4F4] justify-center items-center">
-                <div className="w-[1258px] h-[265px] bg-[#4338CA] flex items-center p-6">
-                    {/* Botón Izquierdo */}
+            {/* Carrusel (sólo para escritorio) */}
+            <section className="hidden md:flex w-full py-14 px-4 justify-center h-[500px]">
+                <div className="max-w-[1258px] w-full h-[265px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] flex items-center px-8">
                     <button
-                        onClick={() => setCurrentSlide((prev) => Math.max(prev - 1, 0))}
-                        className="text-white bg-[#3730A3] p-3 rounded-full flex items-center justify-center z-10 hover:bg-[#2D2687] transition-colors"
+                        onClick={prevSlide}
+                        className="w-[26.5px] h-[26.5px] flex items-center justify-center bg-white/50 backdrop-blur-[16px] rounded-full shadow-[0px_1px_4px_rgba(0,0,0,0.1)] hover:bg-white/60 transition-colors"
+                        disabled={currentSlide === 0}
                     >
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        <svg className="w-[10px] h-[9px] rotate-180" viewBox="0 0 10 9" fill="none">
+                            <path d="M1 4.5L9 4.5M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#333333" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
 
-                    {/* Contenido del Carrusel */}
-                    <div className="flex-1 grid grid-cols-3 gap-6 px-4 relative">
-                        {/* Imagen Izquierda */}
-                        <div className="relative flex items-center justify-center">
-                            <img
-                                src="https://s3-alpha-sig.figma.com/img/7010/55a8/ad631c0e34af539abb86743a2cafbda1?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=eogAWD84FiSHfQHRVBmg9zdWLeLn4RpEOg48CZ-JqVeQN6F2ZJ66sY24NEDx5p7xU32QEh6OeVEzeduXK-07C6C0CruGYd2eWr67H~331cFwEpLdI0AjnGcrMDQYDa-vn1YCXdTocgHJo6Tw1fH~TfC8T0UIpUg~qKSNtQxUNJla7d4j8f-hUU-Dz9uN75dNOl0hoVuqaxxoGowj2E4mlxMBXA76e6avm95RKgCSpKCfkre2HYSbh4EZsX4SRD6Z2IrB8ilhKvD7WkjJsg8ROTj0LcnxCcsPT~-fUcvRA1GG9jUl~MtGtn-mepPVrkLjaQqwZRWn1iBc00qCERO2uQ__"
-                                alt="Deku with blue effects"
-                                className="w-[190px] h-[200px] object-cover rounded-lg shadow-lg absolute -top-24"
-                            />
+                    {Array.isArray(categories) && categories.length > 0 && (
+                        <div className="flex-1 grid grid-cols-3 gap-6 px-12">
+                            <div className="relative">
+                                <img
+                                    src={categories[currentSlide].character_photo}
+                                    alt={categories[currentSlide].name}
+                                    className="w-[276px] h-[255px] object-cover absolute -top-[75px]"
+                                />
+                            </div>
+                            <div className="relative">
+                                <img
+                                    src={categories[currentSlide].cover_photo}
+                                    alt={categories[currentSlide].name}
+                                    className="w-[180px] h-[255px] object-cover absolute -top-[75px] left-1/2 -translate-x-1/2"
+                                />
+                            </div>
+                            <div className="text-white pt-[75px]">
+                                <h2 className="text-[24px] font-medium font-roboto mb-[10px]" style={{ color: categories[currentSlide].hover }}>
+                                    {categories[currentSlide].name}:
+                                </h2>
+                                <p className="text-[14px] leading-[95.19%] font-roboto max-w-[356px]">
+                                    {categories[currentSlide].description}
+                                </p>
+                            </div>
                         </div>
+                    )}
 
-                        {/* Imagen Central */}
-                        <div className="relative flex items-center justify-center">
-                            <img
-                                src="https://s3-alpha-sig.figma.com/img/0b79/70a5/01731543bd32ac773a1b2fa236c42971?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Y5o5ge4pgEX5qEg5-iw-r0NY680X1lwc2BQ8xW7fjJGvYm6cXRKKFopxMYVa3JuYCQelKfywum5yaWA3atLTQmvowJKxI2J6qee6VQvbp4qKGmU5NzFS46PW7gSknah2HUuQdcaHdoidmR20rhcPVNiwKKswT9qdIJxL1UTJ8NfE3NHjWaWHf7nsobJzAtyhfddaphPxAOCNTAWhxOCNJaCXfZvvpoEay0YY8JEWaWElAuBjaI9qTun8m-G-Qpu~1jxqq8uWMu0zbvYV7TycLDIrL9CBve46Psp9ZXmFGYfOJFjiJUz8zbPl2Of9U5V7yO~UqZKpFSqP6v5Z6ZyHoQ__"
-                                alt="My Hero Academia Group"
-                                className="w-[140px] h-[200px] object-cover rounded-lg shadow-lg absolute -top-24"
-                            />
-                        </div>
-
-                        {/* Texto */}
-                        <div className="text-white relative">
-                            <h2 className="text-2xl font-bold mb-4">Shonen:</h2>
-                            <p className="text-sm leading-relaxed">
-                                Is the manga that is aimed at adolescent boys. They are series with large amounts of action, in which humorous situations often occur. The camaraderie between members of a collective or a combat team stands out.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Botón Derecho */}
                     <button
-                        onClick={() => setCurrentSlide((prev) => prev + 1)}
-                        className="text-white bg-[#3730A3] p-3 rounded-full flex items-center justify-center z-10 hover:bg-[#2D2687] transition-colors"
+                        onClick={nextSlide}
+                        className="w-[26.5px] h-[26.5px] flex items-center justify-center bg-white/50 backdrop-blur-[16px] rounded-full shadow-[0px_1px_4px_rgba(0,0,0,0.1)] hover:bg-white/60 transition-colors"
+                        disabled={currentSlide === categories.length - 1}
                     >
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        <svg className="w-[10px] h-[9px]" viewBox="0 0 10 9" fill="none">
+                            <path d="M1 4.5L9 4.5M9 4.5L5.5 1M9 4.5L5.5 8" stroke="#333333" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
                 </div>
