@@ -56,51 +56,7 @@ const ReactionButton = ({ emoji, mangaId, onReact }) => {
         </button>
     );
 };
-const FavoritesModal = ({ isOpen, onClose }) => {
-    const [favoriteMangas, setFavoriteMangas] = useState([]);
-    const mangas = useSelector(state => state.mangas.mangas);
 
-    useEffect(() => {
-        const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        setFavoriteMangas(storedFavorites);
-    }, []);
-
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-lg w-full">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold">Favorite Mangas</h2>
-                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
-                </div>
-                <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-                    {favoriteMangas.length > 0 ? (
-                        favoriteMangas.map((favorite, index) => (
-                            <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <div className="flex items-center gap-4">
-                                    <div className="text-2xl">
-                                        {favorite.reaccion === 'liked' ? '👍' : '😍'}
-                                    </div>
-                                    <div>
-                                        <p className="font-medium">
-                                            {mangas.find(m => m._id === favorite.mangaId)?.title || 'Unknown Manga'}
-                                        </p>
-                                        <p className="text-sm text-gray-500">
-                                            {favorite.reaccion}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-center text-gray-500">No favorites yet</p>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-};
 const StatItem = ({ value, label }) => (
     <div className="flex flex-col items-center">
         <span className="text-2xl text-[#424242] font-poppins">{value}</span>
@@ -121,7 +77,6 @@ const TabButton = ({ active, onClick, text }) => (
     </button>
 );
 
-
 function Manga() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -134,9 +89,7 @@ function Manga() {
     const authors = useSelector((state) => state.mangas.authors);
     const [activeTab, setActiveTab] = useState("description");
     const [isLoading, setIsLoading] = useState(true);
-    const [showFavorites, setShowFavorites] = useState(false);
 
-    
     const ChapterCard = ({ chapter }) => (
         <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
             <div className="flex items-center gap-6">
@@ -158,7 +111,7 @@ function Manga() {
             </button>
         </div>
     );
-    
+
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -188,8 +141,6 @@ function Manga() {
 
     const categoryName = categories.find(c => c._id === manga.category_id)?.name;
     const authorName = authors.find(a => a._id === manga.author_id)?.name;
-
-    console.log('Selected manga:', manga); // Debug log
 
     const handleReaction = () => {
         console.log('Reaction handled');
@@ -241,12 +192,6 @@ function Manga() {
                                         onReact={handleReaction}
                                     />
                                 </div>
-                                <button
-                                    onClick={() => setShowFavorites(true)}
-                                    className="text-blue-500 hover:underline text-center w-full"
-                                >
-                                    View Favorites
-                                </button>
                             </div>
                         </div>
 
@@ -296,10 +241,6 @@ function Manga() {
                     </div>
                 </div>
             </div>
-            <FavoritesModal
-                isOpen={showFavorites}
-                onClose={() => setShowFavorites(false)}
-            />
         </div>
     );
 }
