@@ -4,7 +4,6 @@ import axios from "axios";
 export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
     async (search) => {
         const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle/${search}`) 
-
         return response.data.response
     }
 );
