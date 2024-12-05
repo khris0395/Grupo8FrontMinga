@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMangas, Setsearch } from "../../store/actions/mangaActions";
+import { fetchMangas, setSearch } from "../store/actions/mangaActions";
+import { useNavigate } from "react-router-dom";
 
 function Mangas() {
     const dispatch = useDispatch(); // Necesario para despachar la acción
+    const navigate = useNavigate();
+
     const mangas = useSelector((state) => state.mangas.mangas)
     const loading = useSelector((state) => state.mangas.loading)
     const search = useSelector((state) => state.mangas.search)
@@ -19,19 +22,18 @@ function Mangas() {
         ]
 
     const handleTextChange = (e) => {
-        dispatch(Setsearch(e.target.value));
-        
+        dispatch(setSearch(e.target.value));
+
     };
-        console.log(search);
 
     useEffect(() => {
         // Despachar la acción fetchMangas
         dispatch(fetchMangas(search));
     }, [search]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
+    const handleRead = (manga) => {
+        navigate(`/manga/${manga._id}`);
+    };
 
     return (
         <div className="min-h-screen relative">
@@ -54,7 +56,7 @@ function Mangas() {
                     <input
                         type="text"
                         placeholder="Search for manga..."
-                        className="my-6 px-4 py-2 w-3/5 bg-white           rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="my-6 px-4 py-2 w-3/5 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         onChange={handleTextChange}
                     />
                 </div>
@@ -95,7 +97,10 @@ function Mangas() {
 
                                     <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
                                     <p className="text-sm text-violet-500">Type</p>
-                                    <button className="mt-3 px-4 py-2 bg-green-200 text-green-800 text-sm font-semibold rounded-full hover:bg-green-300 w-20">
+                                    <button
+                                        className="mt-3 px-4 py-2 bg-green-200 text-green-800 text-sm font-semibold rounded-full hover:bg-green-300 w-20"
+                                        onClick={() => handleRead(manga)}
+                                        >
                                         Read
                                     </button>
                                 </div>
