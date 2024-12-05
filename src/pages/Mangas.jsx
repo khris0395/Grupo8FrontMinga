@@ -32,10 +32,8 @@ function Mangas() {
     }, [search]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
 
     const handleRead = (manga) => {
-        navigate(`/Manga/${manga._id}`);
+        navigate(`/manga/${manga._id}`);
     };
-
-
 
     return (
         <div className="min-h-screen relative">

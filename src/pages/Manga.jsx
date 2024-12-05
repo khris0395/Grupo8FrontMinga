@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     fetchMangaDetails,
     fetchChapters,
@@ -120,26 +121,9 @@ const TabButton = ({ active, onClick, text }) => (
     </button>
 );
 
-const ChapterCard = ({ chapter }) => (
-    <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-        <div className="flex items-center gap-6">
-            <img
-                src={chapter.cover_photo}
-                alt={chapter.title}
-                className="w-20 h-20 object-cover rounded-lg shadow"
-            />
-            <div>
-                <h3 className="text-xl font-semibold">{chapter.title}</h3>
-                <p className="text-[#9D9D9D]">{chapter.pages?.length || 0} pages</p>
-            </div>
-        </div>
-        <button className="px-8 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors">
-            Read
-        </button>
-    </div>
-);
 
 function Manga() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { id } = useParams();
     const loading = useSelector((state) => state.mangas.loading);
@@ -152,6 +136,28 @@ function Manga() {
     const [isLoading, setIsLoading] = useState(true);
     const [showFavorites, setShowFavorites] = useState(false);
 
+    const ChapterCard = ({ chapter }) => (
+        <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <div className="flex items-center gap-6">
+                <img
+                    src={chapter.cover_photo}
+                    alt={chapter.title}
+                    className="w-20 h-20 object-cover rounded-lg shadow"
+                />
+                <div>
+                    <h3 className="text-xl font-semibold">{chapter.title}</h3>
+                    <p className="text-[#9D9D9D]">{chapter.pages?.length || 0} pages</p>
+                </div>
+            </div>
+            <button
+                className="px-8 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
+                onClick={() => handleRead(chapter)}
+            >
+                Read
+            </button>
+        </div>
+    );
+    
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -170,6 +176,10 @@ function Manga() {
         };
         loadData();
     }, [dispatch, id]);
+
+    const handleRead = (chapter) => {
+        navigate(`/chapter/${chapter._id}`);
+    };
 
     if (isLoading || !categories || !authors) return <div className="text-center p-4">Loading...</div>;
     if (!manga) return <div className="text-center p-4">Select a manga to view details</div>;

@@ -24,33 +24,41 @@ import AuthorProfile from './pages/AuthorProfile'
 import CompanyProfile from './pages/CompanyProfile'
 import Chapter from './pages/Chapter'
 import Favourites from './pages/Favourites'
-import MangaDetails from './pages/MangaDetails'
+import SecondLayout from './layouts/SecondLayout'
 
 const router = createBrowserRouter([
   {
     element: <MainLayout> </MainLayout>,
     children: [
-      {path: '/', element: <Home> </Home>},
-      {path: '/home', element: <Home> </Home>},
-      {path: '/mangas', element: <Mangas></Mangas>},
-      {path: '/Manga/:id', element: <Manga></Manga>},
-      {path: '/manager', element: <Manager></Manager>},
-      {path: '/editChapter', element: <EditChapter></EditChapter>},
-      {path: '/signUp', element: <SignUp></SignUp>},
-      {path: '/signIn', element: <SignIn></SignIn>},
-      {path: '/newRole', element: <NewRole></NewRole>},
-      {path: '/adminPanel', element: <AdminPanel></AdminPanel>},
-      {path: '/editCompany', element: <EditCompany></EditCompany>},
-      {path: '/editAuthor', element: <EditAuthor></EditAuthor>},
-      {path: '/mangaForm', element: <MangaForm></MangaForm>},
-      {path: '/chapterForm', element: <ChapterForm></ChapterForm>},
-      {path: '/authorForm', element: <AuthorForm></AuthorForm>},
-      {path: '/companyForm', element: <CompanyForm></CompanyForm>},
-      {path: '/authorProfile', element: <AuthorProfile></AuthorProfile>},
-      {path: '/companyProfile', element: <CompanyProfile></CompanyProfile>},
-      {path: '/chapter', element: <Chapter></Chapter>},
-      {path: '/favourites', element: <Favourites></Favourites>},
-      {path: '/*', element: <NotFound> </NotFound>},
+      { path: '/', element: <Home> </Home> },
+      { path: '/home', element: <Home> </Home> },
+      { path: '/mangas', element: <Mangas></Mangas> },
+      { path: '/manga/:id', element: <Manga></Manga> },
+      { path: '/manager', element: <Manager></Manager> },
+      { path: '/editChapter', element: <EditChapter></EditChapter> },
+      { path: '/signUp', element: <SignUp></SignUp> },
+      { path: '/signIn', element: <SignIn></SignIn> },
+      { path: '/newRole', element: <NewRole></NewRole> },
+      { path: '/adminPanel', element: <AdminPanel></AdminPanel> },
+      { path: '/editCompany', element: <EditCompany></EditCompany> },
+      { path: '/editAuthor', element: <EditAuthor></EditAuthor> },
+      { path: '/mangaForm', element: <MangaForm></MangaForm> },
+      { path: '/chapterForm', element: <ChapterForm></ChapterForm> },
+      { path: '/authorForm', element: <AuthorForm></AuthorForm> },
+      { path: '/companyForm', element: <CompanyForm></CompanyForm> },
+      { path: '/authorProfile', element: <AuthorProfile></AuthorProfile> },
+      { path: '/companyProfile', element: <CompanyProfile></CompanyProfile> },
+      { path: '/favourites', element: <Favourites></Favourites> },
+      { path: '/*', element: <NotFound> </NotFound> }
+    ]
+  },
+  {
+    element: <SecondLayout />,
+    children: [
+      {
+        path: '/chapter/:id',
+        element: <Chapter />
+      },
     ]
   }
 ])
@@ -74,7 +82,7 @@ const loginWithToken = async (token) => {
 
 export default function App() {
 
-  
+
   const dispatch = useDispatch();
   let token = localStorage.getItem("token");
   if (token) {
