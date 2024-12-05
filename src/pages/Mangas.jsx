@@ -33,9 +33,8 @@ function Mangas() {
     }, [search]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
 
     const handleRead = (manga) => {
-        navigate(`/Manga/${manga._id}`);
+        navigate(`/manga/${manga._id}`);
     };
-
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;

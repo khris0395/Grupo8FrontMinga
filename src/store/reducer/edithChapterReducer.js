@@ -7,7 +7,7 @@ const initialState = {
   error: null,
 };
 
-export const EditChapter = createReducer(initialState, (builder) => {
+export const editChapter = createReducer(initialState, (builder) => {
   builder
     .addCase(fetchChapter.pending, (state) => {
       state.loading = true

@@ -135,27 +135,4 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-        // .addCase(updateReaction.fulfilled, (state, action) => {
-        //     const index = state.reactions.findIndex(r => r._id === action.payload._id);
-        //     if (index !== -1) {
-        //         state.reactions[index] = action.payload;
-        //         // Actualizar favoritos si es necesario
-        //         if (action.payload.reaccion === 'liked' || action.payload.reaccion === 'love') {
-        //             const favIndex = state.favorites.findIndex(f => f._id === action.payload._id);
-        //             if (favIndex !== -1) {
-        //                 state.favorites[favIndex] = {
-        //                     mangaId: action.payload.manga_id,
-        //                     reaccion: action.payload.reaccion,
-        //                     _id: action.payload._id
-        //                 };
-        //                 localStorage.setItem('favorites', JSON.stringify(state.favorites));
-        //             }
-        //         }
-        //     }
-        // })
-        // .addCase(deleteReaction.fulfilled, (state, action) => {
-        //     state.reactions = state.reactions.filter(r => r._id !== action.payload);
-        //     state.favorites = state.favorites.filter(f => f._id !== action.payload);
-        //     localStorage.setItem('favorites', JSON.stringify(state.favorites));
-        // });
 });
