@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../store/actions/authActions";
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const user = useSelector((state) => state.authStore.user)
+    const token = useSelector((state) => state.authStore.token);
+    
+    const dispatch = useDispatch();
 
     return (
         <nav className="absolute top-0 left-0 w-full z-20 bg-transparent">
@@ -21,6 +27,23 @@ function Navbar() {
                             className="h-8"
                         />
                     </Link>
+                    {token && (
+
+                                <div className='flex gap-2'>
+
+
+                                <button className="bg-slate-800 hover:bg-slate-500 text-white px-4 py-2 rounded"
+                                onClick={()=>dispatch(logOut(token))}>
+                                Sign Out
+                                </button>
+
+                                <img
+                                    src={user.photo}
+                                    alt="User profile"
+                                    className="w-10 h-10 rounded-full border-2 border-white cursor-pointer"
+                                />
+                                
+                                </div>)}
                 </div>
 
                 {isOpen && (

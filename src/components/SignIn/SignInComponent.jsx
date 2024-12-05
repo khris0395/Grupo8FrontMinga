@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { login } from "../../store/actions/authActions";
 import { NavLink } from "react-router-dom";
+import { loginWithGoogle } from "../../store/actions/authActions";
 
 const SignInComponent = () => {
   const [email, setEmail] = useState("");
@@ -14,9 +15,10 @@ const SignInComponent = () => {
     dispatch(login({ email, password }));
   };
 
-  const loginWithGoogle = () => {
-    window.location.href = "http://localhost:8080/api/auth/signin/google";
-  };
+  const handleGoogle = (e) => {
+
+    dispatch(loginWithGoogle);
+  }
 
   const loading = authStore.loading;
   const error = authStore.error;
@@ -107,7 +109,8 @@ const SignInComponent = () => {
               </button>
               {/* Botón de Google */}
               <button
-                onClick={loginWithGoogle}
+
+                onClick={handleGoogle}
                 type="button"
                 className="w-full mt-4 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md flex items-center justify-center hover:bg-gray-100 transition"
               >

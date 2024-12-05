@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setUser } from './store/actions/authActions'
+import axios from 'axios'
 import MainLayout from './layouts/MainLayout'
 import PrivateLogin from './components/PrivateLogin'
 import Home from './pages/Home'
