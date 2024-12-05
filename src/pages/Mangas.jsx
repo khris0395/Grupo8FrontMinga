@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMangas, Setsearch } from "../store/actions/mangaActions";
+import { fetchMangas, setSearch } from "../store/actions/mangaActions";
 import { useNavigate } from "react-router-dom";
 
 function Mangas() {
@@ -22,10 +22,9 @@ function Mangas() {
         ]
 
     const handleTextChange = (e) => {
-        dispatch(Setsearch(e.target.value));
+        dispatch(setSearch(e.target.value));
 
     };
-    console.log(search);
 
     useEffect(() => {
         // Despachar la acción fetchMangas
@@ -35,10 +34,6 @@ function Mangas() {
     const handleRead = (manga) => {
         navigate(`/manga/${manga._id}`);
     };
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
 
     return (
         <div className="min-h-screen relative">

@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { login, setUser, logOut, registerUser } from "../actions/authActions";
+import { login, setUser, logOut, registerUser, loginWithGoogle } from "../actions/authActions";
 
 const initialState = {  
     loading : false,
@@ -37,13 +37,23 @@ const initialState = {
         state.user = action.payload.user,
         state.token = action.payload.token
     })
-
-    .addCase(logOut,(state,action)=>{
-        localStorage.removeItem("token");
-        state.user = null,
-        state.token = null
+    .addCase(logOut.pending,(state,action)=>{
+        state.loading = true,
+        state.error = null, 
+        state.successMessage = null
     }) 
-    
+    .addCase(logOut.fulfilled, (state, action) => {
+        localStorage.removeItem("token");
+        state.loading = false,
+        state.user = null,
+        state.token = null,
+        state.error = null,
+        state.successMessage = null
+      })
+    .addCase(logOut.rejected, (state, action) => {
+        state.loading = false,
+        state.error = action.payload || 'Unknown error';
+      }) 
     .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null; 
@@ -59,7 +69,11 @@ const initialState = {
     .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Unknown error';
-      });
+      })
+    .addCase(loginWithGoogle, (state, action)=>{
+        state.loading = false,
+        state.error = false
+    })
 
 })
 

@@ -1,43 +1,33 @@
-import { createReducer } from "@reduxjs/toolkit";
-import {
-    fetchMangas,
-    fetchCategories,
-    fetchAuthors,
-    fetchMangaDetails,
-    fetchChapters,
-    Setsearch,
-    createManga,
-    fetchReactions,
-    createReaction,
-} from "../actions/mangaActions";
+import { createReducer } from "@reduxjs/toolkit"
+import { fetchMangas, setSearch } from "../actions/mangaActions.js"
 
 const initialState = {
     mangas: [],
-    categories: [],
-    chapters: [],
-    authors: [],
-    reactions: [],
-    favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+    mangaDetails: [],
+    mangaFilterCategory: [],
+    mangaFavorites: [],
     search: '',
-    loading: false,
-    error: null,
-    selectedManga: null,
-    createSuccess: false
-};
+    loading: true,
+    error: null
+}
 
 export const mangaReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(fetchMangas.pending, (state) => {
-            state.loading = true;
-            state.error = null;
+            state.loading = true
+            state.error = null
         })
         .addCase(fetchMangas.fulfilled, (state, action) => {
-            state.mangas = action.payload;
-            state.loading = false;
+            state.mangas = action.payload
+            state.loading = false
+            state.error = null
         })
         .addCase(fetchMangas.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
+            state.loading = false
+            state.error = action.error.message
+        }).
+        addCase(setSearch, (state, action) => {
+            state.search = action.payload
         })
         .addCase(fetchCategories.fulfilled, (state, action) => {
             state.categories = action.payload;
@@ -136,3 +126,4 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.error = action.error.message;
         })
 });
+

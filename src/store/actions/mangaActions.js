@@ -1,11 +1,11 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchMangas = createAsyncThunk(
-    "mangas/fetchMangas",
+export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
     async (search) => {
-        const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle${search ? '/' + search : ''}`);
-        return response.data.response;
+        const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle/${search}`) 
+
+        return response.data.response
     }
 );
 
@@ -93,5 +93,4 @@ export const createReaction = createAsyncThunk(
     }
 );
 
-
-export const Setsearch = createAction('mangas/search');
+export const setSearch = createAction('mangas/search')
