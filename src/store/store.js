@@ -4,7 +4,7 @@ import { mangaReducer } from "./reducer/mangaRecuer.js"
 
 const store = configureStore({
      reducer:{
-        mangas: mangaReducer 
+        mangas: mangaReducer
      }
  })
 export default store 

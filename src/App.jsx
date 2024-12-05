@@ -19,6 +19,7 @@ import AuthorProfile from './pages/AuthorProfile'
 import CompanyProfile from './pages/CompanyProfile'
 import Chapter from './pages/Chapter'
 import Favourites from './pages/Favourites'
+import MangaDetails from './pages/MangaDetails'
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       {path: '/CompanyProfile', element: <CompanyProfile></CompanyProfile>},
       {path: '/Chapter', element: <Chapter></Chapter>},
       {path: '/Favourites', element: <Favourites></Favourites>},
+      {path: '/MangaDetails', element: <MangaDetails></MangaDetails>},
       {path: '/*', element: <NotFound> </NotFound>},
     ]
   }

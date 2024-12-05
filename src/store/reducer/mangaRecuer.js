@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { fetchMangas, Setsearch } from "../actions/mangaActions"
+import { fetchMangas, setSearch } from "../actions/mangaActions.js"
 
 const initialState = {
     mangas: [],
@@ -26,7 +26,7 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.loading = false
             state.error = action.error.message
         }).
-        addCase(Setsearch, (state, action) => {
+        addCase(setSearch, (state, action) => {
             state.search = action.payload
         })
 })
