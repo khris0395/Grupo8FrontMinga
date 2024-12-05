@@ -5,26 +5,23 @@ import './EdithAuthor.css'
 function EdithAuthor() {
     return (
         <>
-            <div className="relative bg-cover bg-center w-[1440px] h-[638px] flex items-center justify-center" style={{ backgroundImage: "url('https://s3-alpha-sig.figma.com/img/10b2/d5ee/20210b0eea83b4ff7cf04e7d9e72c1a2?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NK823jbakqxJ4VAwfZgCsQQt-aRhdKMwp65SMiVSLkGTgB~sPwtwJj~j78wYc7nHw1F0Q7DxN3tIYcojpUCr2tqdEk21fJLQNmK7TwYeDTjXfOLS361su3033WsKOylILzA8DOtvjQU9Bq3xuYKnwdMqiDWdm6YSq9YTMS8D3r6jZbKXZgen3af9JxpjgMzxB-lLNGCgL817~4Zak~2fMJsKSWb264wJXr7q4uOx1DtSCYHqs1qPi4JFY4fwsw9iPksACL9iPW0YEtWXn2Nzy9DYTRFp8VOVU~u9v1E0CQzvikTjTp~9k3WpJV353y~l1mxB45HKhxJU1TxaCsUm~A__')" }}>
-                <div className="absolute inset-0 bg-black bg-opacity-50 w-[1440] h-[638px]"></div>
+            <div className="relative bg-cover bg-center w-full h-[50vh] flex items-center justify-center" style={{ backgroundImage: "url('https://s3-alpha-sig.figma.com/img/10b2/d5ee/20210b0eea83b4ff7cf04e7d9e72c1a2?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NK823jbakqxJ4VAwfZgCsQQt-aRhdKMwp65SMiVSLkGTgB~sPwtwJj~j78wYc7nHw1F0Q7DxN3tIYcojpUCr2tqdEk21fJLQNmK7TwYeDTjXfOLS361su3033WsKOylILzA8DOtvjQU9Bq3xuYKnwdMqiDWdm6YSq9YTMS8D3r6jZbKXZgen3af9JxpjgMzxB-lLNGCgL817~4Zak~2fMJsKSWb264wJXr7q4uOx1DtSCYHqs1qPi4JFY4fwsw9iPksACL9iPW0YEtWXn2Nzy9DYTRFp8VOVU~u9v1E0CQzvikTjTp~9k3WpJV353y~l1mxB45HKhxJU1TxaCsUm~A__')" }}>
+                <div className="absolute inset-0 bg-black bg-opacity-50"></div>
                 <h1 className="relative z-10 text-white font-roboto text-[64px] font-bold">Profile</h1>
             </div>
 
-            
-
-            <div className="bg-white rounded-t-2xl mx-11 -mt-[176px] z-20 relative  ">
-
-                <section className="flex flex-col md:flex-row h-screen items-center">
+            <div className="bg-white rounded-t-2xl mx-11 -mt-[176px] z-20 relative max-w-screen-lg  ">
+                <section className="flex flex-col md:flex-row h-auto items-center">
 
                     <div className="  w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/2 2xl:w-1/2  px-6 lg:px-16 xl:px-12
         flex items-center justify-center ">
 
-                        <div className="w-full ">
+                        <div className="w-full md:w-1/2 px-6 lg:px-16 xl:px-12 flex items-center justify-center ">
 
-                            <div className="bg-white p-10 w-[315px] mx-auto ">
-                                <form action>
+                            <div className="bg-white p-10 w-[314px] mx-auto ">
+                                <form className='w-full max-w-md bg-white p-8 rounded-lg shadow' action>
 
-                                    <div className="flex items-center mb-5">
+                                    <div className="mb-5">
 
                                         <input
                                             type="text"
