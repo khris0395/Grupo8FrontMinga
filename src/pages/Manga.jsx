@@ -136,6 +136,7 @@ function Manga() {
     const [isLoading, setIsLoading] = useState(true);
     const [showFavorites, setShowFavorites] = useState(false);
 
+    
     const ChapterCard = ({ chapter }) => (
         <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
             <div className="flex items-center gap-6">

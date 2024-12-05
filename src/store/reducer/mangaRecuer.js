@@ -1,33 +1,43 @@
-import { createReducer } from "@reduxjs/toolkit"
-import { fetchMangas, setSearch } from "../actions/mangaActions.js"
+import { createReducer } from "@reduxjs/toolkit";
+import {
+    fetchMangas,
+    fetchCategories,
+    fetchAuthors,
+    fetchMangaDetails,
+    fetchChapters,
+    setSearch,
+    createManga,
+    fetchReactions,
+    createReaction,
+} from "../actions/mangaActions";
 
 const initialState = {
     mangas: [],
-    mangaDetails: [],
-    mangaFilterCategory: [],
-    mangaFavorites: [],
+    categories: [],
+    chapters: [],
+    authors: [],
+    reactions: [],
+    favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
     search: '',
-    loading: true,
-    error: null
-}
+    loading: false,
+    error: null,
+    selectedManga: null,
+    createSuccess: false
+};
 
 export const mangaReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(fetchMangas.pending, (state) => {
-            state.loading = true
-            state.error = null
+            state.loading = true;
+            state.error = null;
         })
         .addCase(fetchMangas.fulfilled, (state, action) => {
-            state.mangas = action.payload
-            state.loading = false
-            state.error = null
+            state.mangas = action.payload;
+            state.loading = false;
         })
         .addCase(fetchMangas.rejected, (state, action) => {
-            state.loading = false
-            state.error = action.error.message
-        }).
-        addCase(setSearch, (state, action) => {
-            state.search = action.payload
+            state.loading = false;
+            state.error = action.error.message;
         })
         .addCase(fetchCategories.fulfilled, (state, action) => {
             state.categories = action.payload;
@@ -76,7 +86,7 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.error = action.error.message;
             state.chapters = [];
         })
-        .addCase(Setsearch, (state, action) => {
+        .addCase(setSearch, (state, action) => {
             state.search = action.payload;
         })
         .addCase(fetchReactions.pending, (state) => {
@@ -126,4 +136,3 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.error = action.error.message;
         })
 });
-
