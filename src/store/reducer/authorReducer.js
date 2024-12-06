@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { createAuthor } from "../actions/authorActions"
+import { createAuthor, fetchAuthor } from "../actions/authorActions"
 
 const initialState = {
     authors: [],
@@ -25,5 +25,16 @@ export const authorReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
             state.createSuccess = false;
+        }).addCase(fetchAuthor.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(fetchAuthor.fulfilled, (state, action) => {
+            state.authors = action.payload;
+            state.loading = false;
+        })
+        .addCase(fetchAuthor.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
         })
 })
