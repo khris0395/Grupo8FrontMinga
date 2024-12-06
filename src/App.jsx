@@ -28,28 +28,16 @@ import SecondLayout from './layouts/SecondLayout'
 
 const router = createBrowserRouter([
   {
-    element: <MainLayout> </MainLayout>,
+    element: <MainLayout />,
     children: [
-      { path: '/', element: <Home> </Home> },
-      { path: '/home', element: <Home> </Home> },
-      { path: '/mangas', element: <Mangas></Mangas> },
-      { path: '/manga/:id', element: <Manga></Manga> },
-      { path: '/manager', element: <Manager></Manager> },
-      { path: '/editChapter', element: <EditChapter></EditChapter> },
-      { path: '/signUp', element: <SignUp></SignUp> },
-      { path: '/signIn', element: <SignIn></SignIn> },
-      { path: '/newRole', element: <NewRole></NewRole> },
-      { path: '/adminPanel', element: <AdminPanel></AdminPanel> },
-      { path: '/editCompany', element: <EditCompany></EditCompany> },
-      { path: '/editAuthor', element: <EditAuthor></EditAuthor> },
-      { path: '/mangaForm', element: <MangaForm></MangaForm> },
-      { path: '/chapterForm', element: <ChapterForm></ChapterForm> },
-      { path: '/authorForm', element: <AuthorForm></AuthorForm> },
-      { path: '/companyForm', element: <CompanyForm></CompanyForm> },
-      { path: '/authorProfile', element: <AuthorProfile></AuthorProfile> },
-      { path: '/companyProfile', element: <CompanyProfile></CompanyProfile> },
-      { path: '/favourites', element: <Favourites></Favourites> },
-      { path: '/*', element: <NotFound> </NotFound> }
+      { path: '/', element: <Home /> },
+      { path: '/home', element: <Home /> },
+      { path: '/mangas', element: <Mangas /> },
+      { path: '/manga/:id', element: <Manga /> },
+      { path: '/manager', element: <Manager /> },
+      { path: '/authorProfile', element: <AuthorProfile /> },
+      { path: '/companyProfile', element: <CompanyProfile /> },
+      { path: '/favourites', element: <Favourites /> }
     ]
   },
   {
@@ -59,6 +47,52 @@ const router = createBrowserRouter([
         path: '/chapter/:id',
         element: <Chapter />
       },
+      {
+        path: '/signUp',
+        element: <SignUp />
+      },
+      {
+        path: '/signIn',
+        element: <SignIn />
+      },
+      {
+        path: '/newRole',
+        element: <NewRole />
+      },
+      {
+        path: '/adminPanel',
+        element: <AdminPanel />
+      }, {
+        path: '/editChapter',
+        element: <EditChapter />
+      },
+      {
+        path: '/editCompany',
+        element: <EditCompany />
+      },
+      {
+        path: '/editAuthor',
+        element: <EditAuthor />
+      }, {
+        path: '/mangaForm',
+        element: <MangaForm />
+      },
+      {
+        path: '/chapterForm',
+        element: <ChapterForm />
+      },
+      {
+        path: '/authorForm',
+        element: <AuthorForm />
+      },
+      {
+        path: '/companyForm',
+        element: <CompanyForm />
+      },
+      {
+        path: '/*',
+        element: <NotFound />
+      }
     ]
   }
 ])

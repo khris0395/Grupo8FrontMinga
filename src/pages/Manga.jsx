@@ -90,6 +90,10 @@ function Manga() {
     const [activeTab, setActiveTab] = useState("description");
     const [isLoading, setIsLoading] = useState(true);
 
+    const handleChapter = (chapter) => {
+        navigate(`/chapter/${chapter._id}`);
+    };
+
     const ChapterCard = ({ chapter }) => (
         <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
             <div className="flex items-center gap-6">
@@ -105,7 +109,7 @@ function Manga() {
             </div>
             <button
                 className="px-8 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
-                onClick={() => handleRead(chapter)}
+                onClick={() => handleChapter(chapter)}
             >
                 Read
             </button>
@@ -130,10 +134,6 @@ function Manga() {
         };
         loadData();
     }, [dispatch, id]);
-
-    const handleRead = (chapter) => {
-        navigate(`/chapter/${chapter._id}`);
-    };
 
     if (isLoading || !categories || !authors) return <div className="text-center p-4">Loading...</div>;
     if (!manga) return <div className="text-center p-4">Select a manga to view details</div>;
