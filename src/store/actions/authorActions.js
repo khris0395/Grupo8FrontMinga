@@ -1,6 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export const fetchAuthor = createAsyncThunk(
+    "author/fetchAuthor",
+    async (authorId) => {
+        const response = await axios.get(`http://localhost:8080/api/authors/${authorId}`);
+        return response.data.response
+    }
+);
+
 export const createAuthor = createAsyncThunk(
     "authors/createAuthor",
     async (authorData) => {

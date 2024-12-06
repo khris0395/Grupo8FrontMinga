@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 import { fetchChapter, fetchComments, createComment } from "../actions/chapterActions"
 
 const initialState = {
-    chapter: [],
+    chapter: null,
     comments: [],
     loading: false,
     error: null,
