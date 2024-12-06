@@ -47,35 +47,20 @@ export default function Manager() {
 
 
                         <div className="my-20">
-                            <h1 className="text-white text-4xl font-bold ">Manga</h1>
+                            <h1 className="text-white text-4xl font-bold ">{profile.name}</h1>
                         </div>
-                        <h3 className=" text-white">Company Or Author</h3>
+                      
                     </div>
                 </div>
 
                 {/* Contenido debajo de la imagen */}
 
                 {/* Filtros por categoria*/}
-                <div className="flex gap-4 justify-start ml-40 my-3 w-full">
-                    {inputs.map((category, index) => (
-                        <label
-                            key={index}
-                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${category.bgColor} ${category.textColor}`}
-                        >
-                            <input
-                                type="checkbox"
-                                name="category"
-                                value={category.label}
-                                className="hidden"
-                            />
-                            <span>{category.label}</span>
-                        </label>
-                    ))}
-                </div>
-                <MangaCard />
+               
+                <MangaCard mangas={mangas} isManager={true}/>
 
             </div>
-            );
+            
         </>
     );
 }
