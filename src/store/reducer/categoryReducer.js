@@ -1,8 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { get_categories } from "../actions/categoryActions"
+import { get_categories, setSelectedCategories } from "../actions/categoryActions"
 
 const initialState = {
     categories: [],
+    categorySelet: [],
     loading: false,
     error: null
 }
@@ -21,5 +22,8 @@ export const categoryReducer = createReducer(initialState, (builder) => {
         .addCase(get_categories.rejected, (state, action) => {
             state.loading = false
             state.error = action.error.message
+        }).
+        addCase(setSelectedCategories,(state, action) => {
+            state.categorySelet = action.payload
         })
 })

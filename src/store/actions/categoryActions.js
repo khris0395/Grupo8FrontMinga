@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit"
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
 
 export const get_categories = createAsyncThunk(
@@ -12,3 +12,5 @@ export const get_categories = createAsyncThunk(
         }
     }
 )
+
+export const setSelectedCategories = createAction('SET_SELECTED_CATEGORIES');
