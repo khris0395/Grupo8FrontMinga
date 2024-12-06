@@ -13,7 +13,7 @@ function EdithAuthor() {
             <div className="bg-white rounded-t-2xl mx-11 -mt-[176px] z-20 relative max-w-screen-lg  ">
                 <section className="flex flex-col md:flex-row h-auto items-center">
 
-                    <div className="  w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/2 2xl:w-1/2  px-6 lg:px-16 xl:px-12
+                    <div className="w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/2 2xl:w-1/2  px-6 lg:px-16 xl:px-12
         flex items-center justify-center ">
 
                         <div className="w-full md:w-1/2 px-6 lg:px-16 xl:px-12 flex items-center justify-center ">
@@ -105,6 +105,7 @@ function EdithAuthor() {
                                     <span className="ml-1">
                                         City</span>
                                 </div>
+
                                 <div className="font-roboto flex items-center">
                                     <svg width="14" height="15" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15.75 12.1594C15.3578 12.1594 14.9656 12.2729 14.625 12.5C13.9438 12.9542 13.0562 12.9542 12.375 12.5C11.6938 12.0458 10.8062 12.0458 10.125 12.5C9.44375 12.9542 8.55625 12.9542 7.875 12.5C7.19375 12.0458 6.30625 12.0458 5.625 12.5C4.94375 12.9542 4.05625 12.9542 3.375 12.5C3.03438 12.2729 2.64219 12.1594 2.25 12.1594M6.75 5V6.5M9 5V6.5M11.25 5V6.5M6.75 2.75H6.7575M9 2.75H9.0075M11.25 2.75H11.2575M15.75 16.25V11C15.75 10.1716 15.0784 9.5 14.25 9.5H3.75C2.92157 9.5 2.25 10.1716 2.25 11V16.25H15.75ZM13.5 9.5V8C13.5 7.17157 12.8284 6.5 12 6.5H6C5.17157 6.5 4.5 7.17157 4.5 8V9.5H13.5Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -120,6 +121,33 @@ function EdithAuthor() {
 
                 </section>
             </div>
+
+            <div className="min-h-screen relative">
+                {/* Contenedor de la imagen con posición relativa */}
+                <div className="relative">
+                    {/* Imagen de fondo */}
+                    <div className="w-full h-screen">
+                        <img
+                            src="https://s3-alpha-sig.figma.com/img/f0d0/3e80/2ae29b0afaf84c3dc0f77973947cfb6b?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=jM4YzCS2maTpYLKMLSX7l3-HbMuW6kkY3prbqcR2D3X~W4yKcLlQs~O1XgA~DP7X2-6HvXTgmCTdp1ZzChQvLzzWIvki1FjUETKsL6KEoQhs-RuTSWXela6gcgTLsmBVx5sg9wtD585MquSDbR0uuDRgjJFOXrD7cLXhjXCChCV3nLEDw1BRiFr7bV8ZyQ-WXXc41BzB242phZNuOyURY8WRGTiuoeoKrIiT9t0rQJsIp1dPwQIpByamNfMKIvIzF2aKscBdIE2D-5J1pn5RIglF3EkbQurznjo~vWOfvoX8VFEyaCYlbcljHy-IWBFHu0U0M6sy~d~H5ITi3HXG2g__"
+                            alt="Mangas"
+                            className="w-full h-full object-cover object-center"
+                        />
+                    </div>
+
+                    {/* Título e input superpuestos */}
+                </div>
+
+                {/* Contenido debajo de la imagen */}
+
+                {/* Filtros por categoria*/}
+                <div className="flex gap-4 justify-start ml-40 my-3 w-full">
+
+                </div>
+                <form action="">
+
+                </form>
+
+            </div> 
 
         </>
     )
