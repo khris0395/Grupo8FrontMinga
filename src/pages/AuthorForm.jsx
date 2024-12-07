@@ -44,26 +44,25 @@ const AuthorForm = () => {
         console.log("Form data before dispatch:", formData);
 
         try {
-            // Crear autor
+            
             await dispatch(
                 createAuthor({
                     authorData: formData,
-                    token, // Pasa el token para validación
+                    token,
                 })
             ).unwrap();
 
-            // Actualizar rol del usuario
             if (user && user._id) {
                 await dispatch(
                     updateRole({
                         userId: user._id,
                         role: 1,
-                        token, // Pasa el token para validación
+                        token,
                     })
                 ).unwrap();
             }
 
-            navigate('/'); // Redirigir al home
+            navigate('/');
         } catch (err) {
             console.error('Error:', err);
         }
