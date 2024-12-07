@@ -1,7 +1,9 @@
+import CompanyProfiles from "../components/CompanyProfiles/CompanyProfiles";
+
 export default function CompanyProfile() {
     return (
         <>
-            <h1>CompanyProfile</h1>
+            <CompanyProfiles />
         </>
     );
 }
