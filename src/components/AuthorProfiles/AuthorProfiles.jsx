@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ToggleSwitch from "./ToggleSwitch";
 
-const AuthorProfile = () => {
+const AuthorProfiles = () => {
     const [formData, setFormData] = useState({
         firstname: "Lucas Ezequiel",
         lastname: "Silva",
@@ -147,4 +147,4 @@ const AuthorProfile = () => {
     );
 };
 
-export default AuthorProfile;
+export default AuthorProfiles;

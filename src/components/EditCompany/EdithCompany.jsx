@@ -3,9 +3,9 @@ import './EdithCompany.css'
 
 const EdithCompany = () => {
   const [formData, setFormData] = useState({
-    firstname: "Toei Animation",
+    name: "Toei Animation",
     city: "United States",
-    website: "https://www.toei-animation-la.com/",
+    website: "https://corp.toei-anim.co.jp/en/index.html",
     profileImage: "https://upload.wikimedia.org/wikipedia/commons/d/d8/Toei_animation_logo.PNG", // Imagen por defecto
   });
 
