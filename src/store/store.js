@@ -9,6 +9,7 @@ import { companyReducer } from "./reducer/companyReducer";
 import { chapterReducer } from "./reducer/chapterReducer";
 import { commentReducer } from "./reducer/commentsReducer"
 
+
 const store = configureStore({
   reducer: {
     mangas: mangaReducer,
@@ -19,7 +20,7 @@ const store = configureStore({
     adminPanel: adminPanelReducer,
     company: companyReducer,
     chapter: chapterReducer,
-    comment: commentReducer
+    comment: commentReducer,
   }
 });
 

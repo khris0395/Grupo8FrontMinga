@@ -1,10 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createAuthor } from '../store/actions/authorActions'
 
 const AuthorForm = () => {
     const dispatch = useDispatch()
+    const user = useSelector((state)=>state.authStore.user)
+    console.log(user);
+    
     const authorState = useSelector((state) => state.author) || {}
     const loading = authorState.loading || false
     const error = authorState.error
@@ -17,39 +20,50 @@ const AuthorForm = () => {
         city_country: '',
         date: '',
         photo: '',
-        user_id: "674e8d017de330968c59d918", // TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
+        user_id: "", // TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
         active: true
     })
+
+
+    // Actualiza el user_id en formData cuando el usuario esté disponible
+    useEffect(() => {
+        if (user && user._id) {
+            setFormData((prevData) => ({
+                ...prevData,
+                user_id: user._id,
+            }));
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
-        })
-    }
+            [e.target.name]: e.target.value,
+        });
+    };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            await dispatch(createAuthor(formData))
-            setSuccessMessage('Author successfully created!')
+            await dispatch(createAuthor(formData));
+            setSuccessMessage('Author successfully created!');
             setFormData({
                 name: '',
                 last_name: '',
                 city_country: '',
                 date: '',
                 photo: '',
-                user_id: "674e8d017de330968c59d918",// TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
-                active: true
-            })
+                user_id: user._id, // Mantén el user_id del usuario actual
+                active: true,
+            });
             setTimeout(() => {
-                setSuccessMessage('')
-            }, 3000)
+                setSuccessMessage('');
+            }, 3000);
         } catch (err) {
-            console.error('Error creating author:', err)
+            console.error('Error creating author:', err);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen flex justify-center items-center p-4">

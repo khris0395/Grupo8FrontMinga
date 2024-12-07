@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/actions/authActions";
@@ -7,25 +7,20 @@ function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const user = useSelector((state) => state.authStore.user)
     const token = useSelector((state) => state.authStore.token);
-    const menuRef = useRef(null);
+    const role = user?.role ?? null;
+    console.log(role);
+    
+
+    
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setIsOpen(false);
-            }
-        }
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     return (
+
         <nav className="absolute top-0 left-0 w-full z-20 bg-transparent">
+                
             <div className="w-full">
                 <div className="flex justify-between items-center h-16 px-4">
                     <button onClick={() => setIsOpen(!isOpen)} className="text-[#4338CA]">
@@ -41,83 +36,87 @@ function Navbar() {
                             className="h-8"
                         />
                     </Link>
-                    {token && (
-                        <div className='flex gap-2'>
-                            <button
-                                className="bg-slate-800 hover:bg-slate-500 text-white px-4 py-2 rounded"
-                                onClick={() => dispatch(logOut(token))}
-                            >
-                                Sign Out
-                            </button>
-                            <img
-                                src={user.photo}
-                                alt="User profile"
-                                className="w-10 h-10 rounded-full border-2 border-white cursor-pointer object-cover"
-                            />
-                        </div>
-                    )}
                 </div>
-
                 {isOpen && (
                     <>
                         <div
-                            className="fixed inset-0 bg-black bg-opacity-50 z-30"
+                            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-30"
                             onClick={() => setIsOpen(false)}
                         />
                         <div
-                            ref={menuRef}
                             className="fixed top-0 left-0 h-full bg-[#4338CA] w-full md:w-fit md:min-w-[256px] z-40"
                         >
                             <div className="p-6">
-                                {token ? (
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <img
-                                            src={user.photo}
-                                            alt="Profile"
-                                            className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                                        />
-                                        <p className="text-white flex-1 truncate">{user.email}</p>
-                                        <button onClick={() => setIsOpen(false)} className="text-white flex-shrink-0">
-                                            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                                                <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <img
-                                            src="https://i.pravatar.cc/150"
-                                            alt="Profile"
-                                            className="w-12 h-12 rounded-full flex-shrink-0"
-                                        />
-                                        <p className="text-white flex-1 truncate">Guest User</p>
-                                        <button onClick={() => setIsOpen(false)} className="text-white flex-shrink-0">
-                                            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                                                <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                )}
+                        {token ? (
+                                    
+                            <div className="flex items-center gap-4 mb-8">
+                                <img
+                                    src={user.photo}
+                                    alt="Profile"
+                                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                                    />
+                                <div>
+                                    <p className="text-white flex-1 truncate">{user.email}</p>
+                                    <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"
+                                    onClick={()=>dispatch(logOut(token))}>
+                                    Sign Out
+                                    </button>
+                                </div>
+                                <button onClick={() => setIsOpen(false)} className="text-white flex-shrink-0">
+                                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+                                        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+                                    </svg>
+                                </button>
+                            </div>       
+                            ) : (
+                            <div className="flex items-center gap-4 mb-8">
+                                <img
+                                src="https://i.pravatar.cc/150"
+                                alt="Profile"
+                                className="w-12 h-12 rounded-full flex-shrink-0"
+                                />
+                                <p className="text-white flex-1 truncate">Guest User</p>
+                                <button onClick={() => setIsOpen(false)} className="text-white flex-shrink-0">
+                                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
+                                        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                            )}
 
                                 <div className="flex flex-col gap-6">
-                                    <Link to="/" className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                    <Link to="/" onClick={() => setIsOpen(false)} className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                         Home
                                     </Link>
-                                    {!token ? (
-                                        <>
-                                            <Link to="/signUp" className="text-white text-xl px-6">
-                                                Register
-                                            </Link>
-                                            <Link to="/signIn" className="text-white text-xl px-6">
-                                                Log in
-                                            </Link>
-                                        </>
-                                    ) : null}
+                                    {!token && (<Link to="/signUp" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                        Register
+                                    </Link>
+                                    )}
+                                    {!token && (
+                                    <Link to="/signIn" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                        Log in
+                                    </Link>
+                                    )}
+                                    {token && (
+                                    <Link to="/mangas" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                        Mangas
+                                    </Link>
+                                    )}
+                                    {(!token && (role===1 || role===2)) && (
+                                    <Link to="/manager" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                        Manager
+                                    </Link>
+                                    )}
+                                    {(token && role===0) && (
+                                    <Link to="/newRole" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                        New Role
+                                    </Link>
+                                    )}
                                 </div>
                             </div>
                         </div>
-                    </>
-                )}
+                        </>
+                    )}
             </div>
         </nav>
     );
