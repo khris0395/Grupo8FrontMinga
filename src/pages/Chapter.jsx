@@ -29,7 +29,7 @@ const Chapter = () => {
     const [newComment, setNewComment] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
-    const maxButtons = 5; // Máximo de botones visibles
+    const maxButtons = 3; // Máximo de botones visibles
 
     useEffect(() => {
         const loadData = async () => {
@@ -108,7 +108,7 @@ const Chapter = () => {
             {/* Page Viewer */}
             <div className="relative flex justify-center items-center bg-black h-[90vh] md:h-[80vh]">
                 <button
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl hover:w-10"
                     onClick={handlePreviousPage}
                 >
                     🡠
@@ -119,7 +119,7 @@ const Chapter = () => {
                     className="max-h-full"
                 />
                 <button
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl hover:w-10"
                     onClick={handleNextPage}
                 >
                     🡢

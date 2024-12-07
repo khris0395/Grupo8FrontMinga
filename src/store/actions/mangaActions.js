@@ -3,10 +3,29 @@ import axios from "axios";
 
 export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
     async (search) => {
-        const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle/${search}`) 
-        return response.data.response
+
+        try {
+            const token = localStorage.getItem('token')
+            console.log(token);
+            const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle/${search}`, {
+                headers: {
+                'Authorization': `Bearer ${token}`
+            }
+            })
+            return response.data.response
+
+        } catch (error) {
+            return 'error'
+        }
     }
 );
+
+export const deleteManga = createAsyncThunk(
+    'mangas/deleteManga',
+    async (id) => {
+        const response = await axios.delete(`http://localhost:8080/api/mangas/delete/${id}`)
+    }
+)
 
 export const fetchCategories = createAsyncThunk(
     "mangas/fetchCategories",

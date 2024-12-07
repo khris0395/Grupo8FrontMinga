@@ -1,7 +1,12 @@
+import EdithCompany from "../components/EditCompany/EdithCompany"; 
+
 export default function EditCompany() {
     return (
         <>
-            <h1>EditCompany</h1>
+            
+            <EdithCompany />
+
+
         </>
     );
 }

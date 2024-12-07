@@ -1,8 +1,22 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const fetchManager = createAsyncThunk('manager/fetch', async () => {
+export const getManagerProfile = createAsyncThunk('manager/fetch', async () => {
 
-    const response = await axios.get('')
+    try {
+
+        const token = localStorage.getItem('token')
+        console.log(token);
+
+        // Realizamos la solicitud con el token en los headers
+        const response = await axios.get('http://localhost:8080/api/manager/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data
+    } catch (error) {
+        return 'error'
+    }
 
 })

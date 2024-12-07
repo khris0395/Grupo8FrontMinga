@@ -10,6 +10,7 @@ import { chapterReducer } from "./reducer/chapterReducer";
 import { commentReducer } from "./reducer/commentsReducer"
 import roleReducer from "./reducer/roleReducer";
 
+import { managerReducer } from "./reducer/managerReducer";
 
 const store = configureStore({
   reducer: {
@@ -22,7 +23,8 @@ const store = configureStore({
     company: companyReducer,
     chapter: chapterReducer,
     comment: commentReducer,
-    roleStore: roleReducer
+    roleStore: roleReducer,
+    manager: managerReducer
   }
 });
 
