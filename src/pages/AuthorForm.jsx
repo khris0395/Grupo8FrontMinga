@@ -1,31 +1,27 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react'
-import { createAuthor } from '../store/actions/authorActions'
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createAuthor } from '../store/actions/authorActions';
+import { updateRole } from '../store/actions/roleActions';
 
 const AuthorForm = () => {
-    const dispatch = useDispatch()
-    const user = useSelector((state)=>state.authStore.user)
-    console.log(user);
-    
-    const authorState = useSelector((state) => state.author) || {}
-    const loading = authorState.loading || false
-    const error = authorState.error
-    const createSuccess = authorState.createSuccess
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const [successMessage, setSuccessMessage] = useState('')
+    const { user, token } = useSelector((state) => state.authStore);
+    const { loading, error, successMessage } = useSelector((state) => state.author) || {};
+  
+
     const [formData, setFormData] = useState({
         name: '',
         last_name: '',
         city_country: '',
         date: '',
         photo: '',
-        user_id: "", // TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
-        active: true
-    })
+        user_id: '',
+        active: true,
+    });
 
-
-    // Actualiza el user_id en formData cuando el usuario esté disponible
     useEffect(() => {
         if (user && user._id) {
             setFormData((prevData) => ({
@@ -45,23 +41,31 @@ const AuthorForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log("Form data before dispatch:", formData);
+
         try {
-            await dispatch(createAuthor(formData));
-            setSuccessMessage('Author successfully created!');
-            setFormData({
-                name: '',
-                last_name: '',
-                city_country: '',
-                date: '',
-                photo: '',
-                user_id: user._id, // Mantén el user_id del usuario actual
-                active: true,
-            });
-            setTimeout(() => {
-                setSuccessMessage('');
-            }, 3000);
+            // Crear autor
+            await dispatch(
+                createAuthor({
+                    authorData: formData,
+                    token, // Pasa el token para validación
+                })
+            ).unwrap();
+
+            // Actualizar rol del usuario
+            if (user && user._id) {
+                await dispatch(
+                    updateRole({
+                        userId: user._id,
+                        role: 1,
+                        token, // Pasa el token para validación
+                    })
+                ).unwrap();
+            }
+
+            navigate('/'); // Redirigir al home
         } catch (err) {
-            console.error('Error creating author:', err);
+            console.error('Error:', err);
         }
     };
 

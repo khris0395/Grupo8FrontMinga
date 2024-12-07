@@ -5,18 +5,16 @@ import { createCompany } from '../store/actions/companyActions'
 
 const CompanyForm = () => {
     const dispatch = useDispatch()
-    const companyState = useSelector((state) => state.company) || {}
-    const loading = companyState.loading || false
-    const error = companyState.error
+    const { user, token } = useSelector((state) => state.authStore);
+    const { loading, error, successMessage } = useSelector((state) => state.companyState) || {};
     const createSuccess = companyState.createSuccess
 
-    const [successMessage, setSuccessMessage] = useState('')
     const [formData, setFormData] = useState({
         name: '',
         website: '',
         photo: '',
         description: '',
-        user_id: "674a404d2c593fb14a0d09af", // ID temporal para pruebas
+        user_id: "", 
         active: true
     })
 
@@ -27,27 +25,24 @@ const CompanyForm = () => {
         })
     }
 
+    useEffect(() => {
+        if (user && user._id) {
+            setFormData((prevData) => ({
+                ...prevData,
+                user_id: user._id,
+            }));
+        }
+    }, [user]);
+
     const handleSubmit = async (e) => {
         e.preventDefault()
 
         try {
             await dispatch(createCompany(formData))
-            setSuccessMessage('Company successfully created!')
-            setFormData({
-                name: '',
-                website: '',
-                photo: '',
-                description: '',
-                user_id: "674a404d2c593fb14a0d09af",
-                active: true
-            })
-            setTimeout(() => {
-                setSuccessMessage('')
-            }, 3000)
-        } catch (err) {
-            console.error('Error creating company:', err)
-        }
-    }
+
+        }catch(error){
+            console.error('Error:', err);
+        }}
 
     return (
         <div className="relative w-[430px] h-[932px] rounded-[10px] mx-auto">
