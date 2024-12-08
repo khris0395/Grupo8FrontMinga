@@ -4,8 +4,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/actions/authActions";
 import '@madzadev/audio-player/dist/index.css';
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
+import { useLocation } from "react-router-dom";
 
 function Navbar() {
+
+    const location = useLocation();
+
+    // Define las rutas donde el botón será blanco
+    const whiteButtonRoutes = [
+        "/",
+        "/chapter:id",
+        "/mangas",
+        "/favourites",
+        "/home",
+        "/manager",
+        "/signIn"
+    ];
+
+    // Verifica si la ruta actual coincide con alguna de las rutas especificadas
+    const WhiteButton = whiteButtonRoutes.some(route => 
+        route.includes(":") 
+            ? location.pathname.startsWith(route.split(":")[0]) 
+            : location.pathname === route
+    );
+    
+
     const [isOpen, setIsOpen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -34,7 +57,10 @@ function Navbar() {
         <nav className="absolute top-0 left-0 w-full z-20 bg-transparent">
             <div className="w-full">
                 <div className="flex justify-between items-center h-16 px-4">
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-[#4338CA]">
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className={WhiteButton ? "text-white" : "text-[#4338CA]"}
+                    >
                         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
