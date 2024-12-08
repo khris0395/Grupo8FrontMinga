@@ -14,6 +14,7 @@ export default function MangaCard({ mangas, isManager }) {
     const {categories, categorySelet} = useSelector((state) => state.categories)
 
     console.log(categorySelet);
+    console.log(categorySelet);
 
      // Cambiar las categorías seleccionadas
      const handleCategoryChange = (category) => {
@@ -30,17 +31,6 @@ export default function MangaCard({ mangas, isManager }) {
         categorySelet.some(category => manga.category_id.name.includes(category))
       );
     
-    console.log(filteredMangas);
-    
-    const inputs =
-    [
-        { label: 'Todos', bgColor: 'bg-gray-400', textColor: 'text-white' },
-        { label: 'Shōnen', bgColor: 'bg-red-200', textColor: 'text-red-600' },
-        { label: 'Seinen', bgColor: 'bg-orange-200', textColor: 'text-orange-600' },
-        { label: 'Shōjo', bgColor: 'bg-green-200', textColor: 'text-green-600' },
-        { label: 'Kodomo', bgColor: 'bg-purple-200', textColor: 'text-purple-600' },
-    ]
-  
     useEffect(() => {
         // Despachar la acción fetchMangas
         dispatch(fetchMangas(search));
@@ -51,11 +41,11 @@ export default function MangaCard({ mangas, isManager }) {
 
             <div className="w-11/12 bg-white h-full px-4 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
 
-                <div className="flex gap-4 justify-start ml-40 my-3 w-full">
+                <div className="flex flex-wrap gap-4 justify-start ml-40 my-3 w-full">
                     {categories.map((category, index) => (
                         <label
                             key={index}
-                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 bg-[${category.color}] text-black`}
+                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all duration-300  ${category.text}`}
                         >
                             <input
                                 type="checkbox"
@@ -78,10 +68,10 @@ export default function MangaCard({ mangas, isManager }) {
 
                             {/* Contenido de la tarjeta */}
 
-                            <div className="p-4 w-2/3 border-l-4 border-violet-500">
+                            <div className={`p-4 w-2/3 border-l-4 border-${manga.category_id.text}-500`}>
 
                                 <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
-                                <p className="text-sm text-violet-500">Type</p>
+                                <p className={`text-sm ${manga.category_id.text}`}>{manga.category_id.name}</p>
                                  {/* Si es Manager, mostrar botones adicionales */}
                                  {isManager ? (
                                     <>
@@ -90,7 +80,7 @@ export default function MangaCard({ mangas, isManager }) {
                                         <ButtonAddChapter mangaId={manga._id} />
                                     </>
                                 ) : (
-                                    <ButtonReadManga mangaId={manga._id} />
+                                    <ButtonReadManga mangaId={manga._id} bgColor={manga.category_id.bg} textColor={manga.category_id.text}/>
                                 )}
                             </div>
                             {/* Imagen del Manga */}
