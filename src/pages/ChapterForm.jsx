@@ -8,11 +8,10 @@ const ChapterForm = () => {
     const chapterState = useSelector((state) => state.chapter) || {}
     const loading = chapterState.loading || false
     const error = chapterState.error
-    const createSuccess = chapterState.createSuccess
 
     const [successMessage, setSuccessMessage] = useState('')
     const [formData, setFormData] = useState({
-        manga_id: "674a4ad09bfc2a1b87eea87d", // TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
+        manga_id: "674a4ad09bfc2a1b87eea87d", // id del manga 
         title: '',
         order: '',
         pages: [],
@@ -42,12 +41,11 @@ const ChapterForm = () => {
             return
         }
 
-        console.log('Datos a enviar:', formData)
         try {
             await dispatch(createChapter(formData))
             setSuccessMessage('Chapter successfully created!')
             setFormData({
-                manga_id: "674a4ad09bfc2a1b87eea87d",// TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
+                manga_id: "674a4ad09bfc2a1b87eea87d", // id del manga
                 title: '',
                 order: '',
                 pages: [],
@@ -62,78 +60,86 @@ const ChapterForm = () => {
     }
 
     return (
-        <div className="relative w-[430px] h-[932px] rounded-[10px] mx-auto">
-            {/* Contenedor principal del formulario */}
-            <div className="flex flex-col items-center">
-                {/* Título */}
-                <h1 className="absolute w-[207px] h-[42px] left-[111px] top-[179px] font-roboto font-normal text-[36px] leading-[42px] text-black whitespace-nowrap">
-                    New Chapter
-                </h1>
+        <main className="h-screen grid grid-cols-1 md:grid-cols-2">
+            {/* Left side - Form */}
+            <div className="bg-[#EBEBEB] flex flex-col items-center pt-20">
+                <div className="w-full max-w-md px-4">
+                    <h1 className="text-3xl font-bold mb-4">New Chapter</h1>
+                    <p className="text-gray-600 mb-12">
+                        Create a new chapter for your manga. Fill in the details below.
+                    </p>
 
-                {/* Formulario */}
-                <form onSubmit={handleSubmit} className="absolute w-[280px] left-[75px] top-[308px] flex flex-col gap-[28px]">
-                    {/* Mensaje de éxito */}
                     {successMessage && (
-                        <div className="absolute top-[-40px] left-0 right-0 bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-lg text-center">
+                        <div className="text-center bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-lg mb-8">
                             {successMessage}
                         </div>
                     )}
 
-                    {/* Inputs */}
-                    <div className="relative h-[23px]">
-                        <input
-                            type="text"
-                            name="title"
-                            placeholder="Insert title"
-                            value={formData.title}
-                            onChange={handleChange}
-                            className="w-full pb-1 border-b border-[#424242] text-[#9D9D9D] font-roboto text-base focus:outline-none bg-transparent"
-                        />
-                    </div>
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <div>
+                            <input
+                                type="text"
+                                name="title"
+                                placeholder="Insert title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none"
+                            />
+                        </div>
 
-                    <div className="relative h-[23px]">
-                        <input
-                            type="number"
-                            name="order"
-                            placeholder="Insert order"
-                            value={formData.order}
-                            onChange={handleChange}
-                            className="w-full pb-1 border-b border-[#424242] text-[#9D9D9D] font-roboto text-base focus:outline-none bg-transparent"
-                        />
-                    </div>
+                        <div>
+                            <input
+                                type="number"
+                                name="order"
+                                placeholder="Insert order"
+                                value={formData.order}
+                                onChange={handleChange}
+                                className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none"
+                            />
+                        </div>
 
-                    <div className="relative h-[23px]">
-                        <input
-                            type="text"
-                            name="pages"
-                            placeholder="Insert pages"
-                            value={formData.pages.join(', ')}
-                            onChange={handleChange}
-                            className="w-full pb-1 border-b border-[#424242] text-[#9D9D9D] font-roboto text-base focus:outline-none bg-transparent"
-                        />
-                    </div>
+                        <div>
+                            <input
+                                type="text"
+                                name="pages"
+                                placeholder="Insert pages (comma-separated)"
+                                value={formData.pages.join(', ')}
+                                onChange={handleChange}
+                                className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none"
+                            />
+                        </div>
 
-                    <div className="relative h-[23px]">
-                        <input
-                            type="text"
-                            name="cover_photo"
-                            placeholder="Insert cover photo"
-                            value={formData.cover_photo}
-                            onChange={handleChange}
-                            className="w-full pb-1 border-b border-[#424242] text-[#9D9D9D] font-roboto text-base focus:outline-none bg-transparent"
-                        />
-                    </div>
+                        <div>
+                            <input
+                                type="text"
+                                name="cover_photo"
+                                placeholder="Insert cover photo URL"
+                                value={formData.cover_photo}
+                                onChange={handleChange}
+                                className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none"
+                            />
+                        </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-[280px] h-[68px] absolute left-0 top-[243px] bg-[#4338CA] rounded-[50000px] text-white font-bold text-2xl flex justify-center items-center"
-                    >
-                        {loading ? 'Sending...' : 'Send'}
-                    </button>
-                </form>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-3 px-4 bg-[#4338CA] text-white rounded-full hover:bg-opacity-90 transition-all mt-12"
+                        >
+                            {loading ? 'Sending...' : 'Send'}
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+
+            {/* Right side - Background Image */}
+            <div
+                className="hidden md:block bg-cover bg-center"
+                style={{
+                    backgroundImage: `url('https://s3-alpha-sig.figma.com/img/5d98/eac1/025f012e94a72840af6fc1f67a349f61?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=MtGJF7E0D6~8zP9qJDOh~vl~H-KfvC-43eCh-x0l1DphvRvw-q4VjRKc2pvAyU07MpdMI8DnytXVjzZ2sLz7qxUEJFsWD4pJd3VQqkPJmCr-ucqj2OuyAfiYHd8j7zWEzIm8AqrsMcLVWAsQ9E1juZy3ZGgxL5iJZwG5Neuvn~oU-pdeDLybUkdtBxbWN5-VvYmeeteKMPy9WaRQaByX-g4ieNpvdeCUqZngEkVytLr4tbYBe55HhSMhQGvxwwlXEYfkFT9LRvwVOfkCgum2tY4Ry2S~9lVhZTdjAMc~zXjodSKPWOFHggoN4GrSA-qAkaaGbQi0J2xdcEuop1nJkA__')`,
+                    filter: "brightness(0.6) saturate(1.5) sepia(0.7) hue-rotate(220deg)"
+                }}
+            />
+        </main>
     )
 }
 
