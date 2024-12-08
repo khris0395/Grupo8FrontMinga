@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { fetchChapter, fetchComments, createComment } from "../actions/chapterActions"
+import { fetchChapter, fetchCommentFromChapter, createComment } from "../actions/chapterActions"
 
 const initialState = {
     chapter: null,
@@ -26,14 +26,14 @@ export const chapterReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-        .addCase(fetchComments.pending, (state) => {
+        .addCase(fetchCommentFromChapter.pending, (state) => {
             state.loading = true;
         })
-        .addCase(fetchComments.fulfilled, (state, action) => {
+        .addCase(fetchCommentFromChapter.fulfilled, (state, action) => {
             state.comments = action.payload;
             state.loading = false;
         })
-        .addCase(fetchComments.rejected, (state, action) => {
+        .addCase(fetchCommentFromChapter.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
         })

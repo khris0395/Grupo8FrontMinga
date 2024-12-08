@@ -20,9 +20,9 @@ const store = configureStore({
     editChapter: editChapter,
     authors: authorReducer,
     adminPanel: adminPanelReducer,
-    company: companyReducer,
+    companies: companyReducer,
     chapter: chapterReducer,
-    comment: commentReducer,
+    comments: commentReducer,
     roleStore: roleReducer,
     manager: managerReducer
   }
