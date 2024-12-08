@@ -53,6 +53,9 @@ const AuthorForm = () => {
             ).unwrap();
 
             if (user && user._id) {
+
+                console.log("entrando a role");
+                
                 await dispatch(
                     updateRole({
                         userId: user._id,
