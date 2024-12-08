@@ -1,55 +1,75 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useState } from 'react'
-import { createAuthor } from '../store/actions/authorActions'
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { createAuthor } from '../store/actions/authorActions';
+import { updateRole } from '../store/actions/authActions';
 
 const AuthorForm = () => {
-    const dispatch = useDispatch()
-    const authorState = useSelector((state) => state.author) || {}
-    const loading = authorState.loading || false
-    const error = authorState.error
-    const createSuccess = authorState.createSuccess
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const [successMessage, setSuccessMessage] = useState('')
+    const { user, token } = useSelector((state) => state.authStore);
+    const { loading, error, successMessage } = useSelector((state) => state.author) || {};
+  
+
     const [formData, setFormData] = useState({
         name: '',
         last_name: '',
         city_country: '',
         date: '',
         photo: '',
-        user_id: "674e8d017de330968c59d918", // TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
-        active: true
-    })
+        user_id: '',
+        active: true,
+    });
+
+    useEffect(() => {
+        if (user && user._id) {
+            setFormData((prevData) => ({
+                ...prevData,
+                user_id: user._id,
+            }));
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
-        })
-    }
+            [e.target.name]: e.target.value,
+        });
+    };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        console.log("Form data before dispatch:", formData);
 
         try {
-            await dispatch(createAuthor(formData))
-            setSuccessMessage('Author successfully created!')
-            setFormData({
-                name: '',
-                last_name: '',
-                city_country: '',
-                date: '',
-                photo: '',
-                user_id: "674e8d017de330968c59d918",// TODO: Este ID vendrá del autor seleccionado cuando se implemente la autenticación
-                active: true
-            })
-            setTimeout(() => {
-                setSuccessMessage('')
-            }, 3000)
+            
+            await dispatch(
+                createAuthor({
+                    authorData: formData,
+                    token,
+                })
+            ).unwrap();
+
+            if (user && user._id) {
+
+                console.log("entrando a role");
+                
+                await dispatch(
+                    updateRole({
+                        userId: user._id,
+                        role: 1,
+                        token,
+                    })
+                ).unwrap();
+            }
+
+            navigate('/');
         } catch (err) {
-            console.error('Error creating author:', err)
+            console.error('Error:', err);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen flex justify-center items-center p-4">

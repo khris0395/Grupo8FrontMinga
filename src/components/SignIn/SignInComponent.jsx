@@ -9,14 +9,13 @@ const SignInComponent = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const authStore = useSelector((state) => state.authStore);
+  const { loading, error, successMessage } = useSelector((state) => state.authStore);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login({ email, password }));
   };
 
-  const loading = authStore.loading;
-  const error = authStore.error;
 
     return (
       <div className="flex">
@@ -102,6 +101,9 @@ const SignInComponent = () => {
               >
                 Sign in
               </button>
+                {loading && <p className="mt-4 text-center text-blue-500">Registering...</p>}
+                {error && <p className="mt-4 text-center text-red-500">{error}</p>}
+                {successMessage && <p className="mt-4 text-center text-green-500">{successMessage}</p>}
               {/* Botón de Google */}
               <button
 
@@ -132,6 +134,7 @@ const SignInComponent = () => {
               </p>
               {loading && <p className="text-center text-teal-400">Loading...</p>}
               {error && <p className="text-center text-red-500">{error}</p>}
+              {successMessage && <p className="mt-4 text-center text-green-500">{successMessage}</p>}
             </div>
           </div>
         </div>

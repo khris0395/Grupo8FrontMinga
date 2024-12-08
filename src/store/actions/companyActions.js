@@ -3,14 +3,15 @@ import axios from "axios";
 
 export const createCompany = createAsyncThunk(
     "companies/createCompany",
-    async (companyData) => {
+    async (companyData, token) => {
         try {
             const response = await axios.post(
                 'http://localhost:8080/api/companies/create',
                 companyData,
                 {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     }
                 }
             )
@@ -21,3 +22,18 @@ export const createCompany = createAsyncThunk(
         }
     }
 )
+
+export const fetchCompany = createAsyncThunk(
+    "author/fetchCompany",
+    async (companyId) => {
+        const response = await axios.get(`http://localhost:8080/api/comments/commentById/${companyId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        console.log("fetch company",response.data.response);
+        return response.data.response
+    }
+);

@@ -32,7 +32,7 @@ function NewRole() {
                     <div className="space-y-5">
                         {/* Author Card */}
                         <Link
-                            to="#"
+                            to="/authorForm"
                             className="block w-full bg-white border border-[#E5E5E5] rounded-[15px] p-4 hover:shadow-lg transition-all duration-300"
                         >
                             <div className="flex items-center">
@@ -51,7 +51,7 @@ function NewRole() {
 
                         {/* Company Card */}
                         <Link
-                            to="#"
+                            to="/companyForm"
                             className="block w-full bg-white border-2 border-[#4338CA] rounded-[15px] p-4 hover:shadow-lg transition-all duration-300"
                         >
                             <div className="flex items-center">

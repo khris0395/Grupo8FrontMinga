@@ -90,4 +90,49 @@ export const fetchMangaDetails = createAsyncThunk(
   }
 );
 
-export {login, setUser, logOut, registerUser, loginWithGoogle};
+const updateRole = createAsyncThunk(
+  'updateRole',
+  async ({ userId, role, token }, { rejectWithValue }) => {
+      try {
+          const response = await axios.patch(
+              'http://localhost:8080/api/users/updateRole',
+              { _id: userId, role },
+              {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+              }
+          );
+          return response.data; // Devuelve la respuesta de la actualización
+      } catch (error) {
+          return rejectWithValue(error.response?.data || error.message);
+      }
+  })
+
+  const initializeAuth = createAsyncThunk(
+    'auth/initialize',
+    async (_, { dispatch }) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                // Hacer una petición al backend para verificar el token y obtener datos del usuario
+                const response = await axios.get('http://localhost:8080/api/auth/verify', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return {
+                    user: response.data.user,
+                    token: token
+                };
+            } catch (error) {
+                localStorage.removeItem("token");
+                throw error;
+            }
+        }
+        return null;
+    }
+);
+
+
+export {login, setUser, logOut, registerUser, loginWithGoogle, updateRole, initializeAuth};
