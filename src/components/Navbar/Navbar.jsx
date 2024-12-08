@@ -22,12 +22,12 @@ function Navbar() {
     ];
 
     // Verifica si la ruta actual coincide con alguna de las rutas especificadas
-    const WhiteButton = whiteButtonRoutes.some(route => 
-        route.includes(":") 
-            ? location.pathname.startsWith(route.split(":")[0]) 
+    const WhiteButton = whiteButtonRoutes.some(route =>
+        route.includes(":")
+            ? location.pathname.startsWith(route.split(":")[0])
             : location.pathname === route
     );
-    
+
 
     const [isOpen, setIsOpen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -116,13 +116,13 @@ function Navbar() {
                                                 alt="Profile"
                                                 className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                                             />
-                                        <div>
-                                            <p className="text-white flex-1 truncate">{user.email}</p>
-                                            <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"
-                                                    onClick={()=>dispatch(logOut(token))}>
-                                                Sign Out
-                                            </button>
-                                        </div>
+                                            <div>
+                                                <p className="text-white flex-1 truncate">{user.email}</p>
+                                                <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"
+                                                    onClick={() => dispatch(logOut(token))}>
+                                                    Sign Out
+                                                </button>
+                                            </div>
                                             <button onClick={() => setIsOpen(false)} className="text-white flex-shrink-0">
                                                 <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none">
                                                     <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
@@ -150,28 +150,28 @@ function Navbar() {
                                             Home
                                         </Link>
                                         {!token && (<Link to="/signUp" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                        Register
+                                            Register
                                         </Link>
                                         )}
                                         {!token && (
-                                        <Link to="/signIn" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                            Log in
-                                        </Link>
+                                            <Link to="/signIn" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Log in
+                                            </Link>
                                         )}
-                                        
+
                                         <Link to="/mangas" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
                                             Mangas
                                         </Link>
-                                        
-                                        {(token && (role===1 || role===2)) && (
-                                        <Link to="/manager" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                            Manager
-                                        </Link>
+
+                                        {(token && (role === 1 || role === 2)) && (
+                                            <Link to="/manager" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Manager
+                                            </Link>
                                         )}
-                                        {(token && role===0) && (
-                                        <Link to="/newRole" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                            New Role
-                                        </Link>
+                                        {(token && role === 0) && (
+                                            <Link to="/newRole" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                New Role
+                                            </Link>
                                         )}
                                     </div>
                                 </div>

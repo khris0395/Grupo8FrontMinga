@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
 import { useParams } from "react-router-dom";
 import { fetchAuthor } from "../store/actions/authorActions";
-import { commentReducer } from "../store/reducer/commentsReducer";
+import { fetchCompany } from "../store/actions/companyActions";
 import { IoIosSend } from "react-icons/io";
 import {
     fetchChapter,
     createComment,
-    fetchComments
+    fetchCommentFromChapter
 } from "../store/actions/chapterActions";
 
 const Chapter = () => {
@@ -18,12 +18,14 @@ const Chapter = () => {
     // Extraer el capítulo y los comentarios del estado
     const { chapter, loading, error } = useSelector((state) => state.chapter);
     const { comments } = useSelector((state) => state.chapter.comments);
-    // const { authors } = useSelector((state) => state.authors);
-    const { comment } = useSelector((state) => state.comment);
+    const { authors } = useSelector((state) => state.authors);
+    const { companies } = useSelector((state) => state.companies);
+    const [authorsData, setAuthorsData] = useState({});
 
     console.log("Estado actual del capítulo:", chapter);
     console.log("Comentarios actuales:", comments);
-    console.log("comentarios", comment);
+    console.log("autores:", authors);
+    console.log("companies:", companies);
 
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -39,10 +41,8 @@ const Chapter = () => {
                 setIsLoading(true);
                 if (id) {
                     await Promise.all([
-                        dispatch(fetchComments(id)),
+                        dispatch(fetchCommentFromChapter(id)),
                         dispatch(fetchChapter(id)),
-                        dispatch(fetchAuthor()),
-                        dispatch(commentReducer())
                     ]);
                 }
             } finally {
@@ -52,7 +52,31 @@ const Chapter = () => {
         loadData();
     }, [dispatch, id]);
 
+    useEffect(() => {
+        const fetchAuthorsAndCompanies = async () => {
+            const promises = comments.map(async (comment) => {
+                if (comment.author_id) {
+                    const response = await dispatch(fetchAuthor(comment.author_id));
+                    return { id: comment.author_id, data: response.payload };
+                } else if (comment.company_id) {
+                    const response = await dispatch(fetchCompany(comment.company_id));
+                    return { id: comment.company_id, data: response.payload };
+                }
+                return null;
+            });
 
+            const resolvedData = await Promise.all(promises);
+
+            const authorMap = {};
+            resolvedData.forEach((item) => {
+                if (item) {
+                    authorMap[item.id] = item.data || { name: "unknown" };
+                }
+            });
+
+            setAuthorsData(authorMap);
+        };
+    }, [comments, dispatch]);
 
     const handlePreviousPage = () => {
         if (currentPage > 0) setCurrentPage((prev) => prev - 1);
@@ -135,28 +159,27 @@ const Chapter = () => {
                     <div className=" relative bg-[#ebebeb] rounded-lg w-11/12 max-w-lg p-4">
                         <h2 className="text-lg font-bold mb-4">Comments</h2>
                         <div className="max-h-[50vh] overflow-y-auto space-y-4">
-                            {comments?.map((comment, index) => (
-                                <div
-                                    key={index}
-                                    className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded"
-                                >
-                                    <div className="flex gap-5 items-center mb-5">
-                                        <img
-                                            src={comment.avatar}
-                                            alt={comment.author}
-                                            className="w-10 h-10 rounded-full"
-                                        />
-                                        <p className="font-medium">Nombre{comment.author}</p>
+                            {comments?.map((comment, index) => {
+                                const authorData = authorsData[comment.author_id] || authorsData[comment.company_id];
+                                return (
+                                    <div key={index} className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded">
+                                        <div className="flex gap-5 items-center mb-5">
+                                            <img
+                                                src={authorData?.photo || "/default-avatar.png"}
+                                                alt={authorData?.name || "unknown"}
+                                                className="w-10 h-10 rounded-full"
+                                            />
+                                            <p className="font-medium">{authorData?.name || "unknown"}</p>
+                                        </div>
+                                        <div className="flex flex-col w-96 text-center gap-2">
+                                            <p className="text-sm text-gray-500">{comment.message}</p>
+                                            <p className="text-xs text-gray-400">
+                                                {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col w-96 text-center gap-2">
-                                        <p className="text-sm text-gray-500">{comment.message}</p>
-                                        <p className="text-xs text-gray-400">
-                                            {formatDistanceToNow(new Date(comment.
-                                                createdAt), { addSuffix: true })}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                         <div className="mt-4 flex items-center space-x-2">
                             <div className="relative flex-1">
