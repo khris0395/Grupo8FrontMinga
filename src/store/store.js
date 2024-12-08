@@ -8,7 +8,7 @@ import { adminPanelReducer } from "./reducer/adminPanelReducer";
 import { companyReducer } from "./reducer/companyReducer";
 import { chapterReducer } from "./reducer/chapterReducer";
 import { commentReducer } from "./reducer/commentsReducer"
-import roleReducer from "./reducer/roleReducer";
+
 
 import { managerReducer } from "./reducer/managerReducer";
 
@@ -23,7 +23,6 @@ const store = configureStore({
     company: companyReducer,
     chapter: chapterReducer,
     comment: commentReducer,
-    roleStore: roleReducer,
     manager: managerReducer
   }
 });

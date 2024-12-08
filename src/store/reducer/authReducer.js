@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { login, setUser, logOut, registerUser, loginWithGoogle } from "../actions/authActions";
+import { login, setUser, logOut, registerUser, loginWithGoogle, updateRole } from "../actions/authActions";
 
 const initialState = {  
     loading : false,
@@ -73,7 +73,20 @@ const initialState = {
     .addCase(loginWithGoogle, (state, action)=>{
         state.loading = false,
         state.error = false
-    })
+    }).addCase(updateRole.pending, (state) => {
+      state.loading = true;
+  })
+  .addCase(updateRole.fulfilled, (state, action) => {
+      console.log();
+      
+      state.loading = false;
+      state.error = false,
+      state.user = action.payload.user
+  })
+  .addCase(updateRole.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+  });
 
 })
 
