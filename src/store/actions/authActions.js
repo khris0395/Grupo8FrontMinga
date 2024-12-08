@@ -109,4 +109,30 @@ const updateRole = createAsyncThunk(
       }
   })
 
-export {login, setUser, logOut, registerUser, loginWithGoogle, updateRole};
+  const initializeAuth = createAsyncThunk(
+    'auth/initialize',
+    async (_, { dispatch }) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                // Hacer una petición al backend para verificar el token y obtener datos del usuario
+                const response = await axios.get('http://localhost:8080/api/auth/verify', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                return {
+                    user: response.data.user,
+                    token: token
+                };
+            } catch (error) {
+                localStorage.removeItem("token");
+                throw error;
+            }
+        }
+        return null;
+    }
+);
+
+
+export {login, setUser, logOut, registerUser, loginWithGoogle, updateRole, initializeAuth};

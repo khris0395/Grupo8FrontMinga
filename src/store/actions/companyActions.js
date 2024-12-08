@@ -26,7 +26,13 @@ export const createCompany = createAsyncThunk(
 export const fetchCompany = createAsyncThunk(
     "author/fetchCompany",
     async (companyId) => {
-        const response = await axios.get(`http://localhost:8080/api/comments/commentById/${companyId}`);
+        const response = await axios.get(`http://localhost:8080/api/comments/commentById/${companyId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
         console.log("fetch company",response.data.response);
         return response.data.response
     }
