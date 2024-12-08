@@ -5,20 +5,14 @@ export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
     async (search) => {
 
         try {
-            const token = localStorage.getItem('token')
-            console.log(token);
-            const response = await axios.get(`http://localhost:8080/api/mangas/mangasByTitle/${search}`, {
-                headers: {
-                'Authorization': `Bearer ${token}`
-            }
-            })
+            const response = await axios.get(`http://localhost:8080/api/mangas/allMangas?title=${search}`)
             return response.data.response
 
         } catch (error) {
             return 'error'
         }
     }
-);
+)
 
 export const deleteManga = createAsyncThunk(
     'mangas/deleteManga',
