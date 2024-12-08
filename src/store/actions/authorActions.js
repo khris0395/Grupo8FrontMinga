@@ -4,7 +4,8 @@ import axios from "axios";
 export const fetchAuthor = createAsyncThunk(
     "author/fetchAuthor",
     async (authorId) => {
-        const response = await axios.get(`http://localhost:8080/api/authors/${authorId}`);
+        const response = await axios.get(`http://localhost:8080/api/authors/id/${authorId}`);
+        console.log("fetch authors",response.data.response);
         return response.data.response
     }
 );

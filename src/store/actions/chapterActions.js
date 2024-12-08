@@ -10,8 +10,8 @@ export const fetchChapter = createAsyncThunk(
 );
 
 // Acción para obtener comentarios de un capítulo
-export const fetchComments = createAsyncThunk(
-    "chapter/fetchComments",
+export const fetchCommentFromChapter = createAsyncThunk(
+    "chapter/fetchCommentFromChapter",
     async (chapter_id) => {
       const response = await axios.get(`http://localhost:8080/api/chapters/${chapter_id}/comments`);
       return response.data.response;
