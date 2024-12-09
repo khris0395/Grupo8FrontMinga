@@ -29,8 +29,8 @@ const StatItem = ({ value, label }) => (
 const TabButton = ({ active, onClick, text }) => (
     <button
         className={`px-8 py-3 rounded-full font-medium text-lg transition-all duration-300 ${active
-                ? "bg-[#4338CA] text-white shadow-md"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+            ? "bg-[#4338CA] text-white shadow-md"
+            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
             }`}
         onClick={onClick}
     >
@@ -76,7 +76,10 @@ function Manga() {
 
     const [activeTab, setActiveTab] = useState("description");
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedReaction, setSelectedReaction] = useState(null);
+    const [selectedReaction, setSelectedReaction] = useState(() => {
+        const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
+        return savedReactions[id] || null;
+    });
 
     const loading = useSelector((state) => state.mangas.loading);
     const error = useSelector((state) => state.mangas.error);
@@ -96,6 +99,10 @@ function Manga() {
                         dispatch(fetchMangaDetails(id)),
                         dispatch(fetchChapters(id))
                     ]);
+                    const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
+                    if (savedReactions[id]) {
+                        setSelectedReaction(savedReactions[id]);
+                    }
                 }
             } finally {
                 setIsLoading(false);
@@ -104,10 +111,42 @@ function Manga() {
         loadData();
     }, [dispatch, id]);
 
-    const handleReaction = (reactionType) => {
-        setSelectedReaction(prevReaction =>
-            prevReaction === reactionType ? null : reactionType
-        );
+    const handleReaction = async (reactionType) => {
+        try {
+            const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
+            if (savedReactions[manga._id] === reactionType) {
+                delete savedReactions[manga._id];
+                setSelectedReaction(null);
+            } else {
+                savedReactions[manga._id] = reactionType;
+                setSelectedReaction(reactionType);
+            }
+            localStorage.setItem('userReactions', JSON.stringify(savedReactions));
+            if (reactionType === 'liked' || reactionType === 'love') {
+                const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                const existingIndex = favorites.findIndex(f => f.mangaId === manga._id);
+
+                if (existingIndex === -1) {
+                    favorites.push({
+                        mangaId: manga._id,
+                        title: manga.title,
+                        cover_photo: manga.cover_photo,
+                        reaccion: reactionType,
+                        timestamp: new Date().toISOString()
+                    });
+                } else {
+                    favorites[existingIndex] = {
+                        ...favorites[existingIndex],
+                        reaccion: reactionType,
+                        timestamp: new Date().toISOString()
+                    };
+                }
+
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+        } catch (error) {
+            console.error('Error handling reaction:', error);
+        }
     };
 
     const handleChapter = (chapter) => {
