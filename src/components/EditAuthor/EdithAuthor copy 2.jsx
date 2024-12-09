@@ -10,9 +10,9 @@ import './EdithAuthor.css'
 const EditProfile = () => {
 
   const userl = useSelector((state) => state.authors.authors); // Accede al usuario desde Redux
-  const id = userl[0]?._id;
+  const idpa = userl[0]?._id;
 
-  //const { id } = useParams();
+  const { id } = useParams();
   const dispatch = useDispatch()
 
   const author = useSelector((state) => state.editAuthor.data);
@@ -70,11 +70,11 @@ const EditProfile = () => {
 
     dispatch(
       updateAuthor({
-        author: {...formData, id},
+        author: {...formData, },
         token,
       }))
       .then((response) => {
-        console.log("Payload sent to server:", { ...formData, id });
+        console.log("Payload sent to server:", { ...formData });
         if (response.meta.requestStatus === "fulfilled") {
           alert("Profile updated successfully!");
         } else {

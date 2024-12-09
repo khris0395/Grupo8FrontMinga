@@ -37,7 +37,7 @@ export const fetchAuthor = createAsyncThunk(
   );
 
 
-export const updateAuthor = createAsyncThunk(
+/* export const updateAuthor = createAsyncThunk(
     "editAuthor/updateAuthor",
     async ({author, token}) => {
 
@@ -58,18 +58,18 @@ export const updateAuthor = createAsyncThunk(
         
         
     }
-);
+); */
 
 export const updateAuthor = createAsyncThunk(
     "editAuthor/updateAuthor",
-    async ({ author, user_id, token }) => {
+    async ({ author, token, id }) => {
       try {
         const response = await axios.put(
-          `http://localhost:8080/api/authors/update/${author.id}`,
-          { ...author, user_id }, // Cuerpo de la solicitud con author y user_id
+          `http://localhost:8080/api/authors/update/${author.id}`, // ID en la URL
+          { ...author }, // Solo datos de actualización en el cuerpo
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Token en los encabezados
+              Authorization: `Bearer ${token}`, // Token en el encabezado
             },
           }
         );
