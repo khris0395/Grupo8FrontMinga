@@ -290,6 +290,12 @@ function Manga() {
                             </div>
                         </div>
                     </div>
+                    <button
+                        className="mt-4 px-6 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
+                        onClick={() => navigate("/favourites")}
+                    >
+                        Go to Favourites
+                    </button>
                 </div>
             </div>
         </main>
