@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import ToggleSwitch from "./ToggleSwitch";
 
 const AuthorProfiles = () => {
+    const user = useSelector((state) => state.authStore.user);
+
+    console.log( user);
+
+
+    
     const [formData, setFormData] = useState({
         firstname: "Lucas Ezequiel",
         lastname: "Silva",
