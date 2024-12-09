@@ -20,6 +20,25 @@ const getReactionType = (emoji) => {
     }
 };
 
+const StatItem = ({ value, label }) => (
+    <div className="flex flex-col items-center">
+        <span className="text-2xl text-[#424242] font-poppins">{value}</span>
+        <span className="text-xs text-[#9D9D9D] font-poppins">{label}</span>
+    </div>
+);
+
+const TabButton = ({ active, onClick, text }) => (
+    <button
+        className={`pb-4 px-4 text-lg font-medium relative ${active
+            ? "text-[#4338CA]"
+            : "text-[#9D9D9D] hover:text-gray-700"}`}
+        onClick={onClick}
+    >
+        {text}
+        {active && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4338CA]" />}
+    </button>
+);
+
 const ReactionButton = ({ emoji, mangaId, onReact }) => {
     const dispatch = useDispatch();
 
@@ -35,8 +54,6 @@ const ReactionButton = ({ emoji, mangaId, onReact }) => {
         try {
             const reactionData = {
                 manga_id: mangaId,
-                author_id: "674a404f2c593fb14a0d09b4",
-                company_id: "674a404f2c593fb14a0d09b6",
                 reaccion: getReactionType(emoji)
             };
             await dispatch(createReaction(reactionData)).unwrap();
@@ -57,26 +74,6 @@ const ReactionButton = ({ emoji, mangaId, onReact }) => {
     );
 };
 
-const StatItem = ({ value, label }) => (
-    <div className="flex flex-col items-center">
-        <span className="text-2xl text-[#424242] font-poppins">{value}</span>
-        <span className="text-xs text-[#9D9D9D] font-poppins">{label}</span>
-    </div>
-);
-
-const TabButton = ({ active, onClick, text }) => (
-    <button
-        className={`pb-4 px-4 text-lg font-medium relative ${active
-            ? "text-[#4338CA]"
-            : "text-[#9D9D9D] hover:text-gray-700"
-            }`}
-        onClick={onClick}
-    >
-        {text}
-        {active && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4338CA]" />}
-    </button>
-);
-
 function Manga() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -89,32 +86,6 @@ function Manga() {
     const authors = useSelector((state) => state.mangas.authors);
     const [activeTab, setActiveTab] = useState("description");
     const [isLoading, setIsLoading] = useState(true);
-
-    const handleChapter = (chapter) => {
-        navigate(`/chapter/${chapter._id}`);
-    };
-
-    const ChapterCard = ({ chapter }) => (
-        <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-            <div className="flex items-center gap-6">
-                <img
-                    src={chapter.cover_photo}
-                    alt={chapter.title}
-                    className="w-20 h-20 object-cover rounded-lg shadow"
-                />
-                <div>
-                    <h3 className="text-xl font-semibold">{chapter.title}</h3>
-                    <p className="text-[#9D9D9D]">{chapter.pages?.length || 0} pages</p>
-                </div>
-            </div>
-            <button
-                className="px-8 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
-                onClick={() => handleChapter(chapter)}
-            >
-                Read
-            </button>
-        </div>
-    );
 
     useEffect(() => {
         const loadData = async () => {
@@ -135,23 +106,36 @@ function Manga() {
         loadData();
     }, [dispatch, id]);
 
-    if (isLoading || !categories || !authors) return <div className="text-center p-4">Loading...</div>;
-    if (!manga) return <div className="text-center p-4">Select a manga to view details</div>;
-    if (error) return <div className="text-center p-4 text-red-500">Error: {error}</div>;
+    const handleReaction = async () => {
+        if (manga?._id) {
+            await dispatch(fetchMangaDetails(manga._id));
+        }
+    };
+
+    const handleChapter = (chapter) => {
+        navigate(`/chapter/${chapter._id}`);
+    };
+
+    if (isLoading || !categories || !authors) {
+        return <div className="text-center p-4">Loading...</div>;
+    }
+
+    if (!manga) {
+        return <div className="text-center p-4">Select a manga to view details</div>;
+    }
+
+    if (error) {
+        return <div className="text-center p-4 text-red-500">Error: {error}</div>;
+    }
 
     const categoryName = categories.find(c => c._id === manga.category_id)?.name;
     const authorName = authors.find(a => a._id === manga.author_id)?.name;
-
-    const handleReaction = () => {
-        console.log('Reaction handled');
-    };
 
     return (
         <div className="bg-[#EBEBEB] min-h-screen">
             <div className="container mx-auto px-4 py-8">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid lg:grid-cols-12 gap-8">
-                        {/* Left Column */}
                         <div className="lg:col-span-4 space-y-6">
                             <img
                                 src={manga.cover_photo}
@@ -163,7 +147,7 @@ function Manga() {
                                 <div className="flex justify-between">
                                     <StatItem value="4.5/5" label="Rating" />
                                     <div className="w-px bg-[#9D9D9D]" />
-                                    <StatItem value="265" label="Chapters" />
+                                    <StatItem value={chapters?.length || 0} label="Chapters" />
                                     <div className="w-px bg-[#9D9D9D]" />
                                     <StatItem value="Eng" label="Language" />
                                 </div>
@@ -173,29 +157,28 @@ function Manga() {
                                 <div className="grid grid-cols-4 gap-4">
                                     <ReactionButton
                                         emoji="👍"
-                                        mangaId={manga?._id}
+                                        mangaId={manga._id}
                                         onReact={handleReaction}
                                     />
                                     <ReactionButton
                                         emoji="👎"
-                                        mangaId={manga?._id}
+                                        mangaId={manga._id}
                                         onReact={handleReaction}
                                     />
                                     <ReactionButton
                                         emoji="😮"
-                                        mangaId={manga?._id}
+                                        mangaId={manga._id}
                                         onReact={handleReaction}
                                     />
                                     <ReactionButton
                                         emoji="😍"
-                                        mangaId={manga?._id}
+                                        mangaId={manga._id}
                                         onReact={handleReaction}
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Right Column */}
                         <div className="lg:col-span-8">
                             <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
                                 <div className="space-y-4">
@@ -204,7 +187,9 @@ function Manga() {
                                         <span className="px-4 py-2 bg-[#FFE0DF] rounded-full text-[#EF8481] font-medium">
                                             {categoryName || 'Category'}
                                         </span>
-                                        <span className="text-[#9D9D9D] text-lg">{authorName || 'Author'}</span>
+                                        <span className="text-[#9D9D9D] text-lg">
+                                            {authorName || 'Author'}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -231,7 +216,32 @@ function Manga() {
                                     ) : (
                                         <div className="grid gap-4">
                                             {chapters?.map((chapter) => (
-                                                <ChapterCard key={chapter._id} chapter={chapter} />
+                                                <div
+                                                    key={chapter._id}
+                                                    className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                                                >
+                                                    <div className="flex items-center gap-6">
+                                                        <img
+                                                            src={chapter.cover_photo}
+                                                            alt={chapter.title}
+                                                            className="w-20 h-20 object-cover rounded-lg shadow"
+                                                        />
+                                                        <div>
+                                                            <h3 className="text-xl font-semibold">
+                                                                {chapter.title}
+                                                            </h3>
+                                                            <p className="text-[#9D9D9D]">
+                                                                {chapter.pages?.length || 0} pages
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        className="px-8 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
+                                                        onClick={() => handleChapter(chapter)}
+                                                    >
+                                                        Read
+                                                    </button>
+                                                </div>
                                             ))}
                                         </div>
                                     )}

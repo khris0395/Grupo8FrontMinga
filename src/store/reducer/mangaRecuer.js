@@ -9,6 +9,8 @@ import {
     createManga,
     fetchReactions,
     createReaction,
+    deleteReaction,
+    updateReaction
 } from "../actions/mangaActions";
 
 const initialState = {
@@ -91,6 +93,7 @@ export const mangaReducer = createReducer(initialState, (builder) => {
         })
         .addCase(fetchReactions.pending, (state) => {
             state.loading = true;
+            state.error = null;
         })
         .addCase(fetchReactions.fulfilled, (state, action) => {
             state.reactions = action.payload;
@@ -106,24 +109,32 @@ export const mangaReducer = createReducer(initialState, (builder) => {
         })
         .addCase(createReaction.fulfilled, (state, action) => {
             if (action.payload) {
-                state.reactions.push(action.payload);
-                if (action.payload.reaccion === 'liked' || action.payload.reaccion === 'love') {
+                const existingReactionIndex = state.reactions.findIndex(
+                    reaction => reaction.manga_id === action.payload.manga_id
+                );
+
+                if (existingReactionIndex !== -1) {
+                    state.reactions[existingReactionIndex] = action.payload;
+                } else {
+                    state.reactions.push(action.payload);
+                }
+
+                if (['liked', 'love'].includes(action.payload.reaccion)) {
                     const newFavorite = {
                         mangaId: action.payload.manga_id,
                         reaccion: action.payload.reaccion,
                         _id: action.payload._id,
-                        timestamp: new Date().toISOString() // Para ordenar por más recientes
+                        timestamp: new Date().toISOString()
                     };
 
-                    // Evitar duplicados
-                    const existingIndex = state.favorites.findIndex(f =>
-                        f.mangaId === newFavorite.mangaId && f.reaccion === newFavorite.reaccion
+                    const existingFavoriteIndex = state.favorites.findIndex(
+                        f => f.mangaId === newFavorite.mangaId
                     );
 
-                    if (existingIndex === -1) {
+                    if (existingFavoriteIndex === -1) {
                         state.favorites.push(newFavorite);
                     } else {
-                        state.favorites[existingIndex] = newFavorite;
+                        state.favorites[existingFavoriteIndex] = newFavorite;
                     }
 
                     localStorage.setItem('favorites', JSON.stringify(state.favorites));
@@ -135,4 +146,54 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
+        .addCase(updateReaction.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(updateReaction.fulfilled, (state, action) => {
+            const index = state.reactions.findIndex(
+                reaction => reaction._id === action.payload._id
+            );
+            if (index !== -1) {
+                state.reactions[index] = action.payload;
+
+                if (['liked', 'love'].includes(action.payload.reaccion)) {
+                    const favoriteIndex = state.favorites.findIndex(
+                        f => f.mangaId === action.payload.manga_id
+                    );
+                    if (favoriteIndex !== -1) {
+                        state.favorites[favoriteIndex] = {
+                            mangaId: action.payload.manga_id,
+                            reaccion: action.payload.reaccion,
+                            _id: action.payload._id,
+                            timestamp: new Date().toISOString()
+                        };
+                        localStorage.setItem('favorites', JSON.stringify(state.favorites));
+                    }
+                }
+            }
+            state.loading = false;
+        })
+        .addCase(updateReaction.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        })
+        .addCase(deleteReaction.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(deleteReaction.fulfilled, (state, action) => {
+            state.reactions = state.reactions.filter(
+                reaction => reaction._id !== action.payload.id
+            );
+            state.favorites = state.favorites.filter(
+                favorite => favorite._id !== action.payload.id
+            );
+            localStorage.setItem('favorites', JSON.stringify(state.favorites));
+            state.loading = false;
+        })
+        .addCase(deleteReaction.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
 });
