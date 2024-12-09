@@ -9,7 +9,7 @@ import {
     createManga,
     fetchReactions,
     createReaction,
-    deleteManga
+    deleteManga,
     deleteReaction,
     updateReaction
 } from "../actions/mangaActions";

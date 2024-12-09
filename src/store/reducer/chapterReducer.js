@@ -27,14 +27,14 @@ export const chapterReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-        .addCase(fetchCommentFromChapter.pending, (state) => {
+        .addCase(fetchComments.pending, (state) => {
             state.loading = true;
         })
-        .addCase(fetchCommentFromChapter.fulfilled, (state, action) => {
+        .addCase(fetchComments.fulfilled, (state, action) => {
             state.comments = action.payload;
             state.loading = false;
         })
-        .addCase(fetchCommentFromChapter.rejected, (state, action) => {
+        .addCase(fetchComments.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
         })
