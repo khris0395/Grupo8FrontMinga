@@ -1,35 +1,67 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAuthor, updateAuthor, deleteAuthor } from "../../store/actions/edithAuthorAction";
 import ToggleSwitch from "./ToggleSwitch";
+import { useNavigate } from "react-router-dom";
+
 
 const AuthorProfiles = () => {
-    const user = useSelector((state) => state.authStore.user);
 
-    console.log( user);
+    const { authorId } = useParams(); // Obtiene el ID desde la URL
 
+    const dispatch = useDispatch();
 
+    const author = useSelector((state) => state.editAuthor.data);
+    console.log(author);
     
+    const status = useSelector((state) => state.editAuthor.loading);
+    const error = useSelector((state) => state.editAuthor.error);
+
+
+    useEffect(() => {
+        if (authorId) {
+            dispatch(fetchAuthor(authorId));
+        }
+    }, [dispatch, authorId]);
+
     const [formData, setFormData] = useState({
-        firstname: "Lucas Ezequiel",
-        lastname: "Silva",
-        city: "Caseros, Buenos Aires",
-        birthdate: "28/12/2022",
-        profileImage: "https://s3-alpha-sig.figma.com/img/d771/e8ee/4d516f000e29670bda6ceb5a6c836183?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=eLwYCN-8mR4Gid6w2ArEj9XNZ6~SkEYnz-44vxHXmD0sVFWCopHO-AS0ILvEg6QDmhi9~yFMorE8l2gN7Nx8FsQ85JGguAVYJCHccKR-68oAA6t5L53hh-Wqxax1fnNNBVk2SKmzbLcpMLdwDMmNgAUbtJQX~KrVRwpTjRa1YvTbsUx-MvzFXLLdhLBcaEcQjTuHnfG70gTotrQmr5TWRK1cjcFlRfjGeW44g4Q3mV01JXvsbLoGY8umEiX-5~MeEhA9CytZnDBnA5R~KvBsQKo8CbdRDlJQTJkwGFAWGwXkSeDWdFw9woVhKymqDQ3JRoe~aoSDkUuSOCjKiaJSyQ__", // Imagen por defecto
+        name: "",
+        last_name: "",
+        city: "",
+        date: "",
+        photo: "https://via.placeholder.com/100",
     });
+
+    useEffect(() => {
+        if (author) {
+            setFormData({
+                name: author.name || "",
+                last_name: author.last_name || "",
+                city: author.city || "",
+                date: author.date || "",
+                photo: author.photo || "",
+            });
+        }
+    }, [author]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSave = () => {
-        alert("Profile saved successfully!");
-        console.log("Saved data:", formData);
+        const updatedAuthor = {
+            ...formData,
+            id: author._id,
+        };
+        dispatch(updateAuthor(updatedAuthor));
     };
+
+    const navigate = useNavigate();
 
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete your account?")) {
-            alert("Account deleted.");
-            console.log("Account deleted.");
+            dispatch(deleteAuthor(author._id));
+            navigate("/")
         }
     };
 
@@ -44,7 +76,7 @@ const AuthorProfiles = () => {
 
                         <div className="flex justify-center items-center">
                             <img
-                                src={formData.profileImage}
+                                src={formData.photo}
                                 alt="Profile"
                                 className="w-[71px] h-[71px] rounded-full"
                             />
@@ -53,7 +85,7 @@ const AuthorProfiles = () => {
                         <div className="flex flex-col items-center justify-center ">
                             <div>
 
-                                <h2 className="text-xl font-bold">{`${formData.firstname} ${formData.lastname}`}</h2>
+                                <h2 className="text-xl font-bold">{`${formData.name} ${formData.last_name}`}</h2>
 
                                 <div className="font-roboto flex items-center  ">
                                     <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -70,7 +102,7 @@ const AuthorProfiles = () => {
                                     </svg>
 
                                     <span className="ml-1">
-                                        {formData.birthdate}</span>
+                                        {formData.date}</span>
                                 </div>
 
                             </div>
@@ -88,7 +120,7 @@ const AuthorProfiles = () => {
                 </div>
 
             </div>
-            
+
             <div className="flex justify-center mt-[61px]">
                 <div className="h-px w-[385px] bg-black " />
             </div>

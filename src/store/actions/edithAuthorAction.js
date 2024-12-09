@@ -1,16 +1,40 @@
-import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+/* 
 export const fetchAuthor = createAsyncThunk(
     "editAuthor/fetchAuthor",
     async (AuthorId) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/authors/id/${AuthorId}`
-            
-        );
-        return response.data;
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/api/authors/id/${AuthorId}`
+            );
+            return response.data;
+        } catch (error) {
+            // Manejo de errores de axios
+            const errorMessage =
+                error.response?.data?.message || error.message || "An error occurred";
+            return thunkAPI.rejectWithValue(errorMessage);
+        }
     }
-);
+); 
+*/
+export const fetchAuthor = createAsyncThunk(
+    "author/fetchAuthor",
+    async ({ user_id, token }) => {
+      const response = await axios.post(
+        `http://localhost:8080/api/authors/findAuthor`, // Enviamos una solicitud POST
+        { user_id }, // Pasa el user_id en el cuerpo
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("fetch authors", response.data.response);
+      return response.data.response;
+    }
+  );
 
 
 export const updateAuthor = createAsyncThunk(

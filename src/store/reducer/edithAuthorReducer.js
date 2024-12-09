@@ -3,7 +3,13 @@ import { fetchAuthor } from "../actions/edithAuthorAction"
 
 const initialState = {
   loading: false,
-  data: {},
+  data: {
+    name: "",
+    last_name: "",
+    city: "",
+    date: "",
+    photo: "",
+  },
   error: null,
 };
 
