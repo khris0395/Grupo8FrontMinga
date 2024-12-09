@@ -25,14 +25,9 @@ const Chapter = () => {
     const [newComment, setNewComment] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const maxButtons = 3;
-    const dispatch = useDispatch();
-    const { id } = useParams();
-    const { user, token } = useSelector((state) => state.authStore);
     const role = user?.role;
     const idAuthor = user?.author?._id || "";
     const idCompany = user?.company?._id || "";
-    const { chapter, loading, error } = useSelector((state) => state.chapter);
-    const { comments } = useSelector((state) => state.chapter);
 
     useEffect(() => {
         if (!id) return;

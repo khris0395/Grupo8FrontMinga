@@ -22,7 +22,7 @@ export default function ButtonDeleteManga(idManga) {
                 // Si el usuario confirma, se ejecutan los despachos
                 dispatch(deleteManga(id));
                 dispatch(getManagerProfile());
-    
+
                 Swal.fire(
                     'Deleted!',
                     'The manga has been deleted successfully.',
@@ -36,3 +36,5 @@ export default function ButtonDeleteManga(idManga) {
                 );
             }
         });
+    }
+}

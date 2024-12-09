@@ -12,7 +12,6 @@ function Mangas() {
     const loading = useSelector((state) => state.mangas.loading)
     const search = useSelector((state) => state.mangas.search)
     const error = useSelector((state) => state.mangas.error)
-    const {mangas, search} = useSelector((state) => state.mangas)
     
 
 
