@@ -21,8 +21,6 @@ export default function SignUp() {
         setFormData({ ...formData, [name]: value });
       };
 
-      console.log(formData)
-
       const handleSubmit = async (e) => {
         e.preventDefault();
         dispatch(registerUser(formData));

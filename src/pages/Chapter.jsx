@@ -18,13 +18,8 @@ const Chapter = () => {
 
     const { user, token } = useSelector((state) => state.authStore);
 
-    console.log(token);
-
-
-
     const { chapter, loading, error } = useSelector((state) => state.chapter);
     const { comments } = useSelector((state) => state.chapter);
-    console.log(comments);
 
     const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,7 +69,6 @@ const Chapter = () => {
             author_id: user.role === 1 ? user.author?._id : null,
             company_id: user.role === 2 ? user.company?._id : null,
         };
-        console.log("Sending comment data:", commentData);
 
         dispatch(
             createComment({

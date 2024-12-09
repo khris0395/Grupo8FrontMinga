@@ -1,13 +1,11 @@
 import { useNavigate } from "react-router-dom"
 
 export default function ButtonDeleteManga(idManga) {
-    
-    
+        
     const navigate = useNavigate()
 
     function detailsManga(idManga) {
         // navigate(`/MangaDetails/${id}`)
-        console.log(idManga);
     }
 
     return (

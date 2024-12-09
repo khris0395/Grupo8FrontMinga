@@ -8,12 +8,7 @@ export default function Manager() {
 
     const dispatch = useDispatch();
     const {profile, mangas, role, loading, error} = useSelector((state) => state.manager)
-    console.log(profile);
-    console.log(mangas);
-    console.log( role);
-    console.log( loading);
-    console.log( error);
-    
+ 
 
     useEffect(() => {
         dispatch(getManagerProfile())
