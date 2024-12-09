@@ -2,32 +2,26 @@ import { useDispatch, useSelector } from "react-redux";
 import MangaCard from "../components/MangaCard";
 import { useEffect } from "react";
 import { getManagerProfile } from "../store/actions/managerActions";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Manager() {
 
+    const token = localStorage.getItem('token')
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const {profile, mangas, role, loading, error} = useSelector((state) => state.manager)
-    console.log(profile);
-    console.log(mangas);
-    console.log( role);
-    console.log( loading);
-    console.log( error);
     
 
     useEffect(() => {
+        if(!token){
+            navigate('/Signin')
+        }
         dispatch(getManagerProfile())
     },[dispatch])
     
+    useEffect
 
-    const inputs =
-        [
-            { label: 'Todos', bgColor: 'bg-gray-400', textColor: 'text-white' },
-            { label: 'Shōnen', bgColor: 'bg-red-200', textColor: 'text-red-600' },
-            { label: 'Seinen', bgColor: 'bg-orange-200', textColor: 'text-orange-600' },
-            { label: 'Shōjo', bgColor: 'bg-green-200', textColor: 'text-green-600' },
-            { label: 'Kodomo', bgColor: 'bg-purple-200', textColor: 'text-purple-600' },
-        ]
     return (
         <>
             <div className="min-h-screen relative">
@@ -53,7 +47,7 @@ export default function Manager() {
                     </div>
                 </div>
 
-                {/* Contenido debajo de la imagen */}
+                {/* Contenido debajo de la imagen */} 
 
                 {/* Filtros por categoria*/}
                

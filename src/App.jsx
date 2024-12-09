@@ -3,12 +3,14 @@ import { useDispatch } from 'react-redux'
 import { findAuthor, findCompany, setUser } from './store/actions/authActions'
 import axios from 'axios'
 import MainLayout from './layouts/MainLayout'
-import {PrivateLogin, 
-        PrivateAdmin,
-        PrivateManager,
-        PrivateProfileAuthor, 
-        PrivateProfileCompany,
-        PrivateRoles} from './components/PrivateRoutes'
+import {
+  PrivateLogin,
+  PrivateAdmin,
+  PrivateManager,
+  PrivateProfileAuthor,
+  PrivateProfileCompany,
+  PrivateRoles
+} from './components/PrivateRoutes'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
@@ -67,7 +69,12 @@ const router = createBrowserRouter([
       {
         path: '/adminPanel',
         element: <PrivateAdmin><AdminPanel /></PrivateAdmin>
-      }, {
+      },
+      {
+        path: '/editChapter/:id',
+        element: <EditChapter />
+      },
+      {
         path: '/editChapter',
         element: <PrivateManager><EditChapter /></PrivateManager>
       },
@@ -126,12 +133,12 @@ export default function App() {
   let token = localStorage.getItem("token");
   if (token) {
     loginWithToken(token).then((user) => {
-      if (user.role===1) {
-        dispatch(findAuthor({user_id: user._id,token}))
-      } else if (user.role===2){
-        dispatch(findCompany({user_id: user._id,token}))
+      if (user.role === 1) {
+        dispatch(findAuthor({ user_id: user._id, token }))
+      } else if (user.role === 2) {
+        dispatch(findCompany({ user_id: user._id, token }))
       }
-      
+
       dispatch(setUser({ user, token }));
     });
   }

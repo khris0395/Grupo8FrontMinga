@@ -1,12 +1,39 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchChapter = createAsyncThunk(
-    "chapter/fetchChapter",
-    async (chapterId) => {
-        const response = await axios.get(`http://localhost:8080/api/chapters/chapterById/${chapterId}`);
-        return response.data.response
+export const getAllChapters = createAsyncThunk(
+  "chapter/getAllChapters",
+  async (id) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.get(`http://localhost:8080/api/chapters/allChapters?id=${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      return response.data.response
+    } catch (error) {
+
     }
+  }
+)
+
+export const getChapter = createAsyncThunk(
+  "chapter/fetchChapter",
+  async (id) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.get(`http://localhost:8080/api/chapters/chapterById/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data
+    } catch (error) {
+      return 'Error in the Consult success: false'
+
+    }
+  }
 );
 
 // Acción para obtener comentarios de un capítulo
