@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createAuthor } from '../store/actions/authorActions';
-import { updateRole } from '../store/actions/authActions';
+import { findAuthor, updateRole } from '../store/actions/authActions';
 
 const AuthorForm = () => {
     const dispatch = useDispatch();
@@ -59,6 +59,11 @@ const AuthorForm = () => {
                         token,
                     })
                 ).unwrap();
+                
+                let user_id= user._id
+                
+
+                await dispatch(findAuthor({user_id, token})).unwrap()
             }
 
             navigate('/');

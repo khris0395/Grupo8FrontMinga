@@ -7,17 +7,20 @@ import MangaCard from "../components/MangaCard";
 function Mangas() {
     const dispatch = useDispatch(); // Necesario para despachar la acción
 
+
     const mangas = useSelector((state) => state.mangas.mangas)
     const loading = useSelector((state) => state.mangas.loading)
     const search = useSelector((state) => state.mangas.search)
     const error = useSelector((state) => state.mangas.error)
+    const {mangas, search} = useSelector((state) => state.mangas)
+    
+
 
     useEffect(() => {
         // Despachar la acción fetchMangas
         dispatch(fetchMangas(search));
-    }, [search]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
-
-   
+    }, [search]); 
+ 
     return (
         <div className="min-h-screen relative">
             {/* Contenedor de la imagen con posición relativa */}
@@ -36,7 +39,7 @@ function Mangas() {
             </div>
 
             {/* Contenido debajo de la imagen */}
-            <MangaCard mangas={mangas} isManager={false}> </MangaCard>
+            <MangaCard mangas={mangas} isManager={false}/>
         </div>
     );
 }

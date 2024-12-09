@@ -15,8 +15,12 @@ export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
 export const deleteManga = createAsyncThunk(
     'mangas/deleteManga',
     async (id) => {
-        const response = await axios.delete(`http://localhost:8080/api/mangas/delete/${id}`);
-        return response.data;
+        const token = localStorage.getItem('token')
+        const response = await axios.delete(`http://localhost:8080/api/mangas/delete/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
     }
 );
 
@@ -39,7 +43,12 @@ export const fetchAuthors = createAsyncThunk(
 export const fetchMangaDetails = createAsyncThunk(
     "mangas/fetchMangaDetails",
     async (mangaId) => {
-        const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`);
+        const token = localStorage.getItem('token')
+        const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         return response.data.response;
     }
 );
