@@ -62,14 +62,23 @@ export const fetchAuthor = createAsyncThunk(
 
 export const updateAuthor = createAsyncThunk(
     "editAuthor/updateAuthor",
-    async ({ author, token, id }) => {
+    async ({ author, token }, { getState }) => {
       try {
+        // Obtén el estado de Redux
+        const state = getState();
+        // Suponemos que el estado tiene un arreglo de autores y tomamos la primera ID (ajusta según tu estructura)
+        const id = state.authors.authors[0]?._id;
+  
+        if (!id) {
+          throw new Error("No author ID found in state.");
+        }
+  
         const response = await axios.put(
-          `http://localhost:8080/api/authors/update/${author.id}`, // ID en la URL
-          { ...author }, // Solo datos de actualización en el cuerpo
+          `http://localhost:8080/api/authors/update/${id}`, // ID obtenida desde Redux
+          { ...author }, // Datos de actualización
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Token en el encabezado
+              Authorization: `Bearer ${token}`, // Token en encabezados
             },
           }
         );
@@ -77,7 +86,7 @@ export const updateAuthor = createAsyncThunk(
         return response.data;
       } catch (error) {
         console.error("Error in updateAuthor:", error.response?.data || error.message);
-        throw error.response?.data || error.message; // Lanza el error para manejarlo en Redux
+        throw error.response?.data || error.message; // Manejo de error
       }
     }
   );

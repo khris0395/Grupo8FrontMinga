@@ -70,11 +70,12 @@ const EditProfile = () => {
 
     dispatch(
       updateAuthor({
-        author: {...formData, },
+        author: {...formData },
         token,
+        id,
       }))
       .then((response) => {
-        console.log("Payload sent to server:", { ...formData });
+        console.log("Payload sent to server:", { ...formData, });
         if (response.meta.requestStatus === "fulfilled") {
           alert("Profile updated successfully!");
         } else {
@@ -200,14 +201,7 @@ const EditProfile = () => {
                     Save
                   </button>
 
-                  <button
-                    onClick={handleSave}
-                    disabled={status === "loading"}
-                    className={`w-full font-roboto py-5 px-12 ${status === "loading" ? "bg-gray-400" : "bg-[#34D399]"
-                      } text-white rounded-full mb-5`}
-                  >
-                    {status === "loading" ? "Saving..." : "Save"}
-                  </button>
+                  
 
                   <button
                     onClick={handleDelete}
