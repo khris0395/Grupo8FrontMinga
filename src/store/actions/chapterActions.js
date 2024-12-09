@@ -18,7 +18,6 @@ export const fetchCommentFromChapter = createAsyncThunk(
     }
   );
   
-  // Acción para crear un nuevo comentario en un capítulo
   export const createComment = createAsyncThunk(
     "chapter/createComment",
     async ({ chapterId, commentData }) => {
@@ -29,3 +28,25 @@ export const fetchCommentFromChapter = createAsyncThunk(
       return response.data.response;
     }
   );
+
+  export const updateComment = createAsyncThunk(
+    "chapter/updateComment",
+    async ({ commentId, updatedMessage, token }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(
+                `http://localhost:8080/api/comments/updateComment`,
+                { commentId, updatedMessage }, // ID y mensaje en el cuerpo del request
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            return response.data; // Respuesta exitosa
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to update comment"
+            );
+        }
+    }
+);
