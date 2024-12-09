@@ -63,7 +63,7 @@ const router = createBrowserRouter([
         path: '/adminPanel',
         element: <AdminPanel />
       }, {
-        path: '/editChapter',
+        path: '/editChapter/:id',
         element: <EditChapter />
       },
       {

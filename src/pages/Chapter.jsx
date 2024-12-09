@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { fetchAuthor } from "../store/actions/authorActions";
 import { commentReducer } from "../store/reducer/commentsReducer";
 import {
-    fetchChapter,
+    getChapter,
     createComment,
     fetchComments
 } from "../store/actions/chapterActions";
@@ -38,7 +38,7 @@ const Chapter = () => {
                 if (id) {
                     await Promise.all([
                         dispatch(fetchComments(id)),
-                        dispatch(fetchChapter(id)),
+                        dispatch(getChapter(id)),
                         dispatch(fetchAuthor()),
                         dispatch(commentReducer())
                     ]);
