@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 function PrivateLogin({ children }) {
   const token = useSelector((state) => state.authStore.token);
 
-  if (!token) {
+  if (token) {
     return <Navigate to="/home" replace />;
   }
   return children;
