@@ -50,3 +50,27 @@ export const fetchCommentFromChapter = createAsyncThunk(
         }
     }
 );
+
+export const deleteComment = createAsyncThunk(
+  "chapter/deleteComment",
+  async ({ id, token }, { rejectWithValue }) => {
+    console.log("token entrando a actionDelete", token);
+
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/comments/deleteComment/${id}`, // Pasar el ID como parte de la URL
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data; // Respuesta exitosa
+    } catch (error) {
+      console.error("Error en deleteComment:", error.response?.data);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete comment"
+      );
+    }
+  }
+);

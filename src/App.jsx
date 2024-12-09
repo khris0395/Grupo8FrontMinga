@@ -3,7 +3,12 @@ import { useDispatch } from 'react-redux'
 import { findAuthor, findCompany, setUser } from './store/actions/authActions'
 import axios from 'axios'
 import MainLayout from './layouts/MainLayout'
-import PrivateLogin from './components/PrivateLogin'
+import {PrivateLogin, 
+        PrivateAdmin,
+        PrivateManager,
+        PrivateProfileAuthor, 
+        PrivateProfileCompany,
+        PrivateRoles} from './components/PrivateRoutes'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
@@ -33,11 +38,11 @@ const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/home', element: <Home /> },
       { path: '/mangas', element: <Mangas /> },
-      { path: '/manga/:id', element: <Manga /> },
-      { path: '/manager', element: <Manager /> },
-      { path: '/authorProfile', element: <AuthorProfile /> },
-      { path: '/companyProfile', element: <CompanyProfile /> },
-      { path: '/favourites', element: <Favourites /> }
+      { path: '/manga/:id', element: <PrivateLogin><Manga /></PrivateLogin> },
+      { path: '/manager', element: <PrivateManager><Manager /></PrivateManager> },
+      { path: '/authorProfile', element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor> },
+      { path: '/companyProfile', element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany> },
+      { path: '/favourites', element: <PrivateLogin><Favourites /></PrivateLogin> }
     ]
   },
   {
@@ -45,11 +50,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/chapter/:id',
-        element: <Chapter />
+        element: <PrivateLogin><Chapter /></PrivateLogin>
       },
       {
         path: '/signUp',
-        element: <SignUp />
+        element: <PrivateLogin><SignUp /></PrivateLogin>
       },
       {
         path: '/signIn',
@@ -57,37 +62,37 @@ const router = createBrowserRouter([
       },
       {
         path: '/newRole',
-        element: <NewRole />
+        element: <PrivateRoles><NewRole /></PrivateRoles>
       },
       {
         path: '/adminPanel',
-        element: <AdminPanel />
+        element: <PrivateAdmin><AdminPanel /></PrivateAdmin>
       }, {
         path: '/editChapter',
-        element: <EditChapter />
+        element: <PrivateManager><EditChapter /></PrivateManager>
       },
       {
         path: '/editCompany',
-        element: <EditCompany />
+        element: <PrivateProfileCompany><EditCompany /></PrivateProfileCompany>
       },
       {
         path: '/editAuthor',
-        element: <EditAuthor />
+        element: <PrivateProfileAuthor><EditAuthor /></PrivateProfileAuthor>
       }, {
         path: '/mangaForm',
-        element: <MangaForm />
+        element: <PrivateManager><MangaForm /></PrivateManager>
       },
       {
         path: '/chapterForm',
-        element: <ChapterForm />
+        element: <PrivateManager><ChapterForm /></PrivateManager>
       },
       {
         path: '/authorForm',
-        element: <AuthorForm />
+        element: <PrivateRoles><AuthorForm /></PrivateRoles>
       },
       {
         path: '/companyForm',
-        element: <CompanyForm />
+        element: <PrivateRoles><CompanyForm /></PrivateRoles>
       },
       {
         path: '/*',

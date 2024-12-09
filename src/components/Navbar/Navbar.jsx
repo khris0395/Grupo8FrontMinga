@@ -149,6 +149,21 @@ function Navbar() {
                                         <Link to="/" className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                             Home
                                         </Link>
+                                        {(token && role === 3) && (
+                                            <Link to="/adminPanel" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Admin Panel
+                                            </Link>
+                                        )}
+                                        {(token && role === 2) && (
+                                            <Link to="/companyProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Company Profile
+                                            </Link>
+                                        )}
+                                        {(token && role === 1) && (
+                                            <Link to="/authorProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Author Profile
+                                            </Link>
+                                        )}
                                         {!token && (<Link to="/signUp" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
                                             Register
                                         </Link>
@@ -171,6 +186,11 @@ function Navbar() {
                                         {(token && role === 0) && (
                                             <Link to="/newRole" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
                                                 New Role
+                                            </Link>
+                                        )}
+                                        {(token && role === 3) && (
+                                            <Link to="/adminPanel" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Admin Panel
                                             </Link>
                                         )}
                                     </div>

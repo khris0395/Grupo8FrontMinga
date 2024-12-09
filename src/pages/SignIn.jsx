@@ -139,13 +139,13 @@ const SignInComponent = () => {
             <div className="text-center mt-6">
               <p className="text-gray-500 text-sm">
                 Don’t have an account yet?{" "}
-                <NavLink href="/signUp" className="text-blue-600 hover:underline">
+                <NavLink to="/signUp" className="text-blue-600 hover:underline">
                   Sign up
                 </NavLink>
               </p>
               <p className="text-gray-500 text-sm mt-2">
                 Go back to{" "}
-                <NavLink href="/home" className="text-blue-600 hover:underline">
+                <NavLink to="/home" className="text-blue-600 hover:underline">
                   home page
                 </NavLink>
               </p>

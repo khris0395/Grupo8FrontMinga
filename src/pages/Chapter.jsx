@@ -10,7 +10,8 @@ import {
     fetchChapter,
     createComment,
     fetchCommentFromChapter,
-    updateComment
+    updateComment,
+    deleteComment
 } from "../store/actions/chapterActions";
 
 
@@ -21,26 +22,16 @@ const Chapter = () => {
     const [editedComment, setEditedComment] = useState("");
 
     const dispatch = useDispatch();
+
     const { id } = useParams();
-
     const { user, token } = useSelector((state) => state.authStore)
-    
-    const idAuthor = user?.author?._id || null
-    const idCompany = user?.company?._id || null;
-
-    console.log(idAuthor);
-
-    
-    
-   
-
-    console.log(token);
-
-
+    const role = user?.role   
+    const idAuthor = user?.author?._id || ""
+    const idCompany = user?.company?._id || ""
 
     const { chapter, loading, error } = useSelector((state) => state.chapter);
     const { comments } = useSelector((state) => state.chapter);
-    console.log(comments);
+
 
     const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,8 +111,6 @@ const Chapter = () => {
         if (!editedComment.trim()) return;
 
         try {
-
-            console.log(editingCommentId, editedComment);
             
             await dispatch(
                 updateComment({
@@ -134,9 +123,28 @@ const Chapter = () => {
             setIsEditing(false);
             setEditingCommentId(null);
             setEditedComment("");
-            dispatch(fetchCommentFromChapter(id)); // Refresh comments
+            dispatch(fetchCommentFromChapter(id));
         } catch (error) {
             console.error("Error updating comment:", error);
+        }
+    };
+
+    const handleDeleteClick = async ( commentId) => {
+    
+
+        try {
+
+         
+            await dispatch(
+                deleteComment({
+                    id: commentId,
+                    token
+                })
+            ).unwrap();
+
+            dispatch(fetchCommentFromChapter(id));
+        } catch (error) {
+            console.error("Error delete comment:", error);
         }
     };
 
@@ -218,7 +226,7 @@ const Chapter = () => {
                                     </div>
                                     <div className="flex flex-col w-96 text-center gap-2">
                                         
-                                        {(isEditing && editingCommentId === comment._id) && (idAuthor===comment.author_id || idCompany===comment.company_id) ? (
+                                        {(isEditing && editingCommentId === comment._id) ? (
                                             <form onSubmit={handleUpdateComment} className="flex gap-2">
                                                 <input
                                                     type="text"
@@ -246,20 +254,35 @@ const Chapter = () => {
                                                 <p className="text-xs text-gray-400">
                                                     {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                                                 </p>
-                                                <button
-                                                    onClick={() => handleEditClick(comment._id, comment.message)}
-                                                    className="text-blue-500 hover:underline"
-                                                >
-                                                    Edit
-                                                </button>
+
+                                                {(idAuthor==(comment?.author_id?._id || "") && idCompany==(comment?.company_id?._id || "")) && ((role===1 || role===2) || role===3 ) ?
+                                                (
+                                                <div className="w-full space-x-4">
+                                                    <button
+                                                        onClick={() => handleEditClick(comment._id, comment.message)}
+                                                        className="text-blue-500 hover:underline"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteClick(comment._id)}
+                                                        className="text-red-500 hover:underline"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                                
+                                                ):(<div>
+                                                   </div>
+                                                )}
                                             </>
                                         )}
                                     </div>
                                 </div>
                             );
                         })}
-
                         </div>
+                    {((role===1 || role===2) || role===3 )&& 
                         <div className="mt-4 flex items-center space-x-2">
                             <div className="relative flex-1">
                                 <input
@@ -277,6 +300,8 @@ const Chapter = () => {
                                 </button>
                             </div>
                         </div>
+                            }
+
                         <button
                             onClick={() => setIsModalOpen(false)}
                             className="absolute top-4 right-4 z-10 bg-transparent text-gray-500 hover:text-gray-800 text-xl"
