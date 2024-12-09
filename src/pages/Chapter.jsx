@@ -16,31 +16,15 @@ const Chapter = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
 
-    const auth = useSelector((state) => {
-        const token = state.auth?.token || localStorage.getItem("token");
-        let user = state.auth?.user;
+    const { user, token } = useSelector((state) => state.authStore);
 
-        if (token && !user) {
-            try {
-                user = jwtDecode(token);
-            } catch (error) {
-                console.error("Error decodificando token:", error);
-            }
-        }
+    console.log(token);
 
-        return {
-            token,
-            user
-        };
-    });
 
-    console.log("Auth state:", auth);
 
     const { chapter, loading, error } = useSelector((state) => state.chapter);
-    const { comments } = useSelector((state) => state.chapter.comments);
-    const { authors } = useSelector((state) => state.authors);
-    const { companies } = useSelector((state) => state.companies);
-    const [authorsData, setAuthorsData] = useState({});
+    const { comments } = useSelector((state) => state.chapter);
+    console.log(comments);
 
     const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,44 +50,15 @@ const Chapter = () => {
         loadData();
     }, [dispatch, id]);
 
-    useEffect(() => {
-        const fetchAuthorsAndCompanies = async () => {
-            if (!comments?.length) return;
+    const handleCreateComment = (e) => {
 
-            const promises = comments.map(async (comment) => {
-                if (comment.author_id) {
-                    const response = await dispatch(fetchAuthor(comment.author_id));
-                    return { id: comment.author_id, data: response.payload };
-                } else if (comment.company_id) {
-                    const response = await dispatch(fetchCompany(comment.company_id));
-                    return { id: comment.company_id, data: response.payload };
-                }
-                return null;
-            });
-
-            const resolvedData = await Promise.all(promises);
-
-            const authorMap = {};
-            resolvedData.forEach((item) => {
-                if (item) {
-                    authorMap[item.id] = item.data || { name: "unknown" };
-                }
-            });
-
-            setAuthorsData(authorMap);
-        };
-
-        fetchAuthorsAndCompanies();
-    }, [comments, dispatch]);
-
-    const handleCreateComment = () => {
-        console.log("Current auth state:", auth);
+        e.preventDefault();
 
         if (!newComment.trim()) {
             return;
         }
 
-        if (!auth.token || !auth.user?.email) {
+        if (!token || !user?.email) {
             console.log("No hay token o usuario disponible");
             return;
         }
@@ -114,25 +69,23 @@ const Chapter = () => {
         }
 
         const commentData = {
-            chapter_id: chapter._id, // Usar el ID del capítulo actual
+            chapter_id: chapter._id,
             message: newComment.trim(),
-            email: auth.user.email,
-            name: auth.user.name,
-            avatar: auth.user.avatar
+            author_id: user.role === 1 ? user.author?._id : null,
+            company_id: user.role === 2 ? user.company?._id : null,
         };
-
         console.log("Sending comment data:", commentData);
 
-        dispatch(createComment({
-            commentData,
-            token: auth.token,
-            chapterId: chapter._id // Asegurarse de enviar el ID del capítulo
-        }))
-            .unwrap()
+        dispatch(
+            createComment({
+                commentData,
+                chapterId: chapter._id,
+            })
+        ).unwrap()
             .then((response) => {
                 console.log("Comment created:", response);
                 setNewComment("");
-                dispatch(fetchCommentFromChapter(chapter._id, auth.token));
+                dispatch(fetchCommentFromChapter(chapter._id, token));
             })
             .catch((error) => {
                 console.error("Error creating comment:", error);

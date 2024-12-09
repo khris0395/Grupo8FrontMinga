@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { login } from "../../store/actions/authActions";
+import { findAuthor, login } from "../../store/actions/authActions";
 import { NavLink } from "react-router-dom";
 import { loginWithGoogle } from "../../store/actions/authActions";
 
@@ -8,12 +8,27 @@ const SignInComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const authStore = useSelector((state) => state.authStore);
+
   const { loading, error, successMessage } = useSelector((state) => state.authStore);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    try {
+      // Inicia sesión
+      const loginResponse = await dispatch(login({ email, password })).unwrap()
+
+      console.log(loginResponse);
+      
+      console.log(loginResponse.user._id);
+      console.log(loginResponse.token);
+      
+      // Despacha la acción findAuthor si el login es exitoso
+      if (loginResponse.token) {
+        dispatch(findAuthor({ user_id: loginResponse.user._id, token: loginResponse.token }));
+      }
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+    }
   };
 
 

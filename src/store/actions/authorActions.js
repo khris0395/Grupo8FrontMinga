@@ -3,18 +3,20 @@ import axios from "axios";
 
 export const fetchAuthor = createAsyncThunk(
     "author/fetchAuthor",
-    async (authorId) => {
-        const response = await axios.get(`http://localhost:8080/api/authors/id/${authorId}`,
+    async ({ authorId, token }) => {
+        const response = await axios.get(
+            `http://localhost:8080/api/authors/id/${authorId}`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             }
         );
-        console.log("fetch authors",response.data.response);
-        return response.data.response
+        console.log("fetch authors", response.data.response);
+        return response.data.response;
     }
 );
+
 
 export const createAuthor = createAsyncThunk(
     "authors/createAuthor",

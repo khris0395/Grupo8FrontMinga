@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { login, setUser, logOut, registerUser, loginWithGoogle, updateRole } from "../actions/authActions";
+import { login, setUser, logOut, registerUser, loginWithGoogle, updateRole, findAuthor } from "../actions/authActions";
 
 const getSavedToken = () => {
    const token = localStorage.getItem("token");
@@ -104,7 +104,21 @@ const authReducer = createReducer(initialState,(builder) => {
    .addCase(updateRole.rejected, (state, action) => {
        state.loading = false;
        state.error = action.payload;
-   });
+   })
+   .addCase(findAuthor.pending, (state) => {
+    state.loading = true;
+    state.error = null;
+    })
+    .addCase(findAuthor.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.user = { ...state.user, author: action.payload };
+    }
+        state.loading = false;
+    })
+    .addCase(findAuthor.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+    });
 });
 
 export default authReducer;

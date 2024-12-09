@@ -63,6 +63,23 @@ const loginWithGoogle = createAction("loginWithGoogle", () => {
   window.location.href = "http://localhost:8080/api/auth/signin/google";
 }) 
 
+const findAuthor = createAsyncThunk(
+  "author/fetchAuthor",
+  async ({ user_id, token }) => {
+    const response = await axios.post(
+      `http://localhost:8080/api/authors/findAuthor`, // Enviamos una solicitud POST
+      { user_id }, // Pasa el user_id en el cuerpo
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("fetch authors", response.data.response);
+    return response.data.response;
+  }
+);
+
 const registerUser = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
@@ -82,7 +99,7 @@ const registerUser = createAsyncThunk(
     }
   })
 
-export const fetchMangaDetails = createAsyncThunk(
+const fetchMangaDetails = createAsyncThunk(
   "mangas/fetchMangaDetails",
   async (mangaId) => {
     const response = await axios.get(`http://localhost:8080/api/manga/mangaById/${mangaId}`);
@@ -135,4 +152,4 @@ const updateRole = createAsyncThunk(
 );
 
 
-export {login, setUser, logOut, registerUser, loginWithGoogle, updateRole, initializeAuth};
+export {login, setUser, logOut, registerUser, loginWithGoogle, updateRole,findAuthor, initializeAuth};
