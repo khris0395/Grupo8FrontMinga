@@ -1,34 +1,109 @@
-import React, { useState } from "react";
-import { useDispatch } from 'react-redux'
-
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAuthor, updateAuthor, deleteAuthor } from "../../store/actions/edithAuthorAction";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { format } from "date-fns";
 import Navbar from '../../components/Navbar/Navbar'
+import AuthorProfile from "../../pages/AuthorProfile";
 import './EdithAuthor.css'
 
 const EditProfile = () => {
+
+  const userl = useSelector((state) => state.authors.authors); // Accede al usuario desde Redux
+  const id = userl[0]?._id;
+
+  //const { id } = useParams();
   const dispatch = useDispatch()
+
+  const author = useSelector((state) => state.editAuthor.data);
+  const status = useSelector((state) => state.editAuthor.loading);
+  const error = useSelector((state) => state.editAuthor.error);
+
+  
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchAuthor(id));
+    }
+  }, [dispatch, id]);
+
   const [formData, setFormData] = useState({
     name: "",
     last_name: "",
     city: "",
     date: "",
-    photo: "",
+    photo: "https://via.placeholder.com/100",
   });
 
+  useEffect(() => {
+    if (author) {
+      setFormData({
+        name: author.name || "",
+        last_name: author.last_name || "",
+        city: author.city || "",
+        date: author.date || "",
+        photo: author.photo || "",
+      });
+    }
+  }, [author]);
+
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: name === "date" ? format(new Date(value), "yyyy-MM-dd") : value,
+    });
   };
 
   const handleSave = () => {
-    alert("Profile saved successfully!");
-    console.log("Saved data:", formData);
+    if (!formData.name || !formData.last_name || !formData.city) {
+      alert("Please fill out all required fields.");
+      return;
+    }
+  
+    let token = localStorage.getItem("token");
+    if (!token){
+      alert("No token found. please log in.");
+      return;
+    }
+
+    dispatch(
+      updateAuthor({
+        author: {...formData, id},
+        token,
+      }))
+      .then((response) => {
+        console.log("Payload sent to server:", { ...formData, id });
+        if (response.meta.requestStatus === "fulfilled") {
+          alert("Profile updated successfully!");
+        } else {
+          alert("Failed to update profile: " + (response.error.message || "Unknown error"));
+        }
+      })
+      .catch((err) => {
+        console.error("Error during profile update:", err);
+        alert("An error occurred: " + err.message);
+      });
   };
+  
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete your account?")) {
-      alert("Account deleted.");
-      console.log("Account deleted.");
+      dispatch(deleteAuthor(id))
+        .then((response) => {
+          if (response.meta.requestStatus === "fulfilled") {
+            alert("Account deleted successfully.");
+            navigate("/"); // Redirige al usuario después de la eliminación
+          } else {
+            alert("Failed to delete account: " + response.payload);
+          }
+        });
     }
   };
+
+  const formattedDate = formData.date ? format(new Date(formData.date), "yyyy-MM-dd") : "N/A";
+
 
   return (
     <>
@@ -69,16 +144,18 @@ const EditProfile = () => {
                       placeholder="First Name"
                       value={formData.name}
                       onChange={handleChange}
+                      required
                       className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                     />
                   </div>
                   <div className="mb-5">
                     <input
                       type="text"
-                      name="lastname"
-                      value={formData.lastname}
+                      name="last_name"
+                      value={formData.last_name}
                       onChange={handleChange}
                       placeholder="Last Name"
+                      required
                       className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                     />
                   </div>
@@ -89,16 +166,18 @@ const EditProfile = () => {
                       value={formData.city}
                       onChange={handleChange}
                       placeholder="City"
+                      required
                       className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                     />
                   </div>
                   <div className="mb-5">
                     <input
-                      type="text"
+                      type="date"
                       name="date"
-                      value={formData.date}
+                      value={formattedDate}
                       onChange={handleChange}
                       placeholder="Birth Date"
+                      required
                       className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                     />
                   </div>
@@ -109,6 +188,7 @@ const EditProfile = () => {
                       value={formData.photo}
                       onChange={handleChange}
                       placeholder="URL Profile Image"
+                      required
                       className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                     />
                   </div>
@@ -119,6 +199,16 @@ const EditProfile = () => {
                   >
                     Save
                   </button>
+
+                  <button
+                    onClick={handleSave}
+                    disabled={status === "loading"}
+                    className={`w-full font-roboto py-5 px-12 ${status === "loading" ? "bg-gray-400" : "bg-[#34D399]"
+                      } text-white rounded-full mb-5`}
+                  >
+                    {status === "loading" ? "Saving..." : "Save"}
+                  </button>
+
                   <button
                     onClick={handleDelete}
                     className="w-full font-roboto py-5 px-12 bg-[#FBDDDC] text-[#EE8380] font-bold rounded-full"
@@ -145,7 +235,7 @@ const EditProfile = () => {
 
               <div className="flex flex-col items-center justify-center px-[30px] ">
                 <div>
-                  <h2 className="text-xl font-bold">{`${formData.name} ${formData.lastname}`}</h2>
+                  <h2 className="text-xl font-bold">{`${formData.name} ${formData.last_name}`}</h2>
 
                   <div className="font-roboto flex items-center  ">
                     <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -162,7 +252,9 @@ const EditProfile = () => {
                     </svg>
 
                     <span className="ml-1">
-                      {formData.date}</span>
+                      {formattedDate}
+                    </span>
+
                   </div>
 
                 </div>

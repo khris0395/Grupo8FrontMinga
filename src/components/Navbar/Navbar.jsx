@@ -5,8 +5,16 @@ import { logOut } from "../../store/actions/authActions";
 import '@madzadev/audio-player/dist/index.css';
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import { useLocation } from "react-router-dom";
+import AuthorProfile from "../../pages/AuthorProfile";
 
 function Navbar() {
+
+    const userl = useSelector((state) => state.authors.authors); // Accede al usuario desde Redux
+    const userId = userl[0]?._id;
+
+    
+    
+    
 
     const location = useLocation();
 
@@ -111,11 +119,14 @@ function Navbar() {
                                 <div className="p-6">
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
+                                            
+                                            <Link to={`/AuthorProfile/${userId}`}>
                                             <img
                                                 src={user.photo}
                                                 alt="Profile"
                                                 className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                                             />
+                                            </Link>
                                             <div>
                                                 <p className="text-white flex-1 truncate">{user.email}</p>
                                                 <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"

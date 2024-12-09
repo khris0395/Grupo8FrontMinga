@@ -39,19 +39,54 @@ export const fetchAuthor = createAsyncThunk(
 
 export const updateAuthor = createAsyncThunk(
     "editAuthor/updateAuthor",
-    async (author) => {
+    async ({author, token}) => {
+
         const response = await axios.put(
-            `http://localhost:8080/api/authors/id/${author.id}`
+            `http://localhost:8080/api/authors/update/${author.id}`
             ,
-            author
+            author,
+            { user_id }, // Pasa el user_id en el cuerpo
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+            
         );
+        console.log("Response Data:", response.data);
         return response.data;
+        
+        
     }
 );
+
+export const updateAuthor = createAsyncThunk(
+    "editAuthor/updateAuthor",
+    async ({ author, user_id, token }) => {
+      try {
+        const response = await axios.put(
+          `http://localhost:8080/api/authors/update/${author.id}`,
+          { ...author, user_id }, // Cuerpo de la solicitud con author y user_id
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Token en los encabezados
+            },
+          }
+        );
+        console.log("Response Data:", response.data);
+        return response.data;
+      } catch (error) {
+        console.error("Error in updateAuthor:", error.response?.data || error.message);
+        throw error.response?.data || error.message; // Lanza el error para manejarlo en Redux
+      }
+    }
+  );
+  
 
 export const deleteAuthor = createAsyncThunk(
     "editAuthor/deleteAuthor",
     async (AuthorId) => {
+        
         const response = await axios.delete(
             `http://localhost:8080/api/authors/id/${AuthorId}`
         );

@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       { path: '/mangas', element: <Mangas /> },
       { path: '/manga/:id', element: <Manga /> },
       { path: '/manager', element: <Manager /> },
-      { path: '/authorProfile', element: <AuthorProfile /> },
+      { path: '/authorProfile/:id', element: <AuthorProfile /> },
       { path: '/companyProfile', element: <CompanyProfile /> },
       { path: '/favourites', element: <Favourites /> }
     ]
