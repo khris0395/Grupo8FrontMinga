@@ -18,21 +18,11 @@ export const getAllChapters = createAsyncThunk(
   }
 )
 
-export const getChapter = createAsyncThunk(
+export const fetchChapter = createAsyncThunk(
   "chapter/fetchChapter",
-  async (id) => {
-    try {
-      const token = localStorage.getItem('token')
-      const response = await axios.get(`http://localhost:8080/api/chapters/chapterById/${id}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      return response.data
-    } catch (error) {
-      return 'Error in the Consult success: false'
-
-    }
+  async (chapterId) => {
+      const response = await axios.get(`http://localhost:8080/api/chapters/chapterById/${chapterId}`);
+      return response.data.response
   }
 );
 
@@ -101,3 +91,29 @@ export const deleteComment = createAsyncThunk(
     }
   }
 );
+export const updateChapter = createAsyncThunk(
+  "chapter/updateChapter",
+  async ({title, updateData}, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.patch(
+        `http://localhost:8080/api/chapters/update`,
+        { title, updateData },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      )
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message)
+    }
+  }
+)
+
+export const fetchComments = createAsyncThunk(
+  "chapter/fetchComments", 
+  async (chapter_id) => {
+    const response = await axios.get(`http://localhost:8080/api/chapters/${chapter_id}/comments`)
+    return response.data.response
+  }
+)

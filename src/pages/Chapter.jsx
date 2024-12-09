@@ -7,11 +7,11 @@ import { fetchCompany } from "../store/actions/companyActions";
 import { IoIosSend } from "react-icons/io";
 import { jwtDecode } from "jwt-decode";
 import {
-    getChapter,
     createComment,
     fetchCommentFromChapter,
     updateComment,
-    deleteComment
+    deleteComment,
+    fetchChapter
 } from "../store/actions/chapterActions";
 
 
@@ -46,10 +46,8 @@ const Chapter = () => {
                 setIsLoading(true);
                 if (id) {
                     await Promise.all([
-                        dispatch(fetchComments(id)),
-                        dispatch(getChapter(id)),
-                        dispatch(fetchAuthor()),
-                        dispatch(commentReducer())
+                        dispatch(fetchCommentFromChapter(id)),
+                        dispatch(fetchChapter(id)),
                     ]);
                 }
             } finally {
