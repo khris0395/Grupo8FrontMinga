@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatDistanceToNow } from "date-fns";
 import { useParams } from "react-router-dom";
-import { fetchAuthor } from "../store/actions/authorActions";
-import { fetchCompany } from "../store/actions/companyActions";
 import { IoIosSend } from "react-icons/io";
-import { jwtDecode } from "jwt-decode";
 import {
     createComment,
     fetchCommentFromChapter,
@@ -14,45 +11,39 @@ import {
     fetchChapter
 } from "../store/actions/chapterActions";
 
-
 const Chapter = () => {
-
     const [isEditing, setIsEditing] = useState(false);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedComment, setEditedComment] = useState("");
-
-    const dispatch = useDispatch();
-
-    const { id } = useParams();
-    const { user, token } = useSelector((state) => state.authStore)
-    const role = user?.role   
-    const idAuthor = user?.author?._id || ""
-    const idCompany = user?.company?._id || ""
-
-    const { chapter, loading, error } = useSelector((state) => state.chapter);
-    const { comments } = useSelector((state) => state.chapter);
-
-
     const [currentPage, setCurrentPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-
     const maxButtons = 3;
 
+    const dispatch = useDispatch();
+    const { id } = useParams();
+    const { user, token } = useSelector((state) => state.authStore);
+    const role = user?.role;
+    const idAuthor = user?.author?._id || "";
+    const idCompany = user?.company?._id || "";
+    const { chapter, loading, error } = useSelector((state) => state.chapter);
+    const { comments } = useSelector((state) => state.chapter);
+
     useEffect(() => {
+        if (!id) return;
+
         const loadData = async () => {
+            setIsLoading(true);
             try {
-                setIsLoading(true);
-                if (id) {
-                    await Promise.all([
-                        dispatch(fetchCommentFromChapter(id)),
-                        dispatch(fetchChapter(id)),
-                    ]);
-                }
-            } finally {
-                setIsLoading(false);
+                await Promise.all([
+                    dispatch(getChapter(id)).unwrap(),
+                    dispatch(fetchCommentFromChapter(id)).unwrap()
+                ]);
+            } catch (error) {
+                console.error(error);
             }
+            setIsLoading(false);
         };
         loadData();
     }, [dispatch, id]);
@@ -111,7 +102,7 @@ const Chapter = () => {
         if (!editedComment.trim()) return;
 
         try {
-            
+
             await dispatch(
                 updateComment({
                     commentId: editingCommentId,
@@ -129,12 +120,12 @@ const Chapter = () => {
         }
     };
 
-    const handleDeleteClick = async ( commentId) => {
-    
+    const handleDeleteClick = async (commentId) => {
+
 
         try {
 
-         
+
             await dispatch(
                 deleteComment({
                     id: commentId,
@@ -210,97 +201,97 @@ const Chapter = () => {
                     <div className="relative bg-[#ebebeb] rounded-lg w-11/12 max-w-lg p-4">
                         <h2 className="text-lg font-bold mb-4">Comments</h2>
                         <div className="max-h-[50vh] overflow-y-auto space-y-4">
-                        {comments?.map((comment, index) => {
-                            const commentAuthor = comment.company_id || comment.author_id;
-                            const isEditing = editingCommentId === comment._id;
+                            {comments?.map((comment, index) => {
+                                const commentAuthor = comment.company_id || comment.author_id;
+                                const isEditing = editingCommentId === comment._id;
 
-                            return (
-                                <div key={comment._id} className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded mb-4">
-                                    <div className="flex gap-5 items-center mb-5">
-                                        <img
-                                            src={comment.author_id?.photo || "/default-avatar.png"}
-                                            alt={comment.author_id?.name || "unknown"}
-                                            className="w-10 h-10 rounded-full"
-                                        />
-                                        <p className="font-medium">{comment.author_id?.name || "unknown"}</p>
-                                    </div>
-                                    <div className="flex flex-col w-96 text-center gap-2">
-                                        
-                                        {(isEditing && editingCommentId === comment._id) ? (
-                                            <form onSubmit={handleUpdateComment} className="flex gap-2">
-                                                <input
-                                                    type="text"
-                                                    value={editedComment}
-                                                    onChange={(e) => setEditedComment(e.target.value)}
-                                                    className="flex-1 border border-gray-300 rounded px-2 py-1"
-                                                />
-                                                <button
-                                                    type="submit"
-                                                    className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                                >
-                                                    Save
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={handleCancelEdit}
-                                                    className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                                                >
-                                                    Cancel
-                                                </button>
-                                            </form>
-                                        ) : (
-                                            <>
-                                                <p className="text-sm text-gray-500">{comment.message}</p>
-                                                <p className="text-xs text-gray-400">
-                                                    {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
-                                                </p>
+                                return (
+                                    <div key={comment._id} className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded mb-4">
+                                        <div className="flex gap-5 items-center mb-5">
+                                            <img
+                                                src={comment.author_id?.photo || "/default-avatar.png"}
+                                                alt={comment.author_id?.name || "unknown"}
+                                                className="w-10 h-10 rounded-full"
+                                            />
+                                            <p className="font-medium">{comment.author_id?.name || "unknown"}</p>
+                                        </div>
+                                        <div className="flex flex-col w-96 text-center gap-2">
 
-                                                {(idAuthor==(comment?.author_id?._id || "") && idCompany==(comment?.company_id?._id || "")) && ((role===1 || role===2) || role===3 ) ?
-                                                (
-                                                <div className="w-full space-x-4">
+                                            {(isEditing && editingCommentId === comment._id) ? (
+                                                <form onSubmit={handleUpdateComment} className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={editedComment}
+                                                        onChange={(e) => setEditedComment(e.target.value)}
+                                                        className="flex-1 border border-gray-300 rounded px-2 py-1"
+                                                    />
                                                     <button
-                                                        onClick={() => handleEditClick(comment._id, comment.message)}
-                                                        className="text-blue-500 hover:underline"
+                                                        type="submit"
+                                                        className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                                                     >
-                                                        Edit
+                                                        Save
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteClick(comment._id)}
-                                                        className="text-red-500 hover:underline"
+                                                        type="button"
+                                                        onClick={handleCancelEdit}
+                                                        className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
                                                     >
-                                                        Delete
+                                                        Cancel
                                                     </button>
-                                                </div>
-                                                
-                                                ):(<div>
-                                                   </div>
-                                                )}
-                                            </>
-                                        )}
+                                                </form>
+                                            ) : (
+                                                <>
+                                                    <p className="text-sm text-gray-500">{comment.message}</p>
+                                                    <p className="text-xs text-gray-400">
+                                                        {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                                                    </p>
+
+                                                    {(idAuthor == (comment?.author_id?._id || "") && idCompany == (comment?.company_id?._id || "")) && ((role === 1 || role === 2) || role === 3) ?
+                                                        (
+                                                            <div className="w-full space-x-4">
+                                                                <button
+                                                                    onClick={() => handleEditClick(comment._id, comment.message)}
+                                                                    className="text-blue-500 hover:underline"
+                                                                >
+                                                                    Edit
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleDeleteClick(comment._id)}
+                                                                    className="text-red-500 hover:underline"
+                                                                >
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+
+                                                        ) : (<div>
+                                                        </div>
+                                                        )}
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
+                                );
+                            })}
+                        </div>
+                        {((role === 1 || role === 2) || role === 3) &&
+                            <div className="mt-4 flex items-center space-x-2">
+                                <div className="relative flex-1">
+                                    <input
+                                        type="text"
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                        placeholder="Say something here..."
+                                        className="w-full border ps-6 border-gray-300 rounded pl-4 pr-10 py-4"
+                                    />
+                                    <button
+                                        onClick={handleCreateComment}
+                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[#9d9d9d] me-8 hover:text-blue-600"
+                                    >
+                                        <IoIosSend size={35} />
+                                    </button>
                                 </div>
-                            );
-                        })}
-                        </div>
-                    {((role===1 || role===2) || role===3 )&& 
-                        <div className="mt-4 flex items-center space-x-2">
-                            <div className="relative flex-1">
-                                <input
-                                    type="text"
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                    placeholder="Say something here..."
-                                    className="w-full border ps-6 border-gray-300 rounded pl-4 pr-10 py-4"
-                                />
-                                <button
-                                    onClick={handleCreateComment}
-                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[#9d9d9d] me-8 hover:text-blue-600"
-                                >
-                                    <IoIosSend size={35} />
-                                </button>
                             </div>
-                        </div>
-                            }
+                        }
 
                         <button
                             onClick={() => setIsModalOpen(false)}
