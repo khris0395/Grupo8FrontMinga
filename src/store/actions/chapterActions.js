@@ -18,11 +18,21 @@ export const getAllChapters = createAsyncThunk(
   }
 )
 
-export const fetchChapter = createAsyncThunk(
+export const getChapter = createAsyncThunk(
   "chapter/fetchChapter",
-  async (chapterId) => {
-      const response = await axios.get(`http://localhost:8080/api/chapters/chapterById/${chapterId}`);
-      return response.data.response
+  async (id) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.get(`http://localhost:8080/api/chapters/chapterById/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.data
+    } catch (error) {
+      return 'Error in the Consult success: false'
+
+    }
   }
 );
 
@@ -131,4 +141,3 @@ export const fetchComments = createAsyncThunk(
     return response.data.response
   }
 )
-

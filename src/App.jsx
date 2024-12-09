@@ -43,7 +43,7 @@ const router = createBrowserRouter([
       { path: '/manager', element: <PrivateManager><Manager /></PrivateManager> },
       { path: '/authorProfile', element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor> },
       { path: '/companyProfile', element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany> },
-      { path: '/favourites', element: <PrivateLogin><Favourites /></PrivateLogin> }
+      { path: '/favourites', element: <PrivateroleNoToken><Favourites /></PrivateroleNoToken> }
     ]
   },
   {

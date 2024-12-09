@@ -4,11 +4,11 @@ import { formatDistanceToNow } from "date-fns";
 import { useParams } from "react-router-dom";
 import { IoIosSend } from "react-icons/io";
 import {
+    getChapter,
     createComment,
     fetchCommentFromChapter,
     updateComment,
-    deleteComment,
-    fetchChapter
+    deleteComment
 } from "../store/actions/chapterActions";
 
 const Chapter = () => {
@@ -203,17 +203,19 @@ const Chapter = () => {
                         <div className="max-h-[50vh] overflow-y-auto space-y-4">
                             {comments?.map((comment, index) => {
                                 const commentAuthor = comment.company_id || comment.author_id;
+                                
+                                
                                 const isEditing = editingCommentId === comment._id;
 
                                 return (
                                     <div key={comment._id} className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded mb-4">
                                         <div className="flex gap-5 items-center mb-5">
                                             <img
-                                                src={comment.author_id?.photo || "/default-avatar.png"}
-                                                alt={comment.author_id?.name || "unknown"}
+                                                src={commentAuthor.photo || "/default-avatar.png"}
+                                                alt={commentAuthor.name || "unknown"}
                                                 className="w-10 h-10 rounded-full"
                                             />
-                                            <p className="font-medium">{comment.author_id?.name || "unknown"}</p>
+                                            <p className="font-medium">{commentAuthor.name || "unknown"}</p>
                                         </div>
                                         <div className="flex flex-col w-96 text-center gap-2">
 

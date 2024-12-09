@@ -188,11 +188,6 @@ function Navbar() {
                                                 New Role
                                             </Link>
                                         )}
-                                        {(token && role === 3) && (
-                                            <Link to="/adminPanel" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                Admin Panel
-                                            </Link>
-                                        )}
                                     </div>
                                 </div>
                             </div>
