@@ -8,6 +8,7 @@ import {PrivateLogin,
         PrivateManager,
         PrivateProfileAuthor, 
         PrivateProfileCompany,
+        PrivateroleNoToken,
         PrivateRoles} from './components/PrivateRoutes'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/home', element: <Home /> },
       { path: '/mangas', element: <Mangas /> },
-      { path: '/manga/:id', element: <PrivateLogin><Manga /></PrivateLogin> },
+      { path: '/manga/:id', element: <PrivateroleNoToken><Manga /></PrivateroleNoToken> },
       { path: '/manager', element: <PrivateManager><Manager /></PrivateManager> },
       { path: '/authorProfile', element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor> },
       { path: '/companyProfile', element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany> },
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/chapter/:id',
-        element: <PrivateLogin><Chapter /></PrivateLogin>
+        element: <PrivateroleNoToken><Chapter /></PrivateroleNoToken>
       },
       {
         path: '/signUp',
