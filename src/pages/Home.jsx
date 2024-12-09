@@ -52,7 +52,7 @@ function Home() {
             setIsMobile(window.innerWidth <= 768);
         };
 
-        handleResize(); // Configuración inicial
+        handleResize(); 
         window.addEventListener("resize", handleResize);
 
         return () => {
@@ -60,12 +60,10 @@ function Home() {
         };
     }, []);
 
-    // Obtiene las categorías desde el store
     useEffect(() => {
         dispatch(get_categories());
     }, [dispatch]);
 
-    // Cambia de diapositiva automáticamente
     useEffect(() => {
         if (categories.length > 0) {
             const timer = setInterval(() => {

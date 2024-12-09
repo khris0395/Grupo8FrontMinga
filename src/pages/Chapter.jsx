@@ -12,6 +12,11 @@ import {
 } from "../store/actions/chapterActions";
 
 const Chapter = () => {
+    const dispatch = useDispatch();
+    const { id } = useParams();
+    const { user, token } = useSelector((state) => state.authStore);
+    const { chapter, loading, error } = useSelector((state) => state.chapter);
+    const { comments } = useSelector((state) => state.chapter);
     const [isEditing, setIsEditing] = useState(false);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedComment, setEditedComment] = useState("");
@@ -20,7 +25,6 @@ const Chapter = () => {
     const [newComment, setNewComment] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const maxButtons = 3;
-
     const dispatch = useDispatch();
     const { id } = useParams();
     const { user, token } = useSelector((state) => state.authStore);
@@ -72,7 +76,6 @@ const Chapter = () => {
             author_id: user.role === 1 ? user.author?._id : null,
             company_id: user.role === 2 ? user.company?._id : null,
         };
-        console.log("Sending comment data:", commentData);
 
         dispatch(
             createComment({
