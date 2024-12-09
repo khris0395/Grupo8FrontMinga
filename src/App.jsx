@@ -1,6 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setUser } from './store/actions/authActions'
+import { findAuthor, setUser } from './store/actions/authActions'
 import axios from 'axios'
 import MainLayout from './layouts/MainLayout'
 import PrivateLogin from './components/PrivateLogin'
@@ -121,6 +121,7 @@ export default function App() {
   let token = localStorage.getItem("token");
   if (token) {
     loginWithToken(token).then((user) => {
+      dispatch(findAuthor({user_id: user._id,token})),
       dispatch(setUser({ user, token }));
     });
   }
