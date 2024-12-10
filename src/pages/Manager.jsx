@@ -11,7 +11,6 @@ export default function Manager() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const {profile, mangas, role, loading, error} = useSelector((state) => state.manager)
-    
 
     useEffect(() => {
         if(!token){

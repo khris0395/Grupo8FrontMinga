@@ -10,7 +10,6 @@ function Navbar() {
 
     const location = useLocation();
 
-    // Define las rutas donde el botón será blanco
     const whiteButtonRoutes = [
         "/",
         "/chapter:id",
@@ -21,13 +20,11 @@ function Navbar() {
         "/signIn"
     ];
 
-    // Verifica si la ruta actual coincide con alguna de las rutas especificadas
     const WhiteButton = whiteButtonRoutes.some(route =>
         route.includes(":")
             ? location.pathname.startsWith(route.split(":")[0])
             : location.pathname === route
     );
-
 
     const [isOpen, setIsOpen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -37,7 +34,6 @@ function Navbar() {
     const role = user?.role ?? null;
     const menuRef = useRef(null);
     const audioRef = useRef(null);
-
     const dispatch = useDispatch();
 
     useEffect(() => {

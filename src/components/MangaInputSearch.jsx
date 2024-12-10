@@ -4,8 +4,6 @@ export default function MangaInputSearch() {
 
     const handleTextChange = (e) => {
         dispatch(setSearch(e.target.value));
-        console.log(search);
-
     };
     const dispatch = useDispatch(); // Necesario para despachar la acción
     const search = useSelector((state) => state.mangas.search)

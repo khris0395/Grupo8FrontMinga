@@ -114,41 +114,55 @@ function Manga() {
     const handleReaction = async (reactionType) => {
         try {
             const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
+
+            // Verifica si la reacción es la misma que la actual para eliminarla
             if (savedReactions[manga._id] === reactionType) {
+                // Elimina la reacción del localStorage
                 delete savedReactions[manga._id];
                 setSelectedReaction(null);
+
+                // Si la reacción es 'liked' o 'love', también elimina de los favoritos
+                if (reactionType === 'liked' || reactionType === 'love') {
+                    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    const updatedFavorites = favorites.filter(favorite => favorite.mangaId !== manga._id);
+
+                    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+                }
             } else {
+                // Si la reacción no coincide, se agrega o actualiza
                 savedReactions[manga._id] = reactionType;
                 setSelectedReaction(reactionType);
-            }
-            localStorage.setItem('userReactions', JSON.stringify(savedReactions));
-            if (reactionType === 'liked' || reactionType === 'love') {
-                const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                const existingIndex = favorites.findIndex(f => f.mangaId === manga._id);
 
-                if (existingIndex === -1) {
-                    favorites.push({
-                        mangaId: manga._id,
-                        title: manga.title,
-                        cover_photo: manga.cover_photo,
-                        reaccion: reactionType,
-                        timestamp: new Date().toISOString()
-                    });
-                } else {
-                    favorites[existingIndex] = {
-                        ...favorites[existingIndex],
-                        reaccion: reactionType,
-                        timestamp: new Date().toISOString()
-                    };
+                // Agregar a los favoritos si es 'liked' o 'love'
+                if (reactionType === 'liked' || reactionType === 'love') {
+                    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    const existingIndex = favorites.findIndex(f => f.mangaId === manga._id);
+
+                    if (existingIndex === -1) {
+                        favorites.push({
+                            mangaId: manga._id,
+                            title: manga.title,
+                            cover_photo: manga.cover_photo,
+                            reaccion: reactionType,
+                            timestamp: new Date().toISOString()
+                        });
+                    } else {
+                        favorites[existingIndex] = {
+                            ...favorites[existingIndex],
+                            reaccion: reactionType,
+                            timestamp: new Date().toISOString()
+                        };
+                    }
+
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
                 }
-
-                localStorage.setItem('favorites', JSON.stringify(favorites));
             }
+
+            localStorage.setItem('userReactions', JSON.stringify(savedReactions));
         } catch (error) {
             console.error('Error handling reaction:', error);
         }
     };
-
     const handleChapter = (chapter) => {
         navigate(`/chapter/${chapter._id}`);
     };
@@ -225,7 +239,7 @@ function Manga() {
                         <div className="md:col-span-8">
                             <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8 space-y-4 md:space-y-6">
                                 <div className="space-y-3 md:space-y-4">
-                                    <h1 className="text-3xl md:text-5xl font-bold text-[#222222]">{manga.title}</h1>
+                                    <h1 className="text-3xl md:text-5xl font-bold text-[#222222]">hola</h1>
                                     <div className="flex flex-wrap items-center gap-2 md:gap-4">
                                         <span className="px-3 md:px-4 py-1.5 md:py-2 bg-[#FFE0DF] rounded-full text-[#EF8481] text-sm md:text-base font-medium">
                                             {categoryName || 'Category'}

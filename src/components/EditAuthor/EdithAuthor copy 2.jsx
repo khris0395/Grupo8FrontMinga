@@ -16,13 +16,11 @@ const EditProfile = () => {
 
   const handleSave = () => {
     alert("Profile saved successfully!");
-    console.log("Saved data:", formData);
   };
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete your account?")) {
       alert("Account deleted.");
-      console.log("Account deleted.");
     }
   };
 
