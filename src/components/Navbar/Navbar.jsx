@@ -146,7 +146,7 @@ function Navbar() {
                                     )}
 
                                     <div className="flex flex-col gap-6">
-                                        <Link to="/" className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                        <Link to="/"  onClick={() => setIsOpen(false)}  className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                             Home
                                         </Link>
                                         {(token && role === 3) && (
