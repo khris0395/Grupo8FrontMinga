@@ -116,7 +116,7 @@ const router = createBrowserRouter([
         element: <PrivateProfileCompany><EditCompany /></PrivateProfileCompany>
       },
       {
-        path: '/editAuthor',
+        path: '/editAuthor/:id',
         element: <PrivateProfileAuthor><EditAuthor /></PrivateProfileAuthor>
       }, {
         path: '/mangaForm',

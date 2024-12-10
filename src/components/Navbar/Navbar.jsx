@@ -116,7 +116,7 @@ function Navbar() {
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
                                             
-                                            <Link to={`/AuthorProfile/${userId}`}>
+                                            <Link to={`/authorProfile/${userId}`}>
                                             <img
                                                 src={user.photo}
                                                 alt="Profile"

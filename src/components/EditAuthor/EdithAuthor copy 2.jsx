@@ -48,38 +48,7 @@ const EditProfile = () => {
     });
   };
 
-/*   
-  const handleSave = () => {
-    if (!formData.name || !formData.last_name || !formData.city) {
-      alert("Please fill out all required fields.");
-      return;
-    }
-  
-    let token = localStorage.getItem("token");
-    if (!token){
-      alert("No token found. please log in.");
-      return;
-    }
-    dispatch(
-      updateAuthor({
-        author: {...formData },
-        token,
-        id,
-      }))
-      .then((response) => {
-        console.log("Payload sent to server:", { ...formData, });
-        if (response.meta.requestStatus === "fulfilled") {
-          alert("Profile updated successfully!");
-        } else {
-          alert("Failed to update profile: " + (response.error.message || "Unknown error"));
-        }
-      })
-      .catch((err) => {
-        console.error("Error during profile update:", err);
-        alert("An error occurred: " + err.message);
-      });
-  };
- */
+
   const handleSave = () => {
     // Validación de campos requeridos
     if (!formData.name || !formData.last_name || !formData.city) {
@@ -138,19 +107,64 @@ const EditProfile = () => {
   };
 
 
+
+
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete your account?")) {
-      dispatch(deleteAuthor(id))
-        .then((response) => {
-          if (response.meta.requestStatus === "fulfilled") {
-            alert("Account deleted successfully.");
-            navigate("/"); // Redirige al usuario después de la eliminación
-          } else {
-            alert("Failed to delete account: " + response.payload);
-          }
-        });
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      Swal.fire({
+        title: "No Token Found",
+        text: "Please log in before deleting your account.",
+        icon: "error",
+        confirmButtonText: "Log In",
+      });
+      return;
     }
+  
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this action!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteAuthor({ id, token }))
+          .then((response) => {
+            if (response.meta.requestStatus === "fulfilled") {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your account has been deleted.",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then(() => {
+                navigate("/home"); // Redirige al home después de borrar
+              });
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: `Failed to delete account: ${response.payload || "Unknown error"}`,
+                icon: "error",
+                confirmButtonText: "Try Again",
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "Error",
+              text: `An error occurred: ${err.message}`,
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          });
+      }
+    });
   };
+  
+
+
   const formattedDate = formData.date ? format(new Date(formData.date), "yyyy-MM-dd") : "N/A";
   return (
     <>
