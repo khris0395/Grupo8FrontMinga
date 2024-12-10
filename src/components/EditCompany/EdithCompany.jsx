@@ -1,4 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { fetchAuthor, updateAuthor, deleteAuthor } from "../../store/actions/edithAuthorAction";
+import Navbar from '../../components/Navbar/Navbar'
+import AuthorProfile from "../../pages/AuthorProfile";
+import Swal from "sweetalert2";
+import { format } from "date-fns";
+
+
+
+
 import './EdithCompany.css'
 
 const EdithCompany = () => {
@@ -26,6 +37,8 @@ const EdithCompany = () => {
   };
 
   return (
+    <>
+    <Navbar menuColor="#4338CA" />
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Background Section */}
       <div
@@ -157,7 +170,7 @@ const EdithCompany = () => {
         </div>
       </div>
     </div>
-
+    </>
   );
 };
 

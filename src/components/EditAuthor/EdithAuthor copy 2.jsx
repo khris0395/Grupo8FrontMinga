@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import Navbar from '../../components/Navbar/Navbar'
 import AuthorProfile from "../../pages/AuthorProfile";
+import Swal from "sweetalert2";
 import './EdithAuthor.css'
 
 const EditProfile = () => {
@@ -56,6 +57,7 @@ const EditProfile = () => {
     });
   };
 
+/*   
   const handleSave = () => {
     if (!formData.name || !formData.last_name || !formData.city) {
       alert("Please fill out all required fields.");
@@ -85,6 +87,64 @@ const EditProfile = () => {
       .catch((err) => {
         console.error("Error during profile update:", err);
         alert("An error occurred: " + err.message);
+      });
+  };
+
+ */
+  const handleSave = () => {
+    // Validación de campos requeridos
+    if (!formData.name || !formData.last_name || !formData.city) {
+      Swal.fire({
+        title: "Incomplete Form",
+        text: "Please fill out all required fields.",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        title: "No Token Found",
+        text: "Please log in before making changes.",
+        icon: "error",
+        confirmButtonText: "Log In",
+      });
+      return;
+    }
+
+    dispatch(
+      updateAuthor({
+        author: { ...formData },
+        token,
+        id,
+      })
+    )
+      .then((response) => {
+        if (response.meta.requestStatus === "fulfilled") {
+          Swal.fire({
+            title: "Profile Updated",
+            text: "Your profile was updated successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } else {
+          Swal.fire({
+            title: "Update Failed",
+            text: `Error: ${response.error.message || "Unknown error"}`,
+            icon: "error",
+            confirmButtonText: "Try Again",
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error",
+          text: `An error occurred: ${err.message}`,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       });
   };
   
