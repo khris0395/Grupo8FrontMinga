@@ -33,7 +33,7 @@ function NewRole() {
                         {/* Author Card */}
                         <Link
                             to="/authorForm"
-                            className="block w-full bg-white border border-[#E5E5E5] rounded-[15px] p-4 hover:shadow-lg transition-all duration-300"
+                            className="block w-full bg-white border-2 border-[#E5E5E5] rounded-[15px] p-4 hover:shadow-lg transition-all duration-300"
                         >
                             <div className="flex items-center">
                                 <div className="flex -space-x-3">
@@ -42,17 +42,21 @@ function NewRole() {
                                     <img className="w-[35px] h-[35px] rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/men/3.jpg" alt="" />
                                 </div>
                                 <div className="ml-4">
-                                    <h3 className="font-roboto font-semibold text-lg text-[#4338CA] tracking-[0.02em]">Join as an Author!</h3>
-                                    <p className="font-roboto font-light text-sm text-[#4338CA] tracking-[0.02em] opacity-80">I'm a reader writing a manga</p>
+                                    <h3 className="font-roboto font-semibold text-lg text-[#4338CA] tracking-[0.02em]">
+                                        Join as an Author!
+                                    </h3>
+                                    <p className="font-roboto font-light text-sm text-[#4338CA] tracking-[0.02em] opacity-80">
+                                        I'm a reader writing a manga
+                                    </p>
                                 </div>
-                                <div className="ml-auto w-[22px] h-[22px] border border-[#E5E5E5] rounded-full" />
+                                
                             </div>
                         </Link>
 
                         {/* Company Card */}
                         <Link
                             to="/companyForm"
-                            className="block w-full bg-white border-2 border-[#4338CA] rounded-[15px] p-4 hover:shadow-lg transition-all duration-300"
+                            className="block w-full bg-white border-2 border-[#E5E5E5] rounded-[15px] p-4 hover:shadow-lg transition-all duration-300"
                         >
                             <div className="flex items-center">
                                 <div className="flex -space-x-3">
@@ -61,14 +65,14 @@ function NewRole() {
                                     <img className="w-[35px] h-[35px] rounded-full border-2 border-white" src="https://randomuser.me/api/portraits/women/6.jpg" alt="" />
                                 </div>
                                 <div className="ml-4">
-                                    <h3 className="font-roboto font-semibold text-lg text-[#4338CA] tracking-[0.02em]">Join as a Company!</h3>
-                                    <p className="font-roboto font-light text-sm text-[#4338CA] tracking-[0.02em] opacity-80">I'm a company and I want to publish my comics</p>
+                                    <h3 className="font-roboto font-semibold text-lg text-[#4338CA] tracking-[0.02em]">
+                                        Join as a Company!
+                                    </h3>
+                                    <p className="font-roboto font-light text-sm text-[#4338CA] tracking-[0.02em] opacity-80">
+                                        I'm a company and I want to publish my comics
+                                        </p>
                                 </div>
-                                <div className="ml-auto w-[22px] h-[22px] bg-[#4338CA] rounded-full flex items-center justify-center">
-                                    <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1 4L4.5 7.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
+                                
                             </div>
                         </Link>
                     </div>

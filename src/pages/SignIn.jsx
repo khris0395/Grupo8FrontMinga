@@ -16,12 +16,6 @@ const SignInComponent = () => {
     try {
       // Inicia sesión
       const loginResponse = await dispatch(login({ email, password })).unwrap()
-
-      console.log(loginResponse);
-      
-      console.log(loginResponse.user._id);
-      console.log(loginResponse.token);
-      
       
       if (loginResponse.token && loginResponse.user.role===1) {
         dispatch(findAuthor({ user_id: loginResponse.user._id, token: loginResponse.token }));
