@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMangas } from "../store/actions/mangaActions";
-import MangaInputSearch from "../components/MangaInputSearch"
+import { fetchMangas, setSearch } from "../store/actions/mangaActions";
+import MangaInputSearch from "../components/MangaInputSearch";
 import MangaCard from "../components/MangaCard";
 
 function Mangas() {
     const dispatch = useDispatch(); // Necesario para despachar la acción
 
-    const {mangas, search} = useSelector((state) => state.mangas)
+
+    const mangas = useSelector((state) => state.mangas.mangas)
+    const loading = useSelector((state) => state.mangas.loading)
+    const search = useSelector((state) => state.mangas.search)
+    const error = useSelector((state) => state.mangas.error)
     
+
 
     useEffect(() => {
         // Despachar la acción fetchMangas
         dispatch(fetchMangas(search));
-    }, [search, dispatch]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
-
+    }, [search]); 
+ 
     return (
         <div className="min-h-screen relative">
             {/* Contenedor de la imagen con posición relativa */}

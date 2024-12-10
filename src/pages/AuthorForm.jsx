@@ -41,8 +41,6 @@ const AuthorForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Form data before dispatch:", formData);
-
         try {
             
             await dispatch(
@@ -53,9 +51,7 @@ const AuthorForm = () => {
             ).unwrap();
 
             if (user && user._id) {
-
-                console.log("entrando a role");
-                
+              
                 await dispatch(
                     updateRole({
                         userId: user._id,

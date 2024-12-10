@@ -3,13 +3,15 @@ import { useDispatch } from 'react-redux'
 import { findAuthor, findCompany, setUser } from './store/actions/authActions'
 import axios from 'axios'
 import MainLayout from './layouts/MainLayout'
-import {PrivateLogin, 
-        PrivateAdmin,
-        PrivateManager,
-        PrivateProfileAuthor, 
-        PrivateProfileCompany,
-        PrivateroleNoToken,
-        PrivateRoles} from './components/PrivateRoutes'
+import {
+  PrivateLogin,
+  PrivateAdmin,
+  PrivateManager,
+  PrivateProfileAuthor,
+  PrivateProfileCompany,
+  PrivateroleNoToken,
+  PrivateRoles
+} from './components/PrivateRoutes'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
@@ -31,19 +33,51 @@ import CompanyProfile from './pages/CompanyProfile'
 import Chapter from './pages/Chapter'
 import Favourites from './pages/Favourites'
 import SecondLayout from './layouts/SecondLayout'
+import { Navigate } from 'react-router-dom';
+
 
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: '/home', element: <Home /> },
-      { path: '/mangas', element: <Mangas /> },
-      { path: '/manga/:id', element: <PrivateroleNoToken><Manga /></PrivateroleNoToken> },
-      { path: '/manager', element: <PrivateManager><Manager /></PrivateManager> },
-      { path: '/authorProfile', element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor> },
-      { path: '/companyProfile', element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany> },
-      { path: '/favourites', element: <PrivateroleNoToken><Favourites /></PrivateroleNoToken> }
+      {
+        path: '/',
+        element: <Home />
+      },
+      {
+        path: "/Home",
+        element: <Navigate to="/" replace />
+      },
+      {
+        path: '/mangas',
+        element: <Mangas />
+
+      },
+      {
+        path: '/manga/:id',
+        element: <PrivateroleNoToken><Manga /></PrivateroleNoToken>
+
+      },
+      {
+        path: '/manager',
+        element: <PrivateManager><Manager /></PrivateManager>
+
+      },
+      {
+        path: '/authorProfile',
+        element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor>
+
+      },
+      {
+        path: '/companyProfile',
+        element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany>
+
+      },
+      {
+        path: '/favourites',
+        element: <PrivateroleNoToken><Favourites /></PrivateroleNoToken>
+
+      }
     ]
   },
   {
