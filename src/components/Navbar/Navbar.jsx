@@ -61,7 +61,7 @@ function Navbar() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <div className="flex gap-20 items-center">
+                    <div className="flex gap-2 sm:gap-20 items-center">
                         {/* Play/Stop button */}
                         <div className="bg-white rounded-lg pb-1 z-50">
                             <button

@@ -44,7 +44,7 @@ export default function MangaCard({ mangas, isManager }) {
                     {categories.map((category, index) => (
                         <label
                             key={index}
-                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${category.bg}   ${category.text}  ${category.hover} ${category.checked} `}
+                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all select-none duration-300 ${category.bg}   ${category.text}  ${category.hover} ${category.checked} `}
                         >
                             <input
                                 type="checkbox"

@@ -50,9 +50,10 @@ const Favorites = () => {
 
     return (
         <div className="min-h-screen relative">
-            {/* Contenedor de la imagen con posición relativa */}
+            <div className="relative flex items-center justify-center">
+                <h1 className="text-white text-4xl font-bold absolute top-60 text-center z-20">Favourites</h1>
+            </div>
             <div className="relative">
-                {/* Imagen de fondo */}
                 <div className="w-full h-screen">
                     <img
                         src="https://s3-alpha-sig.figma.com/img/e99b/5da8/a52db4fd64894930c7407e9673bb78ee?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qxbNGaT5-bW02GCx8ckcxSi3jM4pdUPNL~MAyT0wMpdMDd90S9tLm6KHdzYissk0FqHDczvbUF7JdHNh3B49AjnMkTvNV99XG2IH-x-oNdOyb~Petkn~r11VFzoOphhYk1Q6CwMd3OvB4AyVofVPsOM0mx9wBMqgqeuMoWP7dQ1~C9BmeJlAR~gc2Snw91HzSoBPcpQmXdabcZdFyF4K7H7T-7x6tgZK7owzCVs-GKlG~feC6D0YMHImKJ3rbm~KIRLjZ7bkPm2iC1RlfbRWl9GvW0ZpUcpzKOjYinHxkxGXaSO4P4SdvkVMiA~5P9RkZPpLIm~RhCDlo-uMOIGbDg__"
