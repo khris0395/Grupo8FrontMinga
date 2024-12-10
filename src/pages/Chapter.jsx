@@ -12,11 +12,6 @@ import {
 } from "../store/actions/chapterActions";
 
 const Chapter = () => {
-    const dispatch = useDispatch();
-    const { id } = useParams();
-    const { user, token } = useSelector((state) => state.authStore);
-    const { chapter, loading, error } = useSelector((state) => state.chapter);
-    const { comments } = useSelector((state) => state.chapter);
     const [isEditing, setIsEditing] = useState(false);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedComment, setEditedComment] = useState("");
@@ -25,9 +20,15 @@ const Chapter = () => {
     const [newComment, setNewComment] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const maxButtons = 3;
+
+    const dispatch = useDispatch();
+    const { id } = useParams();
+    const { user, token } = useSelector((state) => state.authStore);
     const role = user?.role;
     const idAuthor = user?.author?._id || "";
     const idCompany = user?.company?._id || "";
+    const { chapter, loading, error } = useSelector((state) => state.chapter);
+    const { comments } = useSelector((state) => state.chapter);
 
     useEffect(() => {
         if (!id) return;
@@ -47,23 +48,17 @@ const Chapter = () => {
         loadData();
     }, [dispatch, id]);
 
+    if (isLoading || !chapter?.pages) {
+        return <div className="text-center p-4">Loading...</div>;
+    }
+
+    if (error) {
+        return <div className="text-center p-4 text-red-500">Error: {error}</div>;
+    }
+
     const handleCreateComment = (e) => {
-
         e.preventDefault();
-
-        if (!newComment.trim()) {
-            return;
-        }
-
-        if (!token || !user?.email) {
-            console.log("No hay token o usuario disponible");
-            return;
-        }
-
-        if (!chapter?._id) {
-            console.log("No hay ID del capítulo");
-            return;
-        }
+        if (!newComment.trim() || !token || !chapter?._id) return;
 
         const commentData = {
             chapter_id: chapter._id,
@@ -72,20 +67,16 @@ const Chapter = () => {
             company_id: user.role === 2 ? user.company?._id : null,
         };
 
-        dispatch(
-            createComment({
-                commentData,
-                chapterId: chapter._id,
-            })
-        ).unwrap()
-            .then((response) => {
-                console.log("Comment created:", response);
+        dispatch(createComment({
+            commentData,
+            chapterId: chapter._id
+        }))
+            .unwrap()
+            .then(() => {
                 setNewComment("");
-                dispatch(fetchCommentFromChapter(chapter._id, token));
+                dispatch(fetchCommentFromChapter(id));
             })
-            .catch((error) => {
-                console.error("Error creating comment:", error);
-            });
+            .catch((error) => console.error(error));
     };
 
     const handleEditClick = (commentId, currentMessage) => {
@@ -96,44 +87,33 @@ const Chapter = () => {
 
     const handleUpdateComment = async (e) => {
         e.preventDefault();
-
         if (!editedComment.trim()) return;
 
         try {
-
-            await dispatch(
-                updateComment({
-                    commentId: editingCommentId,
-                    updatedMessage: editedComment.trim(),
-                    token,
-                })
-            ).unwrap();
+            await dispatch(updateComment({
+                commentId: editingCommentId,
+                updatedMessage: editedComment.trim(),
+                token
+            })).unwrap();
 
             setIsEditing(false);
             setEditingCommentId(null);
             setEditedComment("");
             dispatch(fetchCommentFromChapter(id));
         } catch (error) {
-            console.error("Error updating comment:", error);
+            console.error(error);
         }
     };
 
     const handleDeleteClick = async (commentId) => {
-
-
         try {
-
-
-            await dispatch(
-                deleteComment({
-                    id: commentId,
-                    token
-                })
-            ).unwrap();
-
+            await dispatch(deleteComment({
+                id: commentId,
+                token
+            })).unwrap();
             dispatch(fetchCommentFromChapter(id));
         } catch (error) {
-            console.error("Error delete comment:", error);
+            console.error(error);
         }
     };
 
@@ -144,40 +124,35 @@ const Chapter = () => {
     };
 
     const handlePreviousPage = () => {
-        if (currentPage > 0) setCurrentPage((prev) => prev - 1);
+        if (currentPage > 0) setCurrentPage(prev => prev - 1);
     };
 
     const handleNextPage = () => {
-        if (chapter?.pages?.length && currentPage < chapter.pages.length - 1) {
-            setCurrentPage((prev) => prev + 1);
+        if (currentPage < chapter.pages.length - 1) {
+            setCurrentPage(prev => prev + 1);
         }
     };
 
     const getPaginationRange = () => {
-        if (!chapter?.pages) return [];
         const totalPages = chapter.pages.length;
         const start = Math.max(0, currentPage - Math.floor(maxButtons / 2));
         const end = Math.min(totalPages, start + maxButtons);
         return Array.from({ length: end - start }, (_, i) => i + start);
     };
 
-    if (isLoading || !chapter) return <div className="text-center p-4">Loading...</div>;
-    if (loading) return <div className="text-center p-4">Loading chapter...</div>;
-    if (error) return <div className="text-center p-4 text-red-500">Error: {error}</div>;
-    if (!chapter) return <div className="text-center p-4">No chapter data available</div>;
-
     return (
         <div className="bg-[#ebebeb] min-h-screen">
             <div className="bg-[#4338ca] p-4 flex justify-center text-white items-center">
                 <h1 className="text-lg font-bold">
-                    {chapter.order} -  {chapter.title}
+                    {chapter.order} - {chapter.title}
                 </h1>
             </div>
 
             <div className="relative flex justify-center items-center bg-black h-[90vh] md:h-[80vh]">
                 <button
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl hover:w-10"
                     onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl hover:w-10"
                 >
                     🡠
                 </button>
@@ -187,8 +162,9 @@ const Chapter = () => {
                     className="max-h-full"
                 />
                 <button
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl hover:w-10"
                     onClick={handleNextPage}
+                    disabled={currentPage === chapter.pages.length - 1}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-700 text-3xl hover:w-10"
                 >
                     🡢
                 </button>
@@ -199,25 +175,20 @@ const Chapter = () => {
                     <div className="relative bg-[#ebebeb] rounded-lg w-11/12 max-w-lg p-4">
                         <h2 className="text-lg font-bold mb-4">Comments</h2>
                         <div className="max-h-[50vh] overflow-y-auto space-y-4">
-                            {comments?.map((comment, index) => {
-                                const commentAuthor = comment.company_id || comment.author_id;
-                                
-                                
+                            {comments?.map((comment) => {
                                 const isEditing = editingCommentId === comment._id;
-
                                 return (
                                     <div key={comment._id} className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded mb-4">
                                         <div className="flex gap-5 items-center mb-5">
                                             <img
-                                                src={commentAuthor.photo || "/default-avatar.png"}
-                                                alt={commentAuthor.name || "unknown"}
+                                                src={comment?.author_id?.photo || "/default-avatar.png"}
+                                                alt={comment?.author_id?.name || "unknown"}
                                                 className="w-10 h-10 rounded-full"
                                             />
-                                            <p className="font-medium">{commentAuthor.name || "unknown"}</p>
+                                            <p className="font-medium">{comment?.author_id?.name || "unknown"}</p>
                                         </div>
                                         <div className="flex flex-col w-96 text-center gap-2">
-
-                                            {(isEditing && editingCommentId === comment._id) ? (
+                                            {isEditing ? (
                                                 <form onSubmit={handleUpdateComment} className="flex gap-2">
                                                     <input
                                                         type="text"
@@ -225,17 +196,10 @@ const Chapter = () => {
                                                         onChange={(e) => setEditedComment(e.target.value)}
                                                         className="flex-1 border border-gray-300 rounded px-2 py-1"
                                                     />
-                                                    <button
-                                                        type="submit"
-                                                        className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                                                    >
+                                                    <button type="submit" className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                                                         Save
                                                     </button>
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleCancelEdit}
-                                                        className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                                                    >
+                                                    <button onClick={handleCancelEdit} className="px-4 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                                         Cancel
                                                     </button>
                                                 </form>
@@ -245,9 +209,8 @@ const Chapter = () => {
                                                     <p className="text-xs text-gray-400">
                                                         {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                                                     </p>
-
-                                                    {(idAuthor == (comment?.author_id?._id || "") && idCompany == (comment?.company_id?._id || "")) && ((role === 1 || role === 2) || role === 3) ?
-                                                        (
+                                                    {(idAuthor === comment?.author_id?._id || idCompany === comment?.company_id?._id) &&
+                                                        ((role === 1 || role === 2) || role === 3) && (
                                                             <div className="w-full space-x-4">
                                                                 <button
                                                                     onClick={() => handleEditClick(comment._id, comment.message)}
@@ -262,9 +225,6 @@ const Chapter = () => {
                                                                     Delete
                                                                 </button>
                                                             </div>
-
-                                                        ) : (<div>
-                                                        </div>
                                                         )}
                                                 </>
                                             )}
@@ -273,7 +233,8 @@ const Chapter = () => {
                                 );
                             })}
                         </div>
-                        {((role === 1 || role === 2) || role === 3) &&
+
+                        {((role === 1 || role === 2) || role === 3) && (
                             <div className="mt-4 flex items-center space-x-2">
                                 <div className="relative flex-1">
                                     <input
@@ -291,7 +252,7 @@ const Chapter = () => {
                                     </button>
                                 </div>
                             </div>
-                        }
+                        )}
 
                         <button
                             onClick={() => setIsModalOpen(false)}
@@ -315,9 +276,7 @@ const Chapter = () => {
                     {getPaginationRange().map((page) => (
                         <button
                             key={page}
-                            className={`px-3 py-1 rounded-full ${page === currentPage
-                                ? "bg-[#4338ca] text-white"
-                                : "bg-gray-200 text-gray-800"
+                            className={`px-3 py-1 rounded-full ${page === currentPage ? "bg-[#4338ca] text-white" : "bg-gray-200 text-gray-800"
                                 }`}
                             onClick={() => setCurrentPage(page)}
                         >
@@ -333,15 +292,13 @@ const Chapter = () => {
                     </button>
                 </div>
 
-                <div className="flex justify-center gap-20 items-center h-[10vh]">
-                    <div>
-                        <button
-                            className="text-blue-500 text-center text-4xl shadow-2xl"
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            📝
-                        </button>
-                    </div>
+                <div>
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="text-blue-500 text-center text-4xl shadow-2xl"
+                    >
+                        📝
+                    </button>
                 </div>
             </div>
         </div>
