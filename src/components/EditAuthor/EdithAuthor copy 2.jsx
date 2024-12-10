@@ -7,6 +7,7 @@ import Navbar from '../../components/Navbar/Navbar'
 import AuthorProfile from "../../pages/AuthorProfile";
 import Swal from "sweetalert2";
 import './EdithAuthor.css'
+import ToggleSwitch from "../EditAuthor/ToggleSwitch";
 
 const EditProfile = () => {
   const userl = useSelector((state) => state.authors.authors); // Accede al usuario desde Redux
@@ -16,7 +17,7 @@ const EditProfile = () => {
   const author = useSelector((state) => state.editAuthor.data);
   const status = useSelector((state) => state.editAuthor.loading);
   const error = useSelector((state) => state.editAuthor.error);
-  
+
   useEffect(() => {
     if (id) {
       dispatch(fetchAuthor(id));
@@ -111,7 +112,7 @@ const EditProfile = () => {
 
   const handleDelete = () => {
     const token = localStorage.getItem("token");
-  
+
     if (!token) {
       Swal.fire({
         title: "No Token Found",
@@ -121,7 +122,7 @@ const EditProfile = () => {
       });
       return;
     }
-  
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this action!",
@@ -162,14 +163,16 @@ const EditProfile = () => {
       }
     });
   };
-  
 
 
-  const formattedDate = formData.date ? format(new Date(formData.date), "yyyy-MM-dd") : "N/A";
+  const formattedDate = formData.date
+    ? format(new Date(formData.date), "yyyy-MM-dd") // Asegura que formData.date se convierta en un objeto Date
+    : "N/A";
+
   return (
     <>
       <Navbar menuColor="#4338CA" />
-      <div className="min-h-screen bg-gray-100 flex flex-col">
+      <div className=" min-h-screen bg-gray-100 flex-col">
         {/* Background Section */}
         <div
           className="hidden md:block bg-cover bg-center h-[50vh] lg:h-[638px] relative"
@@ -191,8 +194,8 @@ const EditProfile = () => {
               />
             </div>
             {/* Form Section */}
-            <div className="lg:p-[30px] lg:w-[437px] lg:mx-auto lg:pt-[54px] lg:pl-[121px]">
-              <div className="bg-white lg:w-[377px]  lg:pt-[54px] lg:px-[25px] w-full max-w-md mx-auto p-6 md:p-8">
+            <div className="">
+              <div className="bg-white w-full max-w-md mx-auto flex items-center justify-center">
                 <div className="w-full max-w-[280px] lg:p-8">
                   <div className="mb-5">
                     <input
@@ -255,7 +258,7 @@ const EditProfile = () => {
                   >
                     Save
                   </button>
-                  
+
                   <button
                     onClick={handleDelete}
                     className="w-full font-roboto py-5 px-12 bg-[#FBDDDC] text-[#EE8380] font-bold rounded-full"
@@ -299,6 +302,7 @@ const EditProfile = () => {
           </div>
         </div>
       </div>
+      
     </>
   );
 };
