@@ -64,7 +64,7 @@ const router = createBrowserRouter([
 
       },
       {
-        path: '/authorProfile',
+        path: '/authorProfile/:id',
         element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor>
 
       },
@@ -112,7 +112,7 @@ const router = createBrowserRouter([
         element: <PrivateManager><EditChapter /></PrivateManager>
       },
       {
-        path: '/editCompany',
+        path: '/editCompany/:id',
         element: <PrivateProfileCompany><EditCompany /></PrivateProfileCompany>
       },
       {
