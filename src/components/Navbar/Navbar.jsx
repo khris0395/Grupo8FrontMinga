@@ -18,7 +18,6 @@ function Navbar() {
 
     const location = useLocation();
 
-    // Define las rutas donde el botón será blanco
     const whiteButtonRoutes = [
         "/",
         "/chapter:id",
@@ -29,13 +28,11 @@ function Navbar() {
         "/signIn"
     ];
 
-    // Verifica si la ruta actual coincide con alguna de las rutas especificadas
     const WhiteButton = whiteButtonRoutes.some(route =>
         route.includes(":")
             ? location.pathname.startsWith(route.split(":")[0])
             : location.pathname === route
     );
-
 
     const [isOpen, setIsOpen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -45,7 +42,6 @@ function Navbar() {
     const role = user?.role ?? null;
     const menuRef = useRef(null);
     const audioRef = useRef(null);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -73,7 +69,7 @@ function Navbar() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <div className="flex gap-20 items-center">
+                    <div className="flex gap-2 sm:gap-20 items-center">
                         {/* Play/Stop button */}
                         <div className="bg-white rounded-lg pb-1 z-50">
                             <button
@@ -157,9 +153,24 @@ function Navbar() {
                                     )}
 
                                     <div className="flex flex-col gap-6">
-                                        <Link to="/" className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                        <Link to="/"  onClick={() => setIsOpen(false)}  className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                             Home
                                         </Link>
+                                        {(token && role === 3) && (
+                                            <Link to="/adminPanel" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Admin Panel
+                                            </Link>
+                                        )}
+                                        {(token && role === 2) && (
+                                            <Link to="/companyProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Company Profile
+                                            </Link>
+                                        )}
+                                        {(token && role === 1) && (
+                                            <Link to="/authorProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Author Profile
+                                            </Link>
+                                        )}
                                         {!token && (<Link to="/signUp" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
                                             Register
                                         </Link>

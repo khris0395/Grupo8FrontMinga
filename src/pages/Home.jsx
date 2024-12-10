@@ -52,7 +52,7 @@ function Home() {
             setIsMobile(window.innerWidth <= 768);
         };
 
-        handleResize(); // Configuración inicial
+        handleResize();
         window.addEventListener("resize", handleResize);
 
         return () => {
@@ -60,12 +60,10 @@ function Home() {
         };
     }, []);
 
-    // Obtiene las categorías desde el store
     useEffect(() => {
         dispatch(get_categories());
     }, [dispatch]);
 
-    // Cambia de diapositiva automáticamente
     useEffect(() => {
         if (categories.length > 0) {
             const timer = setInterval(() => {
@@ -127,7 +125,7 @@ function Home() {
             </div>
 
             {/* Carrusel (sólo para escritorio) */}
-            <section className="hidden md:flex w-full py-14 px-4 justify-center h-[500px]">
+            <section className="hidden md:flex w-full py-20 px-4 justify-center">
                 <div className="max-w-[1258px] w-full h-[265px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] flex items-center px-8">
                     <button
                         onClick={prevSlide}
@@ -145,17 +143,17 @@ function Home() {
                                 <img
                                     src={categories[currentSlide].character_photo}
                                     alt={categories[currentSlide].name}
-                                    className="w-[276px] h-[255px] object-cover absolute -top-[75px]"
+                                    className="w-[276px] h-[255px] object-cover absolute -top-[30px]"
                                 />
                             </div>
                             <div className="relative">
                                 <img
                                     src={categories[currentSlide].cover_photo}
                                     alt={categories[currentSlide].name}
-                                    className="w-[180px] h-[255px] object-cover absolute -top-[75px] left-1/2 -translate-x-1/2"
+                                    className="w-[180px] h-[255px] object-cover absolute -top-[60px] left-1/2 -translate-x-1/2"
                                 />
                             </div>
-                            <div className="text-white pt-[75px]">
+                            <div className="text-white h-[265px] flex flex-col justify-center">
                                 <h2 className="text-[24px] font-medium font-roboto mb-[10px]" style={{ color: categories[currentSlide].hover }}>
                                     {categories[currentSlide].name}:
                                 </h2>

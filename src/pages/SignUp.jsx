@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom'
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../store/actions/authActions";
+import { registerUser, login } from "../store/actions/authActions";
 import { loginWithGoogle } from "../store/actions/authActions";
 
 export default function SignUp() {
 
     const dispatch = useDispatch();
     const { loading, error, successMessage } = useSelector((state) => state.authStore);
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -21,11 +23,28 @@ export default function SignUp() {
         setFormData({ ...formData, [name]: value });
       };
 
-      console.log(formData)
-
       const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(registerUser(formData));
+
+        try {
+          const registerResponse = await dispatch(registerUser(formData)).unwrap();
+         
+
+          if (registerResponse) {
+
+            try {
+              // Inicia sesión
+              const loginResponse = await dispatch(login({ email: formData.email, password: formData.password })).unwrap()
+            
+            } catch (error) {
+              console.error("Error en el inicio de sesión:", error);
+            }
+          } 
+
+        } catch (error) {
+          console.error('Error:', error);
+        }
+
       };
 
     return (
@@ -98,7 +117,7 @@ export default function SignUp() {
                   className="peer mt-1 block w-full rounded-md border-2 focus:ring-0 focus:border-transparent sm:text-sm pt-5 pb-3 pl-4"
                 />
                 <label
-                  htmlFor="password"
+                  htmlFor="photo"
                   className={`absolute left-4 text-sm font-medium transition-all duration-300 
                               transform -translate-y-1/2 peer-focus:top-0 
                               peer-focus:left-4 peer-focus:text-xs peer-focus:font-semibold peer-focus:bg-white 

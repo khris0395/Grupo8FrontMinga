@@ -1,29 +1,25 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMangas, setSearch } from "../store/actions/mangaActions";
-import { useNavigate } from "react-router-dom";
 import MangaInputSearch from "../components/MangaInputSearch";
 import MangaCard from "../components/MangaCard";
 
 function Mangas() {
     const dispatch = useDispatch(); // Necesario para despachar la acción
-    const navigate = useNavigate();
+
 
     const mangas = useSelector((state) => state.mangas.mangas)
     const loading = useSelector((state) => state.mangas.loading)
     const search = useSelector((state) => state.mangas.search)
     const error = useSelector((state) => state.mangas.error)
-console.log(mangas);
+    
+
 
     useEffect(() => {
         // Despachar la acción fetchMangas
         dispatch(fetchMangas(search));
-    }, [search]); // Dependencia de dispatch, esto asegura que se ejecute solo una vez
-
-    const handleRead = (manga) => {
-        navigate(`/manga/${manga._id}`);
-    };
-
+    }, [search]); 
+ 
     return (
         <div className="min-h-screen relative">
             {/* Contenedor de la imagen con posición relativa */}
@@ -42,7 +38,7 @@ console.log(mangas);
             </div>
 
             {/* Contenido debajo de la imagen */}
-            <MangaCard mangas={mangas} isManager={false}> </MangaCard>
+            <MangaCard mangas={mangas} isManager={false}/>
         </div>
     );
 }

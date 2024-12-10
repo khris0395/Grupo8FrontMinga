@@ -1,15 +1,20 @@
 import { useNavigate } from "react-router-dom"
 
-export default function ButtonAddChapter() {
+export default function ButtonAddChapter(manga) {
     const navigate = useNavigate()
+    console.log(manga);
+    
 
     function detailsManga(id) {
-        // navigate(`/MangaDetails/${id}`)
+         navigate(`/ChapterForm/${id}`)
     }
 
     return (
-        <button className="mt-3 px-4 py-2 bg-yellow-200 text-yellow-800 text-sm font-semibold rounded-full hover:bg-yellow-300 w-20" onClick={() => detailsManga(manga._id)}>
-            Edit
+        <button
+            onClick={() => detailsManga(manga.mangaId)}
+            className="bg-white hover:bg-gray-200 text-black border border-black font-bold text-sm w-4 h-4 flex items-center justify-center rounded-full shadow-lg">
+            +
         </button>
+
     )
 }

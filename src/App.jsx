@@ -1,9 +1,17 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { findAuthor, setUser } from './store/actions/authActions'
+import { findAuthor, findCompany, setUser } from './store/actions/authActions'
 import axios from 'axios'
 import MainLayout from './layouts/MainLayout'
-import PrivateLogin from './components/PrivateLogin'
+import {
+  PrivateLogin,
+  PrivateAdmin,
+  PrivateManager,
+  PrivateProfileAuthor,
+  PrivateProfileCompany,
+  PrivateroleNoToken,
+  PrivateRoles
+} from './components/PrivateRoutes'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
@@ -25,19 +33,51 @@ import CompanyProfile from './pages/CompanyProfile'
 import Chapter from './pages/Chapter'
 import Favourites from './pages/Favourites'
 import SecondLayout from './layouts/SecondLayout'
+import { Navigate } from 'react-router-dom';
+
 
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
-      { path: '/', element: <Home /> },
-      { path: '/home', element: <Home /> },
-      { path: '/mangas', element: <Mangas /> },
-      { path: '/manga/:id', element: <Manga /> },
-      { path: '/manager', element: <Manager /> },
-      { path: '/authorProfile/:id', element: <AuthorProfile /> },
-      { path: '/companyProfile', element: <CompanyProfile /> },
-      { path: '/favourites', element: <Favourites /> }
+      {
+        path: '/',
+        element: <Home />
+      },
+      {
+        path: '/home',
+        element: <Home />
+      },
+      {
+        path: '/mangas',
+        element: <Mangas />
+
+      },
+      {
+        path: '/manga/:id',
+        element: <PrivateroleNoToken><Manga /></PrivateroleNoToken>
+
+      },
+      {
+        path: '/manager',
+        element: <PrivateManager><Manager /></PrivateManager>
+
+      },
+      {
+        path: '/authorProfile',
+        element: <PrivateProfileAuthor><AuthorProfile /></PrivateProfileAuthor>
+
+      },
+      {
+        path: '/companyProfile',
+        element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany>
+
+      },
+      {
+        path: '/favourites',
+        element: <PrivateroleNoToken><Favourites /></PrivateroleNoToken>
+
+      }
     ]
   },
   {
@@ -45,11 +85,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/chapter/:id',
-        element: <Chapter />
+        element: <PrivateroleNoToken><Chapter /></PrivateroleNoToken>
       },
       {
         path: '/signUp',
-        element: <SignUp />
+        element: <PrivateLogin><SignUp /></PrivateLogin>
       },
       {
         path: '/signIn',
@@ -57,37 +97,42 @@ const router = createBrowserRouter([
       },
       {
         path: '/newRole',
-        element: <NewRole />
+        element: <PrivateRoles><NewRole /></PrivateRoles>
       },
       {
         path: '/adminPanel',
-        element: <AdminPanel />
-      }, {
-        path: '/editChapter',
+        element: <PrivateAdmin><AdminPanel /></PrivateAdmin>
+      },
+      {
+        path: '/editChapter/:id',
         element: <EditChapter />
       },
       {
-        path: '/editCompany',
-        element: <EditCompany />
+        path: '/editChapter',
+        element: <PrivateManager><EditChapter /></PrivateManager>
       },
       {
-        path: '/editAuthor/:id',
-        element: <EditAuthor />
+        path: '/editCompany',
+        element: <PrivateProfileCompany><EditCompany /></PrivateProfileCompany>
+      },
+      {
+        path: '/editAuthor',
+        element: <PrivateProfileAuthor><EditAuthor /></PrivateProfileAuthor>
       }, {
         path: '/mangaForm',
-        element: <MangaForm />
+        element: <PrivateManager><MangaForm /></PrivateManager>
       },
       {
         path: '/chapterForm',
-        element: <ChapterForm />
+        element: <PrivateManager><ChapterForm /></PrivateManager>
       },
       {
         path: '/authorForm',
-        element: <AuthorForm />
+        element: <PrivateRoles><AuthorForm /></PrivateRoles>
       },
       {
         path: '/companyForm',
-        element: <CompanyForm />
+        element: <PrivateRoles><CompanyForm /></PrivateRoles>
       },
       {
         path: '/*',
@@ -121,7 +166,12 @@ export default function App() {
   let token = localStorage.getItem("token");
   if (token) {
     loginWithToken(token).then((user) => {
-      dispatch(findAuthor({user_id: user._id,token})),
+      if (user.role === 1) {
+        dispatch(findAuthor({ user_id: user._id, token }))
+      } else if (user.role === 2) {
+        dispatch(findCompany({ user_id: user._id, token }))
+      }
+
       dispatch(setUser({ user, token }));
     });
   }

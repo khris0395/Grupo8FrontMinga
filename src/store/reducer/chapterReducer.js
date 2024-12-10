@@ -1,30 +1,30 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { fetchChapter, fetchCommentFromChapter, createComment } from "../actions/chapterActions"
+import { getChapter, fetchCommentFromChapter, createComment, updateChapter, getAllChapters } from "../actions/chapterActions"
 
 const initialState = {
     chapter: null,
     comments: [],
     loading: false,
     error: null,
+    updateSuccess: false,
     createSuccess: false
 }
 
 export const chapterReducer = createReducer(initialState, (builder) => {
     builder
-        // Casos para fetchChapter
-        .addCase(fetchChapter.pending, (state) => {
+        .addCase(getChapter.pending, (state) => {
             state.loading = true;
             state.error = null;
-            state.chapter = null;
         })
-        .addCase(fetchChapter.fulfilled, (state, action) => {
-            state.chapter = action.payload; // Actualizar capítulo
+        .addCase(getChapter.fulfilled, (state, action) => {
+            state.chapter = action.payload.response;
             state.loading = false;
             state.error = null;
         })
-        .addCase(fetchChapter.rejected, (state, action) => {
+        .addCase(getChapter.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
+            state.chapter = null;
         })
         .addCase(fetchCommentFromChapter.pending, (state) => {
             state.loading = true;
@@ -37,7 +37,6 @@ export const chapterReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-        // Casos para createComment
         .addCase(createComment.pending, (state) => {
             state.loading = true;
             state.createSuccess = false;
@@ -49,5 +48,33 @@ export const chapterReducer = createReducer(initialState, (builder) => {
         .addCase(createComment.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
-        });
+            state.createSuccess = false;
+        })
+        .addCase(updateChapter.pending, (state) => {
+            state.loading = true;
+            state.updateSuccess = false;
+        })
+        .addCase(updateChapter.fulfilled, (state, action) => {
+            state.loading = false;
+            state.updateSuccess = true;
+        })
+        .addCase(updateChapter.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+            state.updateSuccess = false;
+        })
+        .addCase(getAllChapters.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getAllChapters.fulfilled, (state, action) => {
+            state.chapter = action.payload;
+            state.loading = false;
+            state.error = null;
+        })
+        .addCase(getAllChapters.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+            state.chapter = null;
+        })
 });

@@ -1,24 +1,36 @@
 import React from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import { createCompany } from '../store/actions/companyActions'
+import { findCompany, updateRole } from '../store/actions/authActions';
+import { useNavigate } from 'react-router-dom'
+
 
 const CompanyForm = () => {
     const dispatch = useDispatch()
-    const companyState = useSelector((state) => state.company) || {}
-    const loading = companyState.loading || false
-    const error = companyState.error
-    const createSuccess = companyState.createSuccess
+    const navigate = useNavigate()
 
-    const [successMessage, setSuccessMessage] = useState('')
+    const { user, token } = useSelector((state) => state.authStore);
+    const { loading, error, successMessage } = useSelector((state) => state.company) || {};
+
     const [formData, setFormData] = useState({
         name: '',
         website: '',
-        photo: '',
         description: '',
-        user_id: "674a404d2c593fb14a0d09af",
+        photo: '',
+        user_id: "",
         active: true
     })
+
+    useEffect(() => {
+        if (user && user._id) {
+            setFormData((prevData) => ({
+                ...prevData,
+                user_id: user._id,
+            }));
+        }
+    }, [user]);
 
     const handleChange = (e) => {
         setFormData({
@@ -28,26 +40,42 @@ const CompanyForm = () => {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
+        console.log("Form data before dispatch:", formData);
 
         try {
-            await dispatch(createCompany(formData))
-            setSuccessMessage('Company successfully created!')
-            setFormData({
-                name: '',
-                website: '',
-                photo: '',
-                description: '',
-                user_id: "674a404d2c593fb14a0d09af",
-                active: true
-            })
-            setTimeout(() => {
-                setSuccessMessage('')
-            }, 3000)
+            
+            await dispatch(
+                createCompany({
+                    companyData: formData,
+                    token,
+                })
+            ).unwrap();
+
+            if (user && user._id) {
+
+                console.log("entrando a role");
+                
+                await dispatch(
+                    updateRole({
+                        userId: user._id,
+                        role: 2,
+                        token,
+                    })
+                ).unwrap();
+
+                let user_id= user._id
+
+
+                await dispatch(findCompany({user_id, token})).unwrap()
+            }
+
+            navigate('/');
         } catch (err) {
-            console.error('Error creating company:', err)
+            console.error('Error:', err);
         }
-    }
+    };
 
     return (
         <main className="h-screen grid grid-cols-1 md:grid-cols-2">

@@ -9,6 +9,7 @@ import {
     createManga,
     fetchReactions,
     createReaction,
+    deleteManga,
     deleteReaction,
     updateReaction
 } from "../actions/mangaActions";
@@ -40,6 +41,12 @@ export const mangaReducer = createReducer(initialState, (builder) => {
         .addCase(fetchMangas.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
+        })
+        .addCase(deleteManga.fulfilled, ( state, action) => {
+            state.mangas = action.payload
+        })
+        .addCase(deleteManga.rejected, ( state, action ) => {
+            state.error = action.error.message
         })
         .addCase(fetchCategories.fulfilled, (state, action) => {
             state.categories = action.payload;
