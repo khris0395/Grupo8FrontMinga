@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createManga } from '../store/actions/mangaActions';
+import registroImg from "../assets/images/registros.jpg"
 
 function NewManga() {
     const dispatch = useDispatch();
@@ -119,7 +120,7 @@ function NewManga() {
             <div
                 className="hidden md:block bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('https://s3-alpha-sig.figma.com/img/5d98/eac1/025f012e94a72840af6fc1f67a349f61?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=MtGJF7E0D6~8zP9qJDOh~vl~H-KfvC-43eCh-x0l1DphvRvw-q4VjRKc2pvAyU07MpdMI8DnytXVjzZ2sLz7qxUEJFsWD4pJd3VQqkPJmCr-ucqj2OuyAfiYHd8j7zWEzIm8AqrsMcLVWAsQ9E1juZy3ZGgxL5iJZwG5Neuvn~oU-pdeDLybUkdtBxbWN5-VvYmeeteKMPy9WaRQaByX-g4ieNpvdeCUqZngEkVytLr4tbYBe55HhSMhQGvxwwlXEYfkFT9LRvwVOfkCgum2tY4Ry2S~9lVhZTdjAMc~zXjodSKPWOFHggoN4GrSA-qAkaaGbQi0J2xdcEuop1nJkA__')`,
+					backgroundImage: `url(${registroImg})`,
                     filter: "brightness(0.6) saturate(1.5) sepia(0.7) hue-rotate(220deg)"
                 }}
             />

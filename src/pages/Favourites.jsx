@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionsById, deleteReaction } from "../store/actions/reactionsActions";
+import MangaNotFound from "../assets/images/anime-girl.gif"
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
@@ -61,7 +62,14 @@ const Favorites = () => {
     };
 
     if (!favorites.length) {
-        return <div className="text-center p-4 mt-24">No favorites yet!</div>;
+        return <div className="m-10 flex flex-col justify-center items-center mt-20">
+        <h2 className="text-xl font-bold text-[#4338ca]">No favorites yet, go explore 🔥.</h2>
+        <img
+            src={MangaNotFound}
+            alt="Manga-Not-Found"
+            className="object-cover rounded-l-full w-1/4"
+        />
+    </div>;
     }
 
     return (
@@ -79,7 +87,7 @@ const Favorites = () => {
                 </div>
 
                 <div className="w-full h-full mx-auto mt-5 -translate-y-24 bg-gray-300 flex justify-center items-center">
-                    <div className="w-11/12 bg-white h-full px-4 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
+                    <div className="w-11/12 bg-white h-full p-5 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
                         <div className="flex justify-center items-center flex-wrap">
 
                             {favorites.map((favorite) => (

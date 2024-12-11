@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { createCompany } from '../store/actions/companyActions'
 import { findCompany, updateRole } from '../store/actions/authActions';
 import { useNavigate } from 'react-router-dom'
+import registro2Img from "../assets/images/registros2.jpg"
+
 
 
 const CompanyForm = () => {
@@ -83,7 +85,7 @@ const CompanyForm = () => {
             <div
                 className="hidden md:block bg-cover bg-center"
                 style={{
-                    backgroundImage: `url('https://s3-alpha-sig.figma.com/img/cd7b/cfec/c07083cef0707bd5864b287bac613f2b?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Aa72~qaQ-Re8JBUPxzkxXnEmKnF~Nksubt4JQlzlSyaNzCKI0yOFHb4M3jaIdNjawWVO7VvkTsBWhTN03z4KsmZA8WhV2jMxWVM2PJAnD0piJN30WPlc~QnVykKFP4CwvEbbwihCfqj9VoAAHWocAqPpcZDmnlZvtbifXp5LaI6iv8fUVn5-MuCjlzaYt1mRYVISghahbU3i2vVtbPt5V7gYm5Kq6vJX4et7u36v8lwqsnUviMfvNVJlj3t1c8l6vYcPmsBFDMzEU~6r3HAvc-IIchLyEBooDoJHVTy9IaK2pFeS-Gwe3nW6UApCQiKHRAitgbRjVrp7MqrZqRXw4g__')`,
+                    backgroundImage: `url(${registro2Img})`,
                     filter: "brightness(0.6) saturate(1.5) sepia(0.7) hue-rotate(220deg)"
                 }}
             />

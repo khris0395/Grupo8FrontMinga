@@ -7,6 +7,7 @@ import ButtonDeleteManga from "./buttons/ButtonDeleteManga.jsx";
 import ButtonAddChapter from "./buttons/buttonAddChapter.jsx";
 import ButtonEdit2Manga from "./buttons/buttonEdit2Manga.jsx";
 import { get_categories, setSelectedCategories } from "../store/actions/categoryActions.js";
+import MangaNotFound from "../assets/images/anime-girl.gif";
 
 export default function MangaCard({ mangas, isManager }) {
     const dispatch = useDispatch(); // Necesario para despachar la acción
@@ -59,44 +60,56 @@ export default function MangaCard({ mangas, isManager }) {
 
                 <div className="flex justify-center items-center flex-wrap">
                     {error && <div className="error-message">{error}</div>}
-                    {loading && filteredMangas.length === 0 ? <div className="loading-indicator">Loading...</div> : filteredMangas.length === 0 && !loading ? <p>No mangas found for this author/company.</p> : filteredMangas.map((manga, index) => (
+                    {loading && filteredMangas.length === 0 ?
+                        <div className="loading-indicator">Loading...</div>
+                        : filteredMangas.length === 0 && !loading ?
 
-                        <div className="w-full h-44  mx-6 mt-4 flex items-center bg-white shadow-md rounded-xl overflow-hidden max-w-sm" key={index}>
-
-
-                            {/* Contenido de la tarjeta */}
-
-                            <div className={`p-4 w-2/3 border-l-4 ${manga.category_id.border}`}>
-                                <div className="flex gap-4">
-                                    {isManager && <ButtonAddChapter mangaId={manga._id} />}
-                                    {isManager && <ButtonEdit2Manga mangaId={manga._id}></ButtonEdit2Manga>}
-                                </div>
-
-                                <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
-                                <p className={`text-sm ${manga.category_id.text}`}>{manga.category_id.name}</p>
-                                {/* Si es Manager, mostrar botones adicionales */}
-                                {isManager ? (
-                                    <>
-                                        <ButtonEditManga mangaId={manga._id} />
-                                        <ButtonDeleteManga mangaId={manga._id} />
-
-                                    </>
-                                ) : (
-                                    <ButtonReadManga mangaId={manga._id} bgColor={manga.category_id.bg} textColor={manga.category_id.text} hover={manga.category_id.hover} />
-                                )}
-                            </div>
-                            {/* Imagen del Manga */}
-
-                            <div className="w-2/3 relative">
+                            <div className="m-10">
+                                <h2 className="text-xl font-bold text-[#4338ca]">Sorry, No mangas were found. Please try a new search.. 🔍</h2>
                                 <img
-                                    src={manga.cover_photo ? manga.cover_photo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
-                                    alt={manga.title}
+                                    src={MangaNotFound}
+                                    alt="Manga-Not-Found"
                                     className="object-cover rounded-l-full w-full h-auto"
                                 />
                             </div>
-                        </div>
+                            : filteredMangas.map((manga, index) => (
 
-                    ))
+                                <div className="w-full h-44  mx-6 mt-4 flex items-center bg-white shadow-md rounded-xl overflow-hidden max-w-sm" key={index}>
+
+
+                                    {/* Contenido de la tarjeta */}
+
+                                    <div className={`p-4 w-2/3 border-l-4 ${manga.category_id.border}`}>
+                                        <div className="flex gap-4">
+                                            {isManager && <ButtonAddChapter mangaId={manga._id} />}
+                                            {isManager && <ButtonEdit2Manga mangaId={manga._id}></ButtonEdit2Manga>}
+                                        </div>
+
+                                        <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
+                                        <p className={`text-sm ${manga.category_id.text}`}>{manga.category_id.name}</p>
+                                        {/* Si es Manager, mostrar botones adicionales */}
+                                        {isManager ? (
+                                            <>
+                                                <ButtonEditManga mangaId={manga._id} />
+                                                <ButtonDeleteManga mangaId={manga._id} />
+
+                                            </>
+                                        ) : (
+                                            <ButtonReadManga mangaId={manga._id} bgColor={manga.category_id.bg} textColor={manga.category_id.text} hover={manga.category_id.hover} />
+                                        )}
+                                    </div>
+                                    {/* Imagen del Manga */}
+
+                                    <div className="w-2/3 relative">
+                                        <img
+                                            src={manga.cover_photo ? manga.cover_photo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
+                                            alt={manga.title}
+                                            className="object-cover rounded-l-full w-full h-auto"
+                                        />
+                                    </div>
+                                </div>
+
+                            ))
                     }
 
 

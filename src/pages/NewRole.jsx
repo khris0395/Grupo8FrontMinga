@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import newroleImg from "../assets/images/Registros3.jpg"
 
 function NewRole() {
     return (
@@ -84,21 +85,10 @@ function NewRole() {
                 <div className="absolute inset-0 bg-[#4338CA] opacity-15" />
                 <div className="absolute inset-0 bg-black opacity-40" />
                 <img
-                    src="https://s3-alpha-sig.figma.com/img/b8b4/c1ca/d91c01d1ff2a1a1341ce3c24609e0349?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gqOlUaZrihLOcb8a3YFZ7Ab9cCdJgSozuary8Lfwzg~Qm2qbvbDU7onI-m8Wdue-ZUDzDAUmJ9BbtX6RUVGlUJLA-AZz~32HVTU7TcptrojKmmyc~IA~TEPcBiJP8gUvBfi1bctlKNkVBGklXo4n0gmdvoQwdmOARzm52LnXUUZQ0aXouvrCPWcePVswxYiZGXb36tHY0HccbIPF~SyUNto3ev7kZ1I2SZ4PtmrV2wvPGljVAdz-oGf4F-v0Stw68W2D9j2ycWUCLrwR06bmfID5lbvsWHvMYp7BULmbAqHLjBigaQdqyjOE-TRopZYkpOCjB0bYBsgHHqGxlaA1cg__"
+                    src={newroleImg}
                     alt=""
                     className="w-full h-full object-cover"
                 />
-                <div className="absolute p-16 pt-40 max-w-[553px]">
-                    <p className="font-poppins font-semibold text-2xl leading-9 text-white">
-                        Minga.com is the best place to find manga reviews. We've been super impressed by the quality of applicants.
-                    </p>
-                    <div className="mt-11 flex items-center">
-                        <div className="w-7 h-[1px] bg-white" />
-                        <span className="ml-3 font-roboto text-base tracking-[0.02em] text-white">
-                            Ignacio Borraz
-                        </span>
-                    </div>
-                </div>
             </div>
         </div>
     );

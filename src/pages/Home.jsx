@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar/Navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../store/actions/authActions";
+import homeImg from "../assets/images/home.jpg"
 
 const loginWithToken = async (token) => {
     try {
@@ -87,7 +88,7 @@ function Home() {
                 {/* Imagen de fondo */}
                 <div className="absolute inset-0">
                     <img
-                        src="https://s3-alpha-sig.figma.com/img/9e1b/0909/605c4919d06e9e4c2973cbfcca57c35d?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=GQSFmbbIfg2OKcXHveX4vlqfuxaetKTeavDnSRC8E9oTS4WVdouy3p7PmtfaUcNXdZo6TStVtjp~ZaRxzh4l3olr1P-ftY1andYm6N4ZknuAfyyQp12ODAHr6BLBOuabjCrsAxwPdHfT8Uxw442JPt8j6BtbX8sblDmibVvfc67tY0njvtfa2uVHfYbuDH1WGGCeziB7iGH~BrJVrled2JNf1La7KwgOvJbVCRvq91C7wpn6RbKoDYd9LGz63PnlkFv5vhPPU9S33xYzkPfy9Db7EvgDUEg8KuWHdJgPI2ukTJNPwByQGP6pBw14YiHwsupW4Ja50vrz-YM4DCfTrA__"
+                        src={homeImg}
                         alt="Comic Books Background"
                         className="w-full h-full object-cover"
                     />
