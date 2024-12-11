@@ -181,11 +181,11 @@ const Chapter = () => {
                                     <div key={comment._id} className="flex flex-col items-start space-x-4 gap-3 bg-white p-2 rounded mb-4">
                                         <div className="flex gap-5 items-center mb-5">
                                             <img
-                                                src={comment?.author_id?.photo || "/default-avatar.png"}
-                                                alt={comment?.author_id?.name || "unknown"}
+                                                src={comment?.author_id?.photo || "https://img.freepik.com/foto-gratis/retrato-hombre-blanco-aislado_53876-40306.jpg"}
+                                                alt={comment?.author_id?.name || "Camilo"}
                                                 className="w-10 h-10 rounded-full"
                                             />
-                                            <p className="font-medium">{comment?.author_id?.name || "unknown"}</p>
+                                            <p className="font-medium">{comment?.author_id?.name || "Camilo"}</p>
                                         </div>
                                         <div className="flex flex-col w-96 text-center gap-2">
                                             {isEditing ? (
