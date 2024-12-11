@@ -55,7 +55,6 @@ export default function Manager() {
                 <MangaCard profile={profile} mangas={mangas} isManager={true}/>
 
             </div>
-            
         </>
     );
 }
