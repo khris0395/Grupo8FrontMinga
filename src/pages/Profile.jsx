@@ -45,37 +45,32 @@ export default function Profiles() {
         photo: "https://via.placeholder.com/100",
     });
 
-    const author = useSelector((state) => state.profiles.profile)
-console.log(author);
-
-    const company = useSelector((state) => state.profiles.profile)
-    console.log(company);
-
+    const isAuthor = role === "Author";
+    const isCompany = role === "Company";
 
     const determineInitialData = () => {
-        if (author) {
+        if (isAuthor && profile) {
             return {
-                name: author.name || "",
-                last_name: author.last_name || "",
-                city: author.city || "",
-                date: author.date || "",
-                photo: author.photo || "",
+                name: profile.name || "",
+                last_name: profile.last_name || "",
+                city: profile.city || "",
+                date: profile.date || "",
+                photo: profile.photo || "",
             };
-        } else if (company) {
+        } else if (isCompany && profile) {
             return {
-                name: company.name || "",
-                website: company.website || "",
-                description: company.description || "",
-                photo: company.photo || "",
+                name: profile.name || "",
+                website: profile.website || "",
+                description: profile.description || "",
+                photo: profile.photo || "",
             };
         }
-        return formData; // Valores predeterminados
+        return formData; // valores predeterminados si no es autor ni empresa
     };
 
     useEffect(() => {
-        // Actualiza los datos iniciales según el tipo
         setFormData(determineInitialData());
-    }, [author, company]);
+    }, [profile, role]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -237,7 +232,7 @@ console.log(author);
                         <div className="">
                             <div className="bg-white w-full max-w-md mx-auto flex items-center justify-center">
                                 <div className="w-full max-w-[280px] lg:p-8">
-                                    {author && (
+                                    {isAuthor && (
                                         <>
                                             <div className="mb-5">
                                                 <input
@@ -296,7 +291,7 @@ console.log(author);
                                             </div>
                                         </>
                                     )}
-                                    {company && (
+                                    {isCompany && (
                                         <>
                                             <div className="mb-5">
                                                 <input
@@ -312,7 +307,7 @@ console.log(author);
                                                 <input
                                                     type="text"
                                                     name="city"
-                                                    value={formData.city}
+                                                    value={formData.description}
                                                     onChange={handleChange}
                                                     placeholder="City"
                                                     className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
@@ -324,7 +319,7 @@ console.log(author);
                                                     name="website"
                                                     value={formData.website}
                                                     onChange={handleChange}
-                                                    placeholder="Bisrth Date"
+                                                    placeholder="website"
                                                     className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                                                 />
                                             </div>
@@ -332,7 +327,7 @@ console.log(author);
                                                 <input
                                                     type="text"
                                                     name="profileImage"
-                                                    value={formData.profileImage}
+                                                    value={formData.photo}
                                                     onChange={handleChange}
                                                     placeholder="URL Profile Image"
                                                     className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
