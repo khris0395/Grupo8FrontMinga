@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom'
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/actions/authActions";
@@ -8,6 +9,7 @@ export default function SignUp() {
 
     const dispatch = useDispatch();
     const { loading, error, successMessage } = useSelector((state) => state.authStore);
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
         email: "",
@@ -25,7 +27,14 @@ export default function SignUp() {
 
       const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(registerUser(formData));
+
+        try {
+          await dispatch(registerUser(formData)).unwrap();
+          navigate('/signIn');
+        } catch (error) {
+          console.error('Error:', error);
+        }
+
       };
 
     return (

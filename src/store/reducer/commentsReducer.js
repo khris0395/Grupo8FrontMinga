@@ -1,5 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { fetchCommentAC } from "../actions/commentsActions";
+import { fetchComment } from "../actions/commentsActions";
+import { createComment } from "../actions/chapterActions"; // Asegúrate de importar createComment
 
 const initialState = {
   comments: [],
@@ -9,16 +10,30 @@ const initialState = {
 
 export const commentReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(fetchCommentAC.pending, (state) => {
+    .addCase(fetchComment.pending, (state) => {
       state.loading = true;
       state.error = null;
     })
-    .addCase(fetchCommentAC.fulfilled, (state, action) => {
-      state.comments = action.payload; // Guardamos los comentarios que incluyen la info del autor
+    .addCase(fetchComment.fulfilled, (state, action) => {
+      state.comments = action.payload;
       state.loading = false;
       state.error = null;
     })
-    .addCase(fetchCommentAC.rejected, (state, action) => {
+    .addCase(fetchComment.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    })
+    // Agregar casos para createComment
+    .addCase(createComment.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(createComment.fulfilled, (state, action) => {
+      state.comments.push(action.payload); // Agregar el nuevo comentario al array
+      state.loading = false;
+      state.error = null;
+    })
+    .addCase(createComment.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

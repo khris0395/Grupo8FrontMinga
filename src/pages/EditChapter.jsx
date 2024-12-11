@@ -5,7 +5,6 @@ import Navbar from '../components/Navbar/Navbar'
 import { useParams } from 'react-router-dom'
 import { fetchMangaDetails } from '../store/actions/mangaActions'
 import { getAllChapters, updateChapter } from '../store/actions/chapterActions'
-import ButtonDeleteManga from '../components/buttons/ButtonDeleteManga'
 
 const EditChapter = () => {
     const [selectedChapter, setSelectedChapter] = useState(null);
@@ -15,11 +14,8 @@ const EditChapter = () => {
     const selectedManga = useSelector((state) => state.mangas.selectedManga)
     const { chapter, loading } = useSelector((state) => state.chapter)
 
-    
-    
-
     const [formData, setFormData] = useState({
-        mangaName: selectedManga && selectedManga.title,
+        mangaName: '',
         chapter: '',
         date: '',
         dataToEdit: ''
@@ -135,11 +131,12 @@ const EditChapter = () => {
                             {loading ? (
                                 <option disabled>Loading chapters...</option>
                             ) : (
-                                Array.isArray(chapter) && chapter.map((chaptr) => (
+                                chapter.map((chaptr) => (
                                     <option key={chaptr._id} value={chaptr.title}>
                                         {chaptr.title}
                                     </option>
-                                )))}
+                                ))
+                            )}
                         </select>
 
 
@@ -176,14 +173,16 @@ const EditChapter = () => {
                         <button onClick={newUpdateChapter} className="w-full h-[68px] bg-[#34D399] rounded-[50000px] text-white font-bold text-2xl">
                             Edit
                         </button>
-                       <ButtonDeleteManga  mangaId={id} title={formData.chapter} setFormData={setFormData} />
+                        <button className="w-full h-[68px] bg-[#FBDDDC] rounded-[50000px] text-[#EE8380] font-bold text-2xl">
+                            Delete
+                        </button>
                     </div>
                 </div>
 
                 <div className="hidden md:flex w-1/2 h-full flex-col items-center mt-10 md:mt-0">
-                    <p className="text-xl font-roboto mb-10">{selectedManga && selectedManga.title}</p>
+                    <p className="text-xl font-roboto mb-10"></p>
                     <img
-                        src={selectedManga && selectedManga.cover_photo }
+                        src="https://s3-alpha-sig.figma.com/img/c698/cc3f/21fb3f85f083e6806f525d147a260d5a?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=TZlZIvHXfkR~DQBAYQmN4hGrrfNsNaOqUtlCkkaTgoRnG79-nmRcQ5SnWcA9XPwujPbmGyKxVb1wdzHSMF7GnFMv3I9xqg1adjIG8Nz7JNWEHeiXmITxL1OPjsiJfP3hQ6RUEF8EmuB9nMqEK4Tw8G79~p4NBuZ~uFNwJOws4gUfrDJODqCY26oRBkKOtSMjnn1ztpYY08wgkJeAQUDG~hht8pZTeB1-MssahEw2OvXOojM0X8yCDjmjSwWVfRXLWQy-sTnefTV0ba4bGWuQM4eFivT73hJZUda9jfF8RtuulN6UfIhCx-Sk036hHSKSw3DvKffg9tm2jWqQD9KAmg__"
                         alt="Chapter cover"
                         className="w-[564px] h-[450px] object-contain rounded-[5px] drop-shadow-[7px_4px_4px_rgba(0,0,0,0.05)]"
                     />

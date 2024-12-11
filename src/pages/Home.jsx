@@ -8,20 +8,20 @@ import { setUser } from "../store/actions/authActions";
 
 const loginWithToken = async (token) => {
     try {
-  
-      const response = await axios.get(
-        "http://localhost:8080/api/users/validateToken",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data.response;
+
+        const response = await axios.get(
+            "http://localhost:8080/api/users/validateToken",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        return response.data.response;
     } catch (error) {
-      console.log("error", error);
+        console.log("error", error);
     }
-  };
+};
 
 function Home() {
 
@@ -35,16 +35,16 @@ function Home() {
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
         if (token) {
-  
-          localStorage.setItem("token", token);
-    
-          loginWithToken(token).then((user) => {
-            dispatch(setUser({ user, token }));
-          });
-          
+
+            localStorage.setItem("token", token);
+
+            loginWithToken(token).then((user) => {
+                dispatch(setUser({ user, token }));
+            });
+
         }
         navigate("/")
-      }, [dispatch,navigate]);
+    }, [dispatch, navigate]);
 
     // Detecta si el dispositivo es móvil
     useEffect(() => {
@@ -117,7 +117,9 @@ function Home() {
                                 ? "From classics to novelties, we have everything you need to immerse yourself in your favorite universes. Explore our catalog and live the adventure of your life."
                                 : "Explore our catalog to live the adventure of your life."}
                         </p>
-                        <button className="w-full md:w-[240px] h-[55px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] font-roboto font-medium text-xl">
+                        <button
+                            onClick={() => navigate("/mangas")}
+                            className="w-full md:w-[240px] h-[55px] bg-gradient-to-r from-[#4338CA] to-[#5E52F3] rounded-[6px] font-roboto font-medium text-xl">
                             {isMobile ? "Lets go!" : "Let's go!"}
                         </button>
                     </div>

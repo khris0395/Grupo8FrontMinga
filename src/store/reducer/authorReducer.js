@@ -30,7 +30,7 @@ export const authorReducer = createReducer(initialState, (builder) => {
             state.error = null;
         })
         .addCase(fetchAuthor.fulfilled, (state, action) => {
-            state.authors = action.payload;
+            state.authors.push(action.payload) ;
             state.loading = false;
         })
         .addCase(fetchAuthor.rejected, (state, action) => {

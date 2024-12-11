@@ -18,11 +18,11 @@ const store = configureStore({
     editChapter: editChapter,
     authors: authorReducer,
     adminPanel: adminPanelReducer,
-    company: companyReducer,
+    companies: companyReducer,
     chapter: chapterReducer,
     comment: commentReducer,
     manager: managerReducer
   }
-})
+});
 
 export default store;

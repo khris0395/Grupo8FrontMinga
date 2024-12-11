@@ -1,7 +1,10 @@
+import AuthorProfiles from "../components/AuthorProfiles/AuthorProfiles";
+
 export default function AuthorProfile() {
     return (
         <>
-            <h1>AuthorProfile</h1>
+        <AuthorProfiles />
+            
         </>
     );
 }
