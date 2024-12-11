@@ -3,27 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionsById, deleteReaction } from "../store/actions/reactionsActions";
 import MangaNotFound from "../assets/images/anime-girl.gif"
+import Favourites from "../assets/images/Favourites.jpg"
+
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user, token } = useSelector((state) => state.authStore);
-    const idUser = user?._id
+    const idUser = user?._id;
 
     useEffect(() => {
-        // Función auxiliar asincrónica para cargar las reacciones
         const fetchFavorites = async () => {
-            if (!idUser || !token) return; // Validación previa
+            if (!idUser || !token) return;
 
-            console.log("token entrando a fetchFavotites",token);
-            
-    
             try {
-
                 const response = await dispatch(
                     reactionsById({ id: idUser, token })
-                ).unwrap(); // Desenrolla la promesa para obtener el payload directamente
+                ).unwrap();
 
                 const filteredReactions = response.reactions.filter(
                     (reaction) => reaction.reaccion === "liked" || reaction.reaccion === "love"
@@ -32,10 +29,10 @@ const Favorites = () => {
                 setFavorites(filteredReactions);
 
             } catch (error) {
-                console.error("Error fetching reactions:", error); // Manejo de errores
+                console.error("Error fetching reactions:", error);
             }
         };
-    
+
         fetchFavorites();
     }, [dispatch, idUser, token]);
 
@@ -44,7 +41,6 @@ const Favorites = () => {
     };
 
     const handleRemoveFavorite = async (mangaId) => {
-
         try {
             await dispatch(deleteReaction({
                 id: mangaId,
@@ -58,72 +54,70 @@ const Favorites = () => {
         } catch (error) {
             console.error(error);
         }
-        
     };
 
     if (!favorites.length) {
-        return <div className="m-10 flex flex-col justify-center items-center mt-20">
-        <h2 className="text-xl font-bold text-[#4338ca]">No favorites yet, go explore 🔥.</h2>
-        <img
-            src={MangaNotFound}
-            alt="Manga-Not-Found"
-            className="object-cover rounded-l-full w-1/4"
-        />
-    </div>;
+        return <div className="text-center p-4 mt-24">No favorites yet!</div>;
     }
 
     return (
         <div className="min-h-screen relative">
             <div className="relative flex items-center justify-center">
-                <h1 className="text-white text-4xl font-bold absolute top-60 text-center z-20">Favourites</h1>
+                <h1 className="text-white text-4xl font-bold absolute top-40 md:top-20 text-center z-20">Favourites</h1>
             </div>
             <div className="relative">
-                <div className="w-full h-screen">
+                <div className="w-full h-[40vh] md:h-[50vh]">
                     <img
-                        src="https://s3-alpha-sig.figma.com/img/e99b/5da8/a52db4fd64894930c7407e9673bb78ee?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qxbNGaT5-bW02GCx8ckcxSi3jM4pdUPNL~MAyT0wMpdMDd90S9tLm6KHdzYissk0FqHDczvbUF7JdHNh3B49AjnMkTvNV99XG2IH-x-oNdOyb~Petkn~r11VFzoOphhYk1Q6CwMd3OvB4AyVofVPsOM0mx9wBMqgqeuMoWP7dQ1~C9BmeJlAR~gc2Snw91HzSoBPcpQmXdabcZdFyF4K7H7T-7x6tgZK7owzCVs-GKlG~feC6D0YMHImKJ3rbm~KIRLjZ7bkPm2iC1RlfbRWl9GvW0ZpUcpzKOjYinHxkxGXaSO4P4SdvkVMiA~5P9RkZPpLIm~RhCDlo-uMOIGbDg__"
+                        src={Favourites}
                         alt="Mangas"
                         className="w-full h-full object-cover object-center"
                     />
                 </div>
 
-                <div className="w-full h-full mx-auto mt-5 -translate-y-24 bg-gray-300 flex justify-center items-center">
-                    <div className="w-11/12 bg-white h-full p-5 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
-                        <div className="flex justify-center items-center flex-wrap">
+                <div className="w-11/12 bg-white mx-auto -translate-y-12 rounded-xl py-8">
+                    <div className="flex flex-wrap justify-center items-start gap-4">
+                        {favorites.map((favorite) => {
+                            if (!favorite?.manga_id) return null;
 
-                            {favorites.map((favorite) => (
+                            return (
                                 <div
                                     key={favorite.manga_id._id}
-                                    className="w-full h-40 mx-6 mt-4 flex items-center bg-white shadow-md rounded-xl overflow-hidden max-w-sm"
+                                    onClick={() => handleNavigateToManga(favorite.manga_id._id)}
+                                    className="w-[280px] h-[90px] md:w-[325px] md:h-[120px] lg:w-[450px] lg:h-36 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative flex items-center m-2 md:m-4 hover:-translate-y-1 cursor-pointer"
                                 >
-                                    <div className={`p-4 w-2/3 border-l-4 ${favorite.manga_id?.category_id?.text ? `${favorite.manga_id.category_id.border}` : 'border-gray-500'}`}>
-                                        <h3 className="text-lg mb-3 font-bold text-gray-800">{favorite.manga_id.title}</h3>
-                                    </div>
-                                    <div className="w-2/3 relative">
-                                        <img
-                                            src={favorite.manga_id.cover_photo || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
-                                            alt={favorite.manga_id.title}
-                                            className="object-cover rounded-l-full w-full h-auto"
-                                        />
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleRemoveFavorite(favorite._id);
+                                        }}
+                                        className="absolute left-[12px] top-[8px] md:left-[18px] md:top-[9px] w-[12px] h-[12px] md:w-[13.9px] md:h-[13.9px] border border-[#222222] rounded-full flex items-center justify-center z-10"
+                                    >
+                                        <span className="transform rotate-45 text-[#222222] text-xs md:text-sm">+</span>
+                                    </button>
+
+                                    <div className="flex-1 p-3 md:p-4 pl-4 md:pl-6 flex flex-col justify-center h-full relative">
+                                        <div className={`w-1 h-full absolute left-0 top-0 ${favorite.manga_id?.category_id?.bg || 'bg-gray-500'}`}></div>
+
+                                        <h3 className="text-base md:text-lg font-bold text-gray-800 line-clamp-2">
+                                            {favorite.manga_id?.title || 'Untitled'}
+                                        </h3>
+                                        <span className={`text-xs md:text-sm ${favorite.manga_id?.category_id?.text || 'text-gray-500'}`}>
+                                            {favorite.manga_id?.category_id?.name || 'Category'}
+                                        </span>
                                     </div>
 
-
-                                    <div className="flex justify-between items-center">
-                                        <button
-                                            onClick={() => handleNavigateToManga(favorite.manga_id._id)}
-                                            className="px-6 py-2.5 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
-                                        >
-                                            View Manga
-                                        </button>
-                                        <button
-                                            onClick={() => handleRemoveFavorite(favorite._id)}
-                                            className="px-4 py-2 text-black hover:text-gray-400"
-                                        >
-                                            ⊗
-                                        </button>
+                                    <div className="w-[80px]  md:w-[100px] lg:w-[120px] h-36 relative flex-shrink-0">
+                                        <div className="w-[120px] h-[80px] md:w-[140px] md:h-[100px] lg:w-[160px] lg:h-[120px] overflow-hidden relative">
+                                            <img
+                                                src={favorite.manga_id?.cover_photo || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
+                                                alt={favorite.manga_id?.title || 'Manga'}
+                                                className="absolute right-0 h-full w-full object-cover rounded-l-full"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
