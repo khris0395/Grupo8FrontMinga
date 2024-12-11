@@ -112,7 +112,7 @@ const router = createBrowserRouter([
         element: <PrivateManager><EditChapter /></PrivateManager>
       },
       {
-        path: '/editCompany/:id',
+        path: '/editCompany/:companyId',
         element: <PrivateProfileCompany><EditCompany /></PrivateProfileCompany>
       },
       {

@@ -115,7 +115,7 @@ const userId = userl?._id;
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
                                             
-                                            <Link to={`/companyProfile/${userId}`}>
+                                            <Link to={`/companyProfile/:companyId`}>
                                             <img
                                                 src={user.photo}
                                                 alt="Profile"
