@@ -9,11 +9,10 @@ import AuthorProfile from "../../pages/AuthorProfile";
 
 function Navbar() {
 
-    const userl = useSelector((state) => state.authors.authors); // Accede al usuario desde Redux
-    const userId = userl[0]?._id;
+const userl = useSelector((state) => state.ediy);
 
-    
-    
+const userId = userl?._id;
+  
     
 
     const location = useLocation();
@@ -116,11 +115,12 @@ function Navbar() {
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
                                             
-                                            <Link to={`/authorProfile/${userId}`}>
+                                            <Link to={`/companyProfile/${userId}`}>
                                             <img
                                                 src={user.photo}
                                                 alt="Profile"
                                                 className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                                            
                                             />
                                             </Link>
                                             <div>

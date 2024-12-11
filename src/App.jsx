@@ -69,7 +69,7 @@ const router = createBrowserRouter([
 
       },
       {
-        path: '/companyProfile',
+        path: '/companyProfile/:companyId',
         element: <PrivateProfileCompany><CompanyProfile /></PrivateProfileCompany>
 
       },

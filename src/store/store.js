@@ -4,6 +4,7 @@ import authReducer from "./reducer/authReducer";
 import { categoryReducer } from './reducer/categoryReducer';
 import { editChapter } from "./reducer/editChapterReducer"
 import { editAuthor } from "./reducer/edithAuthorReducer";
+import {editCompany} from "./reducer/edithCompanyReducer"
 import { authorReducer } from "./reducer/authorReducer";
 import { adminPanelReducer } from "./reducer/adminPanelReducer";
 import { companyReducer } from "./reducer/companyReducer";
@@ -25,7 +26,8 @@ const store = configureStore({
     chapter: chapterReducer,
     comment: commentReducer,
     manager: managerReducer,
-    editAuthor: editAuthor
+    editCompany: editCompany,
+
   }
 });
 

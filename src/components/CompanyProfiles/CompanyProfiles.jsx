@@ -1,7 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+//import { fetchAuthor, updateAuthor, deleteAuthor } from "../../store/actions/edithAuthorAction";
+import {fetchCompany} from "../../store/actions/edithCompanyAction"
+
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { format } from "date-fns";
+import Navbar from '../../components/Navbar/Navbar'
+import AuthorProfile from "../../pages/AuthorProfile";
+import EdithAuthor from "../../pages/EditAuthor"
+import Swal from "sweetalert2";
 import ToggleSwitch from "./ToggleSwitch";
 
+
 const CompanyProfiles = () => {
+    const { companyId } = useParams(); // Captura la ID desde la URL
+    const dispatch = useDispatch();
+    const company = useSelector((state) => state.authStore.user); // Ajusta según tu store
+    const token = useSelector((state) => state.authStore.token);
+    
+    console.log("Token en Redux:", token);
+    useEffect(() => {
+        if (companyId && token) {
+            dispatch(fetchCompany(companyId && token));
+        }
+    }, [companyId, token, dispatch ]);
+
+
+    useEffect(() => {
+        if (company) {
+            setFormData({
+                name: company.name || "",
+                website: company.website || "",
+                description: company.description || "",
+                photo: company.photo || "",
+            });
+        }
+    }, [company]);
+
+
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: name === "date" ? format(new Date(value), "yyyy-MM-dd") : value,
+        });
+    };
+
+
     const [formData, setFormData] = useState({
         name: "Toei Animation",
         description: "Toei Animation Co., Ltd is a Japanese animation studio owned by the Toei Company, Limited...",
@@ -10,19 +56,8 @@ const CompanyProfiles = () => {
         profileImage: "https://s3-alpha-sig.figma.com/img/d771/e8ee/4d516f000e29670bda6ceb5a6c836183?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=eLwYCN-8mR4Gid6w2ArEj9XNZ6~SkEYnz-44vxHXmD0sVFWCopHO-AS0ILvEg6QDmhi9~yFMorE8l2gN7Nx8FsQ85JGguAVYJCHccKR-68oAA6t5L53hh-Wqxax1fnNNBVk2SKmzbLcpMLdwDMmNgAUbtJQX~KrVRwpTjRa1YvTbsUx-MvzFXLLdhLBcaEcQjTuHnfG70gTotrQmr5TWRK1cjcFlRfjGeW44g4Q3mV01JXvsbLoGY8umEiX-5~MeEhA9CytZnDBnA5R~KvBsQKo8CbdRDlJQTJkwGFAWGwXkSeDWdFw9woVhKymqDQ3JRoe~aoSDkUuSOCjKiaJSyQ__", // Imagen por defecto
     });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    const handleSave = () => {
-        alert("Profile saved successfully!");
-    };
 
-    const handleDelete = () => {
-        if (window.confirm("Are you sure you want to delete your account?")) {
-            alert("Account deleted.");
-        }
-    };
 
     return (
         <>
