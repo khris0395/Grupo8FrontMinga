@@ -27,6 +27,6 @@ const store = configureStore({
     editAuthor: editAuthor,
     reactions: reactionsReducer
   }
-});
+})
 
 export default store;

@@ -1,43 +1,87 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createManga } from '../store/actions/mangaActions';
-import registroImg from "../assets/images/registros.jpg"
+import { useNavigate, useParams } from 'react-router-dom';
+import { getManagerProfile } from '../store/actions/managerActions';
 
 function NewManga() {
     const dispatch = useDispatch();
     const mangaStore = useSelector((state) => state.mangaStore);
-    const { loading, error } = mangaStore || {};
+    const { profile, mangas, role } = useSelector((state) => state.manager)
 
+    const { loading, error } = mangaStore || {};
     const [successMessage, setSuccessMessage] = useState('');
     const [formData, setFormData] = useState({
-        title: '',
-        category_id: '',
-        cover_photo: '',
-        description: '',
-        author_id: '674a404f2c593fb14a0d09b4',
-        company_id: '674a404f2c593fb14a0d09b6'
+        creator_id: profile._id, // id de author o company
+        creator_type: role, // tipo de rol 
+        title: '', //titilo del manda
+        cover_photo: '', //foto del manga
+        description: '', //descripcion del manga
+        category_id: '' // categoria al que pertecenece el manga
+    });
+    console.log('esto se va enviar: ', formData);
+    useEffect(() => {
+        dispatch(getManagerProfile())
+    }, [dispatch])
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log('Esto se va a enviar: ', formData);
+
+    // Mostrar alerta de confirmación antes de enviar
+    const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to create the manga "${formData.title}". Please confirm.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, create it!',
+        cancelButtonText: 'No, cancel'
     });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    if (result.isConfirmed) {
         try {
-            await dispatch(createManga(formData));
+            // Enviar datos al backend
+            dispatch(createManga(formData));
             setSuccessMessage('Manga successfully created!');
-            setFormData({
-                title: '',
-                category_id: '',
-                cover_photo: '',
-                description: '',
-                author_id: '674a404f2c593fb14a0d09b4',
-                company_id: '674a404f2c593fb14a0d09b6'
+            
+            // Mostrar alerta de éxito
+             Swal.fire({
+                title: 'Manga Created!',
+                text: `The manga "${formData.title}" was successfully created.`,
+                icon: 'success',
+                timer: 3000,
+                showConfirmButton: false
             });
-            setTimeout(() => {
-                setSuccessMessage('');
-            }, 3000);
+
+            // Restablecer formulario
+            setFormData({
+                creator_id: profile._id, // id de author o company
+                creator_type: role, // tipo de rol 
+                title: '', // título del manga
+                cover_photo: '', // foto del manga
+                description: '', // descripción del manga
+                category_id: '' // categoría al que pertenece el manga
+            });
         } catch (err) {
             console.error('Error creating manga:', err);
+
+            // Mostrar alerta de error
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while creating the manga. Please try again.',
+                icon: 'error'
+            });
         }
-    };
+    } else {
+        // Alerta cuando el usuario cancela la operación
+        Swal.fire({
+            title: 'Cancelled',
+            text: 'The manga creation was cancelled.',
+            icon: 'info'
+        });
+    }
+};
+
 
     return (
         <main className="h-screen grid grid-cols-1 md:grid-cols-2">
@@ -49,11 +93,6 @@ function NewManga() {
                         Share your manga with the community. Fill in the details below to create a new manga entry.
                     </p>
 
-                    {successMessage && (
-                        <div className="text-center bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-lg mb-8">
-                            {successMessage}
-                        </div>
-                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-8">
                         <div>
@@ -67,19 +106,19 @@ function NewManga() {
                             />
                         </div>
 
-                        <div>
-                            <select
-                                className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none appearance-none"
-                                value={formData.category_id}
-                                onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
-                                required
-                            >
-                                <option value="">Insert category</option>
-                                <option value="674a404f2c593fb14a0d09b7">Shonen</option>
-                                <option value="674a404f2c593fb14a0d09b8">Shoujo</option>
-                                <option value="674a404f2c593fb14a0d09b9">Seinen</option>
-                            </select>
-                        </div>
+                <div>
+                    <select
+                        className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none appearance-none"
+                        value={formData.category_id}
+                        onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                        required
+                    >
+                        <option value="">Insert category</option>
+                        <option value="67551cb4236f01c0e94d6764">Shonen</option>
+                        <option value="67551cb4236f01c0e94d6762">Shoujo</option>
+                        <option value="67551cb4236f01c0e94d6763">Seinen</option>
+                    </select>
+                </div>
 
                         <div>
                             <input

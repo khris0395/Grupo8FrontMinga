@@ -12,6 +12,9 @@ export default function Manager() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const {profile, mangas, role, loading, error} = useSelector((state) => state.manager)
+    console.log('data Redux: ', profile);
+    
+    
 
     useEffect(() => {
         if(!token){
@@ -20,7 +23,6 @@ export default function Manager() {
         dispatch(getManagerProfile())
     },[dispatch])
     
-    useEffect
 
     return (
         <>
@@ -51,10 +53,9 @@ export default function Manager() {
 
                 {/* Filtros por categoria*/}
                
-                <MangaCard mangas={mangas} isManager={true}/>
+                <MangaCard profile={profile} mangas={mangas} isManager={true}/>
 
             </div>
-            
         </>
     );
 }

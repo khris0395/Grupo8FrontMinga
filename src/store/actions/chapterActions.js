@@ -11,6 +11,7 @@ export const getAllChapters = createAsyncThunk(
           'Authorization': `Bearer ${token}`
         }
       })
+      
       return response.data.response
     } catch (error) {
 
@@ -35,6 +36,24 @@ export const getChapter = createAsyncThunk(
     }
   }
 );
+
+export const deleteChapter = createAsyncThunk(
+  "chapter/deleteChapter",
+  async (title) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await axios.delete(`http://localhost:8080/api/chapters/delete?title=${title}`, {
+        headers: {
+          'Authorization': `Bearer ${token}` 
+        }
+      })
+      return response.data
+    } catch (error) {
+      return 'error'
+    }
+  }
+)
+
 
 // Acción para obtener comentarios de un capítulo
 export const fetchCommentFromChapter = createAsyncThunk(

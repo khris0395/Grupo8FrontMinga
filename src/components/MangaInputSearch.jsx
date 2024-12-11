@@ -13,7 +13,7 @@ export default function MangaInputSearch() {
 
 
             <div className="my-20">
-                <h1 className="text-white text-4xl font-bold ">Manga</h1>
+                <h1 className="text-white text-4xl font-bold ">Mangas</h1>
             </div>
             <input
                 type="text"

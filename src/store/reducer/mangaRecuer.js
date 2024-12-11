@@ -24,7 +24,7 @@ const initialState = {
     search: '',
     loading: false,
     error: null,
-    selectedManga: null,
+    selectedManga: [],
     createSuccess: false
 };
 
@@ -60,7 +60,7 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.createSuccess = false;
         })
         .addCase(createManga.fulfilled, (state, action) => {
-            state.mangas.push(action.payload);
+            state.mangas = action.payload
             state.loading = false;
             state.createSuccess = true;
         })

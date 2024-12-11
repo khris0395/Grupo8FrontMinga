@@ -8,6 +8,7 @@ import {
     fetchAuthors,
     createReaction
 } from "../store/actions/mangaActions";
+import loading from '../assets/images/loading.jpg'
 
 const getReactionType = (emoji) => {
     switch (emoji) {
@@ -114,87 +115,13 @@ function Manga() {
         loadData();
     }, [dispatch, id]);
 
-
-    const handleReaction = async (reactionType) => {
-        try {
-            const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
-
-            if (savedReactions[manga._id] === reactionType) {
-                delete savedReactions[manga._id];
-                setSelectedReaction(null);
-
-                if (reactionType === 'liked' || reactionType === 'love') {
-                    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                    const updatedFavorites = favorites.filter(favorite => favorite.mangaId !== manga._id);
-                    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-                }
-            } else {
-                savedReactions[manga._id] = reactionType;
-                setSelectedReaction(reactionType);
-
-                if (reactionType === 'liked' || reactionType === 'love') {
-                    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                    const existingIndex = favorites.findIndex(f => f.mangaId === manga._id);
-
-                    if (existingIndex === -1) {
-                        favorites.push({
-                            mangaId: manga._id,
-                            title: manga.title,
-                            cover_photo: manga.cover_photo,
-                            reaccion: reactionType,
-                            timestamp: new Date().toISOString()
-                        });
-                    } else {
-                        favorites[existingIndex] = {
-                            ...favorites[existingIndex],
-                            reaccion: reactionType,
-                            timestamp: new Date().toISOString()
-                        };
-                    }
-
-                    localStorage.setItem('favorites', JSON.stringify(favorites));
-                }
-            }
-
-            localStorage.setItem('userReactions', JSON.stringify(savedReactions));
-        } catch (error) {
-            console.error('Error handling reaction:', error);
-        }
-    };
-
-
-    const [colorButton, setColorButton] = useState({ color: "#FFFFFF", boolean: true })
-    const [colorButton2, setColorButton2] = useState({ color: "#9D9D9D", boolean: false })
-    const [classInfo, setClassInfo] = useState("w-[50%] h-full rounded-[20px] bg-gradient-to-r from-[#463bce] to-[#463bce] z-[0] transition-all duration-300 translate-x-0 absolute");
-    function buttonInfoLeft() {
-        setColorButton({ color: "#fff", boolean: true });
-        setColorButton2({ color: "#a7a7a7", boolean: false });
-        setClassInfo("w-[50%] h-full rounded-[20px] z-[0] bg-gradient-to-r from-[#463bce] to-[#463bce] z-[-1] transition-all duration-300 translate-x-0 absolute");
-        setActiveTab("description");
-    }
-
-    function buttonInfoRight() {
-        setColorButton2({ color: "#fff", boolean: true });
-        setColorButton({ color: "#a7a7a7", boolean: false });
-        setClassInfo("w-[50%] h-full rounded-[20px] z-[0] bg-gradient-to-r from-[#463bce] to-[#463bce] z-[-1] transition-all duration-300 translate-x-full absolute");
-        setActiveTab("chapters");
-    }
-
-    const handleChapter = (chapter) => {
-        navigate(`/chapter/${chapter._id}`);
-    };
-
-    if (isLoading || !categories || !authors) {
-        return <div className="text-center p-4 mt-24">Loading...</div>;
-    }
-
-    if (!manga) {
-        return <div className="text-center p-4 mt-24">Select a manga to view details</div>;
-    }
-
-    if (error) {
-        return <div className="text-center p-4 mt-24 text-red-500">Error: {error}</div>;
-    }
+    if (isLoading || !categories || !authors) return <div className="text-center p-4">
+        <img
+            className="w-screen h-1/2 object-cover p-5"
+            src="https://i.pinimg.com/736x/e2/23/8a/e2238a219d32d5407855d0e33066599c.jpg"
+            alt="loading" /></div>;
+    if (!manga) return <div className="text-center p-4">Select a manga to view details</div>;
+    if (error) return <div className="text-center p-4 text-red-500">Error: {error}</div>;
 
     const categoryName = categories.find(c => c._id === manga.category_id)?.name;
     const authorName = authors.find(a => a._id === manga.author_id)?.name;

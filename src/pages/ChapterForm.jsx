@@ -2,16 +2,15 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import { createChapter } from '../store/actions/edithChapterActions'
+import { useParams } from 'react-router-dom'
 
 const ChapterForm = () => {
     const dispatch = useDispatch()
+    const {id} = useParams()
     const chapterState = useSelector((state) => state.chapter) || {}
     const loading = chapterState.loading || false
-    const error = chapterState.error
-
-    const [successMessage, setSuccessMessage] = useState('')
     const [formData, setFormData] = useState({
-        manga_id: "674a4ad09bfc2a1b87eea87d", // id del manga 
+        manga_id: id, // viene de la URL
         title: '',
         order: '',
         pages: [],
@@ -33,59 +32,99 @@ const ChapterForm = () => {
         }
     }
 
+
     const handleSubmit = async (e) => {
-        e.preventDefault()
-
+        e.preventDefault();
+    
         if (formData.title.length < 3) {
-            alert('Title must have at least 3 characters')
-            return
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Title',
+                text: 'Title must have at least 3 characters'
+            });
+            return;
         }
-
-        try {
-            await dispatch(createChapter(formData))
-            setSuccessMessage('Chapter successfully created!')
-            setFormData({
-                manga_id: "674a4ad09bfc2a1b87eea87d", // id del manga
-                title: '',
-                order: '',
-                pages: [],
-                cover_photo: ''
-            })
-            setTimeout(() => {
-                setSuccessMessage('')
-            }, 3000)
-        } catch (err) {
-            console.error('Error creating chapter:', err)
+    
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            html: `
+                <strong>Title:</strong> ${formData.title} <br/>
+                <strong>Order:</strong> ${formData.order} <br/>
+                <strong>Pages:</strong> ${formData.pages.join(', ')} <br/>
+                <strong>Cover Photo:<img src="${formData.cover_photo}" alt="Cover Photo" style="width: 100%; max-height: 200px; object-fit: contain;" /> </strong> 
+                <p>Are you sure you want to create this chapter?</p>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, create it!',
+            cancelButtonText: 'Cancel'
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                const response = await dispatch(createChapter(formData)).unwrap(); // Utilizar unwrap para manejar errores
+    
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Chapter Created!',
+                    text: 'The chapter was successfully created!',
+                    showConfirmButton: true
+                });
+    
+                setFormData({
+                    manga_id: id,
+                    title: '',
+                    order: '',
+                    pages: [],
+                    cover_photo: ''
+                });
+            } catch (err) {
+                // Manejar los errores desde el backend
+                const errorMessage = Array.isArray(err.message)
+                    ? err.message.join(', ')
+                    : err.message;
+    
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error Creating Chapter',
+                    text: errorMessage || 'Something went wrong. Please try again.'
+                });
+            }
+        } else {
+            Swal.fire({
+                icon: 'info',
+                title: 'Cancelled',
+                text: 'The chapter was not created.'
+            });
         }
-    }
+    };
+    
+    
 
     return (
-        <main className="h-screen grid grid-cols-1 md:grid-cols-2">
-            {/* Left side - Form */}
-            <div className="bg-[#EBEBEB] flex flex-col items-center pt-20">
-                <div className="w-full max-w-md px-4">
-                    <h1 className="text-3xl font-bold mb-4">New Chapter</h1>
-                    <p className="text-gray-600 mb-12">
-                        Create a new chapter for your manga. Fill in the details below.
-                    </p>
+        <div className="relative w-[430px] h-[932px] rounded-[10px] mx-auto">
+            {/* Contenedor principal del formulario */}
+            <div className="flex flex-col items-center">
+                {/* Título */}
+                <h1 className="absolute w-[207px] h-[42px] left-[111px] top-[179px] font-roboto font-normal text-[36px] leading-[42px] text-black whitespace-nowrap">
+                    New Chapter
+                </h1>
 
-                    {successMessage && (
-                        <div className="text-center bg-green-100 border border-green-400 text-green-700 px-6 py-3 rounded-lg mb-8">
-                            {successMessage}
-                        </div>
-                    )}
-
-                    <form onSubmit={handleSubmit} className="space-y-8">
-                        <div>
-                            <input
-                                type="text"
-                                name="title"
-                                placeholder="Insert title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                className="w-full p-3 border-b border-gray-300 bg-transparent focus:outline-none"
-                            />
-                        </div>
+                {/* Formulario */}
+                <form onSubmit={handleSubmit} className="absolute w-[280px] left-[75px] top-[308px] flex flex-col gap-[28px]">
+                    {/* Mensaje de éxito */}
+                    
+                    {/* Inputs */}
+                    <div className="relative h-[23px]">
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="Insert title"
+                            value={formData.title}
+                            onChange={handleChange}
+                            className="w-full pb-1 border-b border-[#424242] text-[#9D9D9D] font-roboto text-base focus:outline-none bg-transparent"
+                        />
+                    </div>
 
                         <div>
                             <input
