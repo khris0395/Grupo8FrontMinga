@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/actions/authActions";
 import '@madzadev/audio-player/dist/index.css';
@@ -117,12 +117,12 @@ function Navbar() {
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
                                             <img
-                                                src={user.photo}
+                                                src={user?.photo}
                                                 alt="Profile"
                                                 className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                                             />
                                             <div>
-                                                <p className="text-white flex-1 truncate">{user.email}</p>
+                                                <p className="text-white flex-1 truncate">{user?.email}</p>
                                                 <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"
                                                     onClick={() => dispatch(logOut(token))}>
                                                     Sign Out
@@ -151,48 +151,128 @@ function Navbar() {
                                     )}
 
                                     <div className="flex flex-col gap-6">
-                                        <Link to="/" onClick={() => setIsOpen(false)} className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
-                                            Home
-                                        </Link>
-                                        {(token && role === 3) && (
-                                            <Link to="/adminPanel" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                Admin Panel
-                                            </Link>
-                                        )}
-                                        {(token && role === 2) && (
-                                            <Link to="/companyProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                Company Profile
-                                            </Link>
-                                        )}
-                                        {(token && role === 1) && (
-                                            <Link to="/authorProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                Author Profile
-                                            </Link>
-                                        )}
-                                        {!token && (<Link to="/signUp" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                            Register
-                                        </Link>
-                                        )}
-                                        {!token && (
-                                            <Link to="/signIn" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                Log in
-                                            </Link>
-                                        )}
 
-                                        <Link to="/mangas" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                            Mangas
-                                        </Link>
+                                    <NavLink
+                                        to="/"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                        isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                    >
+                                        Home
+                                    </NavLink>
 
-                                        {(token && (role === 1 || role === 2)) && (
-                                            <Link to="/manager" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                Manager
-                                            </Link>
-                                        )}
-                                        {(token && role === 0) && (
-                                            <Link to="/newRole" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
-                                                New Role
-                                            </Link>
-                                        )}
+                                    {token && role === 3 && (
+                                        <NavLink
+                                        to="/adminPanel"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        Admin Panel
+                                        </NavLink>
+                                    )}
+
+                                    {token && role === 2 && (
+                                        <NavLink
+                                        to="/companyProfile"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        Company Profile
+                                        </NavLink>
+                                    )}
+
+                                    {token && role === 1 && (
+                                        <NavLink
+                                        to="/authorProfile"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        Author Profile
+                                        </NavLink>
+                                    )}
+
+                                    {!token && (
+                                        <NavLink
+                                        to="/signUp"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        Register
+                                        </NavLink>
+                                    )}
+
+                                    {!token && (
+                                        <NavLink
+                                        to="/signIn"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        Log in
+                                        </NavLink>
+                                    )}
+
+                                    <NavLink
+                                        to="/mangas"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                        isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                    >
+                                        Mangas
+                                    </NavLink>
+
+                                    {token && (role === 1 || role === 2) && (
+                                        <NavLink
+                                        to="/manager"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        Manager
+                                        </NavLink>
+                                    )}
+
+                                    {token && role === 0 && (
+                                        <NavLink
+                                        to="/newRole"
+                                        onClick={() => setIsOpen(false)}
+                                        className={({ isActive }) =>
+                                            isActive
+                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
+                                            : "text-white text-xl px-6 py-4 rounded-lg"
+                                        }
+                                        >
+                                        New Role
+                                        </NavLink>
+                                    )}
                                     </div>
                                 </div>
                             </div>
