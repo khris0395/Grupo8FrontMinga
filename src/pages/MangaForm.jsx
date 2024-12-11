@@ -1,39 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createManga } from '../store/actions/mangaActions';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getManagerProfile } from '../store/actions/managerActions';
 
 function NewManga() {
     const dispatch = useDispatch();
     const mangaStore = useSelector((state) => state.mangaStore);
-    const { loading, error } = mangaStore || {};
+    const { profile, mangas, role } = useSelector((state) => state.manager)
 
+    const { loading, error } = mangaStore || {};
     const [successMessage, setSuccessMessage] = useState('');
     const [formData, setFormData] = useState({
-        title: '',
-        category_id: '',
-        cover_photo: '',
-        description: '',
-        author_id: '674a404f2c593fb14a0d09b4', // Cambiado de author a author_id viene de la creación de la autor
-        company_id: '674a404f2c593fb14a0d09b6' // Cambiado de company a company_id viene de la creación de la company
+        creator_id: profile._id, // id de author o company
+        creator_type: role, // tipo de rol 
+        title: '', //titilo del manda
+        cover_photo: '', //foto del manga
+        description: '', //descripcion del manga
+        category_id: '' // categoria al que pertecenece el manga
     });
-
+    console.log('esto se va enviar: ', formData);
+    useEffect(() => {
+        dispatch(getManagerProfile())
+    }, [dispatch])
     const handleSubmit = async (e) => {
         e.preventDefault();
+console.log('esto se va enviar: ', formData);
 
         try {
-            const response = await dispatch(createManga(formData));
+            dispatch(createManga(formData));
             setSuccessMessage('Manga successfully created!');
-            setFormData({
-                title: '',
-                category_id: '',
-                cover_photo: '',
-                description: '',
-                author_id: '674a404f2c593fb14a0d09b4', // Cambiado de author a author_id viene de la creación de la autor
-                company_id: '674a404f2c593fb14a0d09b6' // Cambiado de company a company_id viene de la creación de la company
-            });
+           
 
             setTimeout(() => {
                 setSuccessMessage('');
+                setFormData({
+                    creator_id: profile._id, // id de author o company
+                    creator_type: role, // tipo de rol 
+                    title: '', //titilo del manda
+                    cover_photo: '', //foto del manga
+                    description: '', //descripcion del manga
+                    category_id: '' // categoria al que pertecenece el manga
+                });
             }, 3000);
         } catch (err) {
             console.error('Error creating manga:', err);
@@ -70,9 +78,9 @@ function NewManga() {
                         required
                     >
                         <option value="">Insert category</option>
-                        <option value="674a404f2c593fb14a0d09b7">Shonen</option>
-                        <option value="674a404f2c593fb14a0d09b8">Shoujo</option>
-                        <option value="674a404f2c593fb14a0d09b9">Seinen</option>
+                        <option value="67551cb4236f01c0e94d6764">Shonen</option>
+                        <option value="67551cb4236f01c0e94d6762">Shoujo</option>
+                        <option value="67551cb4236f01c0e94d6763">Seinen</option>
                     </select>
                 </div>
 

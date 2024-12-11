@@ -13,26 +13,32 @@ export const fetchChapter = createAsyncThunk(
 
 export const createChapter = createAsyncThunk(
     "chapters/createChapter",
-    async (chapterData) => {
+    async (chapterData, { rejectWithValue }) => {
         try {
+            const token = localStorage.getItem('token');
             console.log('Sending data:', chapterData);
+
             const response = await axios.post(
                 'http://localhost:8080/api/chapters/createChapter',
                 chapterData,
                 {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Authorization': `Bearer ${token}`
                     }
                 }
             );
+
             console.log('Create Chapter Response:', response.data);
-            return response.data.chapter
+            return response.data.chapter;
         } catch (error) {
-            console.log('Error details:', error.response?.data);
-            throw error;
+            console.error('Error details:', error.response?.data);
+
+            // Retornar el mensaje del backend si está presente
+            return rejectWithValue(error.response?.data || { success: false, message: "Unknown error occurred" });
         }
     }
 );
+
 
 export const updateChapter = createAsyncThunk(
     "editChapter/updateChapter",

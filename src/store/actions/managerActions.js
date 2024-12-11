@@ -13,6 +13,8 @@ export const getManagerProfile = createAsyncThunk('manager/fetch', async () => {
                 'Authorization': `Bearer ${token}`
             }
         });
+        console.log('response del backend: ',response.data);
+        
         return response.data
     } catch (error) {
         return 'error'

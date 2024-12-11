@@ -9,6 +9,7 @@ import {
     fetchAuthors,
     createReaction
 } from "../store/actions/mangaActions";
+import loading from '../assets/images/loading.jpg'
 
 const getReactionType = (emoji) => {
     switch (emoji) {
@@ -135,7 +136,11 @@ function Manga() {
         loadData();
     }, [dispatch, id]);
 
-    if (isLoading || !categories || !authors) return <div className="text-center p-4">Loading...</div>;
+    if (isLoading || !categories || !authors) return <div className="text-center p-4">
+        <img
+            className="w-screen h-1/2 object-cover p-5"
+            src="https://i.pinimg.com/736x/e2/23/8a/e2238a219d32d5407855d0e33066599c.jpg"
+            alt="loading" /></div>;
     if (!manga) return <div className="text-center p-4">Select a manga to view details</div>;
     if (error) return <div className="text-center p-4 text-red-500">Error: {error}</div>;
 

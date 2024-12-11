@@ -4,18 +4,19 @@ import React, { useEffect } from "react";
 import ButtonReadManga from "./buttons/buttonReadManga.jsx";
 import ButtonEditManga from "./buttons/ButtonEditManga.jsx";
 import ButtonDeleteManga from "./buttons/ButtonDeleteManga.jsx";
-import ButtonAddChapter from "./buttons/buttonAddChapter.jsx";
+import ButtonAddChapter from "./buttons/ButtonAddChapter.jsx";
 import ButtonEdit2Manga from "./buttons/buttonEdit2Manga.jsx";
 import { get_categories, setSelectedCategories } from "../store/actions/categoryActions.js";
 import imgNotFound from '../assets/images/noResulsFoundimg.jpg'
-import imgLoading from '../assets/images/loading.jpg'
+import ButtonAddManga from "./buttons/buttonAddManga.jsx";
 
-export default function MangaCard({ mangas, isManager }) {
+export default function MangaCard({ mangas, isManager, profile }) {
     const dispatch = useDispatch(); // Necesario para despachar la acción
     const { loading, search, error } = useSelector((state) => state.mangas)
     const { categories, categorySelet } = useSelector((state) => state.categories)
-
-
+    
+    console.log('data prop: ', profile);
+    
     // Cambiar las categorías seleccionadas
     const handleCategoryChange = (category) => {
         const newCategories = categorySelet.includes(category)
@@ -42,7 +43,8 @@ export default function MangaCard({ mangas, isManager }) {
 
             <div className="w-11/12 bg-white h-full px-4 mx-4 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
 
-                <div className="flex flex-wrap gap-4 justify-start  py-3 w-full">
+                <div className="flex justify-around   py-3 w-full">
+                    <div className="flex flex-wrap gap-4 py-3 w-full">
                     {categories.map((category, index) => (
                         <label
                             key={index}
@@ -57,6 +59,10 @@ export default function MangaCard({ mangas, isManager }) {
                             {category.name}
                         </label>
                     ))}
+                    </div>
+                    <div className="flex justify-center items-center">
+                       { isManager && <ButtonAddManga profile={profile} />}
+                    </div>
                 </div>
 
                 <div className="flex justify-center items-center flex-wrap">

@@ -70,15 +70,18 @@ export const fetchChapters = createAsyncThunk(
 export const createManga = createAsyncThunk(
     "mangas/createManga",
     async (mangaData) => {
+        const token = localStorage.getItem('token')
         const response = await axios.post(
             'http://localhost:8080/api/mangas/create',
             mangaData,
             {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${token}`
                 }
             }
         );
+        console.log('back al crear: ', response.data);
+        
         return response.data.response;
     }
 );
