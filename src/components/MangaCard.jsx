@@ -38,7 +38,7 @@ export default function MangaCard({ mangas, isManager }) {
     return (
         <div className="w-full h-full mx-auto mt-5 -translate-y-24  bg-gray-300 flex justify-center items-center">
 
-            <div className="w-11/12 bg-white h-full px-4 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
+            <div className="w-11/12 bg-white h-full pb-4 px-4 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
 
                 <div className="flex flex-wrap gap-4 justify-start  my-3 w-full">
                     {categories.map((category, index) => (
