@@ -4,6 +4,7 @@ import {
     fetchAdminPanel,
     toggleStatus,
 } from "../store/actions/adminPanelActions";
+import BackgroundPanelImg from "../assets/images/BackgroundPanel.jpg"
 
 function AdminPanel() {
     const dispatch = useDispatch();
@@ -80,7 +81,7 @@ function AdminPanel() {
         <div className="relative bg-[#EBEBEB] min-h-screen w-full pb-[200px]">
             <div className="relative h-[300px] md:h-[721px] w-full">
                 <img
-                    src="https://s3-alpha-sig.figma.com/img/ca8a/5039/085206b8c835b5fa5af23f8414bac827?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=XBguAgknSY1d-7qSJOpJALqTQeEnRGOES5JSsXbrZa21DhqLawbI1sgfgQFMZBpVE9vClEu22YiX5-0YRFR~O7zCBMC5L0zPFXiUYct1gkVp2rI3iKOG7grZ052ROTPEBXRBXc4CjkzOB~HehvzCm~0cBx1b1QvAm99MVzFBmppFmVlWfi6gOrKIn2UlyRcWnRtcRqw7SNKyTEmXom9SPdk2gdMrwdCpugQ76arucInVFXkT5tScNJgOYs3ZczjqKOCXqjCt8SpE9LM42o-JXatL-oElLcxJTUFzC~AJb0h3plIXReELHEkHW-i91MVRyj9Pw3mR4JRlXYu3P5KDrg__"
+                    src={BackgroundPanelImg}
                     alt="Banner"
                     className="w-full h-full object-cover"
                 />

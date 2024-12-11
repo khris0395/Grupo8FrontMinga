@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, login } from "../store/actions/authActions";
 import { loginWithGoogle } from "../store/actions/authActions";
+import registroImg from "../assets/images/Registros.jpg"
 
 export default function SignUp() {
 
@@ -228,7 +229,7 @@ export default function SignUp() {
           <div
             className="hidden lg:flex w-1/2 bg-cover bg-center border-l-2 border-black"
             style={{
-              backgroundImage: "url('https://s3-alpha-sig.figma.com/img/5d98/eac1/025f012e94a72840af6fc1f67a349f61?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=p-uwqxaKoRDHMjL8mrQGtvc6-B34ZQjhKyqflHNy~hQ~jbwozfSm0~5Xifrl3Cmwq14DLmJiIwx8Oc~nlfTXg-qD8GDhU7iYatDtKOBAg0lJuH4G8WBpkWRwgJY3in8YB7Euffarhv6geVvIDIwPd7YRjyLKhvAjN44WdMukjk4DM8tIx30Rrm1wOR1hcUfoU3Zu13kqCZV4MVdBck-7Ht19DB1RMYd~Qd~X8dubC74ueXk~SJ-PPHvaRYulSu6jYOuxC1XIbUNiIQoJ7bFYmlzNJ-J9cNfA6g541SOFDANfY7EfKGUsyGL9~j13oAic9nsNUZ1kotyFwtepa1eUKg__')",
+              backgroundImage: `url(${registroImg})`,
               filter: "brightness(0.6) saturate(1.5) sepia(0.7) hue-rotate(220deg)", // Tono azulado
             }}
           ></div>
