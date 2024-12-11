@@ -21,3 +21,24 @@ export const getProfile = createAsyncThunk('manager/fetch', async () => {
     }
 
 })
+
+// Acción para actualizar datos de la compañía
+export const updateCompany = createAsyncThunk(
+    "company/updateCompany",
+    async ({ company, token, id }, { rejectWithValue }) => {
+      try {
+        const response = await axios.put(
+          `/api/companies/${id}`, // Endpoint para actualizar la compañía
+          company,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        return response.data; // Devuelve los datos de la respuesta
+      } catch (error) {
+        return rejectWithValue(error.response?.data || error.message);
+      }
+    }
+  );

@@ -79,67 +79,139 @@ export default function Profiles() {
             [name]: name === "date" ? format(new Date(value), "yyyy-MM-dd") : value,
         });
     };
-
+/* 
     const handleSave = () => {
         // Validación de campos requeridos
         if (!formData.name || !formData.last_name || !formData.city) {
-            Swal.fire({
-                title: "Incomplete Form",
-                text: "Please fill out all required fields.",
-                icon: "warning",
-                confirmButtonText: "OK",
-            });
-            return;
+          Swal.fire({
+            title: "Incomplete Form",
+            text: "Please fill out all required fields.",
+            icon: "warning",
+            confirmButtonText: "OK",
+          });
+          return;
         }
-
+    
         const token = localStorage.getItem("token");
         if (!token) {
-            Swal.fire({
-                title: "No Token Found",
-                text: "Please log in before making changes.",
+          Swal.fire({
+            title: "No Token Found",
+            text: "Please log in before making changes.",
+            icon: "error",
+            confirmButtonText: "Log In",
+          });
+          return;
+        }
+    
+        dispatch(
+          updateAuthor({
+            author: { ...formData },
+            token,
+            id,
+          })
+        )
+          .then((response) => {
+            if (response.meta.requestStatus === "fulfilled") {
+              Swal.fire({
+                title: "Profile Updated",
+                text: "Your profile was updated successfully.",
+                icon: "success",
+                confirmButtonText: "OK",
+              });
+            } else {
+              Swal.fire({
+                title: "Update Failed",
+                text: `Error: ${response.error.message || "Unknown error"}`,
                 icon: "error",
-                confirmButtonText: "Log In",
+                confirmButtonText: "Try Again",
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "Error",
+              text: `An error occurred: ${err.message}`,
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          });
+      };
+    
+     */
+
+      const handleSave = () => {
+        // Validación de campos requeridos
+        if (role === "Author") {
+          if (!formData.name || !formData.last_name || !formData.city) {
+            Swal.fire({
+              title: "Incomplete Form",
+              text: "Please fill out all required fields.",
+              icon: "warning",
+              confirmButtonText: "OK",
             });
             return;
-        }
-
-        dispatch(
-            updateAuthor({
-                author: { ...formData },
-                token,
-                id,
-            })
-        )
-            .then((response) => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    Swal.fire({
-                        title: "Profile Updated",
-                        text: "Your profile was updated successfully.",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-                } else {
-                    Swal.fire({
-                        title: "Update Failed",
-                        text: `Error: ${response.error.message || "Unknown error"}`,
-                        icon: "error",
-                        confirmButtonText: "Try Again",
-                    });
-                }
-            })
-            .catch((err) => {
-                Swal.fire({
-                    title: "Error",
-                    text: `An error occurred: ${err.message}`,
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
+          }
+        } else if (role === "Company") {
+          if (!formData.name || !formData.website || !formData.description) {
+            Swal.fire({
+              title: "Incomplete Form",
+              text: "Please fill out all required fields.",
+              icon: "warning",
+              confirmButtonText: "OK",
             });
-    };
+            return;
+          }
+        }
+      
+        const token = localStorage.getItem("token");
+        if (!token) {
+          Swal.fire({
+            title: "No Token Found",
+            text: "Please log in before making changes.",
+            icon: "error",
+            confirmButtonText: "Log In",
+          });
+          return;
+        }
+      
+        const payload = {
+          token,
+          _id, // Este ID debe estar definido en el scope adecuado.
+          ...(role === "Author" && { Author: { ...formData } }),
+          ...(role === "Company" && { Company: { ...formData } }),
+        };
+      
+        const updateAction = role === "Author" ? updateAuthor : updateCompany;
+      
+        dispatch(updateAction(payload))
+          .then((response) => {
+            if (response.meta.requestStatus === "fulfilled") {
+              Swal.fire({
+                title: "Profile Updated",
+                text: "Your profile was updated successfully.",
+                icon: "success",
+                confirmButtonText: "OK",
+              });
+            } else {
+              Swal.fire({
+                title: "Update Failed",
+                text: `Error: ${response.error.message || "Unknown error"}`,
+                icon: "error",
+                confirmButtonText: "Try Again",
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "Error",
+              text: `An error occurred: ${err.message}`,
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          });
+      };
 
-
-
-
+      
     const handleDelete = () => {
         const token = localStorage.getItem("token");
 
@@ -201,10 +273,6 @@ export default function Profiles() {
 
     return (
 
-
-
-
-
         <div>
             <Navbar menuColor="#4338CA" />
             <div className=" min-h-screen bg-gray-100 flex-col">
@@ -219,7 +287,7 @@ export default function Profiles() {
                 </div>
                 {/* Content Section */}
                 <div className="flex-grow flex items-center justify-center">
-                    <div className="container mx-auto px-4 md:-mt-[176px] relative bg-white rounded-t-2xl p-8 flex flex-col md:flex-row gap-8">
+                    <div className=" container mx-auto px-4 md:-mt-[176px] relative bg-white rounded-t-2xl p-8 flex flex-col md:flex-row gap-8">
                         {/* Profile Image for Small Screens */}
                         <div className="md:hidden flex justify-center mt-8">
                             <img
@@ -293,46 +361,53 @@ export default function Profiles() {
                                     )}
                                     {isCompany && (
                                         <>
-                                            <div className="mb-5">
-                                                <input
-                                                    type="text"
-                                                    name="firstname"
-                                                    value={formData.name}
-                                                    onChange={handleChange}
-                                                    placeholder="Firsst Name"
-                                                    className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
-                                                />
-                                            </div>
-                                            <div className="mb-5">
-                                                <input
-                                                    type="text"
-                                                    name="city"
-                                                    value={formData.description}
-                                                    onChange={handleChange}
-                                                    placeholder="City"
-                                                    className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
-                                                />
-                                            </div>
-                                            <div className="mb-5">
-                                                <input
-                                                    type="text"
-                                                    name="website"
-                                                    value={formData.website}
-                                                    onChange={handleChange}
-                                                    placeholder="website"
-                                                    className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
-                                                />
-                                            </div>
-                                            <div className="mb-5">
-                                                <input
-                                                    type="text"
-                                                    name="profileImage"
-                                                    value={formData.photo}
-                                                    onChange={handleChange}
-                                                    placeholder="URL Profile Image"
-                                                    className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
-                                                />
-                                            </div>
+                                            
+                                            
+                                                <div className="">
+                                                    <div className="mb-5">
+                                                        <input
+                                                            type="text"
+                                                            name="firstname"
+                                                            value={formData.name}
+                                                            onChange={handleChange}
+                                                            placeholder="Firsst Name"
+                                                            className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        <input
+                                                            type="text"
+                                                            name="city"
+                                                            value={formData.description}
+                                                            onChange={handleChange}
+                                                            placeholder="City"
+                                                            className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        <input
+                                                            type="text"
+                                                            name="website"
+                                                            value={formData.website}
+                                                            onChange={handleChange}
+                                                            placeholder="website"
+                                                            className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-5">
+                                                        <input
+                                                            type="text"
+                                                            name="photo"
+                                                            value={formData.photo}
+                                                            onChange={handleChange}
+                                                            placeholder="URL Profile Image"
+                                                            className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            
+
+
                                         </>
                                     )}
 
@@ -353,36 +428,71 @@ export default function Profiles() {
                             </div>
                         </div>
                         {/* Profile Display Section for Large Screens */}
-                        <div className="hidden md:flex flex-1 flex-col items-center justify-center">
-                            <div>
-                                <img
-                                    src={formData.photo}
-                                    alt="Profile"
-                                    className="w-[179px] h-[178px] rounded-full border-4 border-gray-100 shadow-lg mb-4"
-                                />
-                            </div>
-                            <div className="flex flex-col items-center justify-center px-[30px] ">
-                                <div>
-                                    <h2 className="text-xl font-bold">{`${formData.name} ${formData.last_name}`}</h2>
-                                    <div className="font-roboto flex items-center  ">
-                                        <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10.7712 10.6046C10.2494 11.1263 9.25189 12.1239 8.41377 12.962C7.63273 13.743 6.36723 13.7431 5.58618 12.962C4.76379 12.1396 3.78304 11.1589 3.22872 10.6046C1.14593 8.52177 1.14593 5.14489 3.22872 3.0621C5.31152 0.979301 8.6884 0.979301 10.7712 3.0621C12.854 5.14489 12.854 8.52177 10.7712 10.6046Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M8.99996 6.83333C8.99996 7.9379 8.10453 8.83333 6.99996 8.83333C5.89539 8.83333 4.99996 7.9379 4.99996 6.83333C4.99996 5.72876 5.89539 4.83333 6.99996 4.83333C8.10453 4.83333 8.99996 5.72876 8.99996 6.83333Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <span className="ml-1">
-                                            {formData.city}</span>
+                        {isAuthor && (
+                            <>
+                                <div className="hidden md:flex flex-1 flex-col items-center justify-center">
+                                    <div>
+                                        <img
+                                            src={formData.photo}
+                                            alt="Profile"
+                                            className="w-[179px] h-[178px] rounded-full border-4 border-gray-100 shadow-lg mb-4"
+                                        />
                                     </div>
-                                    <div className="font-roboto flex items-center">
-                                        <svg width="14" height="15" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M15.75 12.1594C15.3578 12.1594 14.9656 12.2729 14.625 12.5C13.9438 12.9542 13.0562 12.9542 12.375 12.5C11.6938 12.0458 10.8062 12.0458 10.125 12.5C9.44375 12.9542 8.55625 12.9542 7.875 12.5C7.19375 12.0458 6.30625 12.0458 5.625 12.5C4.94375 12.9542 4.05625 12.9542 3.375 12.5C3.03438 12.2729 2.64219 12.1594 2.25 12.1594M6.75 5V6.5M9 5V6.5M11.25 5V6.5M6.75 2.75H6.7575M9 2.75H9.0075M11.25 2.75H11.2575M15.75 16.25V11C15.75 10.1716 15.0784 9.5 14.25 9.5H3.75C2.92157 9.5 2.25 10.1716 2.25 11V16.25H15.75ZM13.5 9.5V8C13.5 7.17157 12.8284 6.5 12 6.5H6C5.17157 6.5 4.5 7.17157 4.5 8V9.5H13.5Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <span className="ml-1">
-                                            {formattedDate}
-                                        </span>
+                                    <div className="flex flex-col items-center justify-center px-[30px] ">
+                                        <div>
+                                            <h2 className="text-xl font-bold">{`${formData.name} ${formData.last_name}`}</h2>
+                                            <div className="font-roboto flex items-center  ">
+                                                <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7712 10.6046C10.2494 11.1263 9.25189 12.1239 8.41377 12.962C7.63273 13.743 6.36723 13.7431 5.58618 12.962C4.76379 12.1396 3.78304 11.1589 3.22872 10.6046C1.14593 8.52177 1.14593 5.14489 3.22872 3.0621C5.31152 0.979301 8.6884 0.979301 10.7712 3.0621C12.854 5.14489 12.854 8.52177 10.7712 10.6046Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M8.99996 6.83333C8.99996 7.9379 8.10453 8.83333 6.99996 8.83333C5.89539 8.83333 4.99996 7.9379 4.99996 6.83333C4.99996 5.72876 5.89539 4.83333 6.99996 4.83333C8.10453 4.83333 8.99996 5.72876 8.99996 6.83333Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                                <span className="ml-1">
+                                                    {formData.city}</span>
+                                            </div>
+                                            <div className="font-roboto flex items-center">
+                                                <svg width="14" height="15" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M15.75 12.1594C15.3578 12.1594 14.9656 12.2729 14.625 12.5C13.9438 12.9542 13.0562 12.9542 12.375 12.5C11.6938 12.0458 10.8062 12.0458 10.125 12.5C9.44375 12.9542 8.55625 12.9542 7.875 12.5C7.19375 12.0458 6.30625 12.0458 5.625 12.5C4.94375 12.9542 4.05625 12.9542 3.375 12.5C3.03438 12.2729 2.64219 12.1594 2.25 12.1594M6.75 5V6.5M9 5V6.5M11.25 5V6.5M6.75 2.75H6.7575M9 2.75H9.0075M11.25 2.75H11.2575M15.75 16.25V11C15.75 10.1716 15.0784 9.5 14.25 9.5H3.75C2.92157 9.5 2.25 10.1716 2.25 11V16.25H15.75ZM13.5 9.5V8C13.5 7.17157 12.8284 6.5 12 6.5H6C5.17157 6.5 4.5 7.17157 4.5 8V9.5H13.5Z" stroke="#9D9D9D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                                <span className="ml-1">
+                                                    {formattedDate}
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
-                            </div>
-                        </div>
+                            </>
+                        )}
+                        {isCompany && (
+                            <>
+                                <div className="hidden md:flex flex-1 flex-col items-center justify-center">
+                                    <div>
+                                        <img
+                                            src={formData.photo}
+                                            alt="Profile"
+                                            className="w-[179px] h-[178px] rounded-full border-4 border-gray-100 shadow-lg mb-4"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center px-[30px] ">
+                                        <div>
+                                            <h2 className="text-xl font-bold text-center">{`${formData.name} `}</h2>
+                                            <div className="font-roboto flex items-center   ">
+
+                                                <span className="ml-1">
+                                                    {formData.website}</span>
+                                            </div>
+                                            <div className="font-roboto flex items-center  ">
+
+                                                <span className="ml-1">
+                                                    {formData.description}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </>
+                        )}
+
                     </div>
                 </div>
             </div>
