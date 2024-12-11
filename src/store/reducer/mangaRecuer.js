@@ -42,10 +42,10 @@ export const mangaReducer = createReducer(initialState, (builder) => {
             state.loading = false;
             state.error = action.error.message;
         })
-        .addCase(deleteManga.fulfilled, ( state, action) => {
+        .addCase(deleteManga.fulfilled, (state, action) => {
             state.mangas = action.payload
         })
-        .addCase(deleteManga.rejected, ( state, action ) => {
+        .addCase(deleteManga.rejected, (state, action) => {
             state.error = action.error.message
         })
         .addCase(fetchCategories.fulfilled, (state, action) => {

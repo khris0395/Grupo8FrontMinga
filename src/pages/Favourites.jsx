@@ -77,7 +77,7 @@ const Favorites = () => {
                         className="w-full h-full object-cover object-center"
                     />
                 </div>
-                
+
                 <div className="w-full h-full mx-auto mt-5 -translate-y-24 bg-gray-300 flex justify-center items-center">
                     <div className="w-11/12 bg-white h-full px-4 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
                         <div className="flex justify-center items-center flex-wrap">

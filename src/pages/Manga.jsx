@@ -119,25 +119,19 @@ function Manga() {
         try {
             const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
 
-            // Verifica si la reacción es la misma que la actual para eliminarla
             if (savedReactions[manga._id] === reactionType) {
-                // Elimina la reacción del localStorage
                 delete savedReactions[manga._id];
                 setSelectedReaction(null);
 
-                // Si la reacción es 'liked' o 'love', también elimina de los favoritos
                 if (reactionType === 'liked' || reactionType === 'love') {
                     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
                     const updatedFavorites = favorites.filter(favorite => favorite.mangaId !== manga._id);
-
                     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
                 }
             } else {
-                // Si la reacción no coincide, se agrega o actualiza
                 savedReactions[manga._id] = reactionType;
                 setSelectedReaction(reactionType);
 
-                // Agregar a los favoritos si es 'liked' o 'love'
                 if (reactionType === 'liked' || reactionType === 'love') {
                     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
                     const existingIndex = favorites.findIndex(f => f.mangaId === manga._id);
@@ -167,6 +161,7 @@ function Manga() {
             console.error('Error handling reaction:', error);
         }
     };
+
     const handleChapter = (chapter) => {
         navigate(`/chapter/${chapter._id}`);
     };
@@ -184,7 +179,7 @@ function Manga() {
     }
 
     const categoryName = categories.find(c => c._id === manga.category_id)?.name;
-    const authorName = authors.find(a => a._id === manga.creator_id)?.name;
+    const authorName = authors.find(a => a._id === manga.author_id)?.name;
 
     return (
         <main className="bg-[#EBEBEB] min-h-screen">
@@ -249,7 +244,7 @@ function Manga() {
                                             {categoryName || 'Category'}
                                         </span>
                                         <span className="text-[#9D9D9D] text-sm md:text-lg">
-                                            {authorName || 'Author'}
+                                            By: {authorName || 'Unknown Author'}
                                         </span>
                                     </div>
                                 </div>
@@ -319,4 +314,5 @@ function Manga() {
         </main>
     );
 }
+
 export default Manga;

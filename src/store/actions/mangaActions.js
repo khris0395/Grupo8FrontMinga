@@ -35,7 +35,15 @@ export const fetchCategories = createAsyncThunk(
 export const fetchAuthors = createAsyncThunk(
     "mangas/fetchAuthors",
     async () => {
-        const response = await axios.get('http://localhost:8080/api/authors/allAuthors');
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+            'http://localhost:8080/api/authors/allAuthors',
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        );
         return response.data.authors;
     }
 );
