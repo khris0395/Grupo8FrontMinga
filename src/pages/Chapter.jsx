@@ -143,7 +143,7 @@ const Chapter = () => {
     return (
         <div className="bg-[#ebebeb] min-h-screen">
             <div className="bg-[#4338ca] p-4 flex justify-center text-white items-center">
-                <h1 className="text-lg font-bold">
+                <h1 className="text-lg font-bold w-9/12 sm:w-auto">
                     {chapter.order} - {chapter.title}
                 </h1>
             </div>
