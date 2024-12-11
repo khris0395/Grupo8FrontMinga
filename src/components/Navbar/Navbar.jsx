@@ -1,13 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/actions/authActions";
-import '@madzadev/audio-player/dist/index.css';
-import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import { useLocation } from "react-router-dom";
-import { FaRegPlayCircle } from "react-icons/fa";
-import { FaRegStopCircle } from "react-icons/fa";
-import "../AudioPlayer/audioPlayer.css"
 
 
 function Navbar() {
@@ -31,13 +26,11 @@ function Navbar() {
     );
 
     const [isOpen, setIsOpen] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
 
     const user = useSelector((state) => state.authStore.user);
     const token = useSelector((state) => state.authStore.token);
     const role = user?.role ?? null;
     const menuRef = useRef(null);
-    const audioRef = useRef(null);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -53,9 +46,6 @@ function Navbar() {
         };
     }, []);
 
-    let play = <FaRegStopCircle className="text-red-500 hover:text-red-700 text-4xl transition ease-in duration-150" />;
-    let stop = <FaRegPlayCircle className="text-blue-500 hover:text-blue-700 text-4xl transition ease-in duration-150" />;
-
     return (
         <nav className="absolute top-0 left-0 w-full z-20 bg-transparent">
             <div className="w-full">
@@ -69,31 +59,6 @@ function Navbar() {
                         </svg>
                     </button>
                     <div className="flex gap-2 sm:gap-20">
-                        {/* Play/Stop button */}
-                        <div className="rounded-lg z-50 flex">
-                            <button
-                                onClick={() => setIsPlaying(!isPlaying)}
-                                className="text-2xl focus:outline-none"
-                            >
-                                {isPlaying ? play : stop}
-                            </button>
-                        </div>
-                        {/* AudioPlayer */}
-                        <div
-                            ref={audioRef}
-                            className={`fixed transition-all duration-700 ease-in-out ${isPlaying ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
-                                }`}
-                            style={{
-                                width: "400px", 
-                                height: "auto", 
-                                left: `65%`,
-                                top: `-50%`,
-                                zIndex: 40,
-                                pointerEvents: isPlaying ? "auto" : "none",
-                            }}
-                        >
-                            <AudioPlayer />
-                        </div>
                         <Link to="/" className="flex items-center">
                             <img
                                 src="https://s3-alpha-sig.figma.com/img/9459/009f/2d9d5cb548675533c3d48e332a694b5a?Expires=1733702400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cnNf-POFHBBNf1RnAwQAox-EGKHwzmimIpp-leCWLaWqUD8vnztcSSI3f2p6bUFQmqbj~9ALB~AtvHXi38fjCbw5XB4YPIp0AWMpSXLI9GO2tKRKhH-5vWwA2C2yTyyAKcHhzg83-7KoRwoiX1L33VI8UN0GqV~KBPDl2CApEa2aPKRqECP2hXfZzBGL83-O9~KY32Cpo6sNuo56UjcP-GhWrVbk6kx9ZcQdopazwPpsmmbh1bEmOoI6FJUYW0zssqY9AuPuHGt6D394NbXBbWW0LycBfus6o~w6zcr7-1LczAun7xqrcOxNX6WKZp71ZDqPSw~CfKr698Qm8CRukA__"
@@ -117,12 +82,12 @@ function Navbar() {
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
                                             <img
-                                                src={user?.photo}
+                                                src={user.photo}
                                                 alt="Profile"
                                                 className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                                             />
                                             <div>
-                                                <p className="text-white flex-1 truncate">{user?.email}</p>
+                                                <p className="text-white flex-1 truncate">{user.email}</p>
                                                 <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"
                                                     onClick={() => dispatch(logOut(token))}>
                                                     Sign Out
@@ -151,128 +116,48 @@ function Navbar() {
                                     )}
 
                                     <div className="flex flex-col gap-6">
+                                        <Link to="/" onClick={() => setIsOpen(false)} className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                            Home
+                                        </Link>
+                                        {(token && role === 3) && (
+                                            <Link to="/adminPanel" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Admin Panel
+                                            </Link>
+                                        )}
+                                        {(token && role === 2) && (
+                                            <Link to="/companyProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Company Profile
+                                            </Link>
+                                        )}
+                                        {(token && role === 1) && (
+                                            <Link to="/authorProfile" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Author Profile
+                                            </Link>
+                                        )}
+                                        {!token && (<Link to="/signUp" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                            Register
+                                        </Link>
+                                        )}
+                                        {!token && (
+                                            <Link to="/signIn" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Log in
+                                            </Link>
+                                        )}
 
-                                    <NavLink
-                                        to="/"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                        isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                    >
-                                        Home
-                                    </NavLink>
+                                        <Link to="/mangas" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                            Mangas
+                                        </Link>
 
-                                    {token && role === 3 && (
-                                        <NavLink
-                                        to="/adminPanel"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        Admin Panel
-                                        </NavLink>
-                                    )}
-
-                                    {token && role === 2 && (
-                                        <NavLink
-                                        to="/companyProfile"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        Company Profile
-                                        </NavLink>
-                                    )}
-
-                                    {token && role === 1 && (
-                                        <NavLink
-                                        to="/authorProfile"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        Author Profile
-                                        </NavLink>
-                                    )}
-
-                                    {!token && (
-                                        <NavLink
-                                        to="/signUp"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        Register
-                                        </NavLink>
-                                    )}
-
-                                    {!token && (
-                                        <NavLink
-                                        to="/signIn"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        Log in
-                                        </NavLink>
-                                    )}
-
-                                    <NavLink
-                                        to="/mangas"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                        isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                    >
-                                        Mangas
-                                    </NavLink>
-
-                                    {token && (role === 1 || role === 2) && (
-                                        <NavLink
-                                        to="/manager"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        Manager
-                                        </NavLink>
-                                    )}
-
-                                    {token && role === 0 && (
-                                        <NavLink
-                                        to="/newRole"
-                                        onClick={() => setIsOpen(false)}
-                                        className={({ isActive }) =>
-                                            isActive
-                                            ? "bg-white text-blue-500 text-xl px-6 py-4 rounded-lg"
-                                            : "text-white text-xl px-6 py-4 rounded-lg"
-                                        }
-                                        >
-                                        New Role
-                                        </NavLink>
-                                    )}
+                                        {(token && (role === 1 || role === 2)) && (
+                                            <Link to="/manager" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                Manager
+                                            </Link>
+                                        )}
+                                        {(token && role === 0) && (
+                                            <Link to="/newRole" onClick={() => setIsOpen(false)} className="text-white text-xl px-6">
+                                                New Role
+                                            </Link>
+                                        )}
                                     </div>
                                 </div>
                             </div>
