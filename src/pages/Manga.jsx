@@ -98,7 +98,7 @@ function Manga() {
                 if (id) {
                     await Promise.all([
                         dispatch(fetchCategories()),
-                        dispatch(fetchAuthors({token})),
+                        dispatch(fetchAuthors({ token })),
                         dispatch(fetchMangaDetails(id)),
                         dispatch(fetchChapters(id))
                     ]);
@@ -113,7 +113,7 @@ function Manga() {
         };
         loadData();
     }, [dispatch, id]);
-    
+
 
     const handleReaction = async (reactionType) => {
         try {
@@ -161,6 +161,24 @@ function Manga() {
             console.error('Error handling reaction:', error);
         }
     };
+
+
+    const [colorButton, setColorButton] = useState({ color: "#FFFFFF", boolean: true })
+    const [colorButton2, setColorButton2] = useState({ color: "#9D9D9D", boolean: false })
+    const [classInfo, setClassInfo] = useState("w-[50%] h-full rounded-[20px] bg-gradient-to-r from-[#463bce] to-[#463bce] z-[0] transition-all duration-300 translate-x-0 absolute");
+    function buttonInfoLeft() {
+        setColorButton({ color: "#fff", boolean: true });
+        setColorButton2({ color: "#a7a7a7", boolean: false });
+        setClassInfo("w-[50%] h-full rounded-[20px] z-[0] bg-gradient-to-r from-[#463bce] to-[#463bce] z-[-1] transition-all duration-300 translate-x-0 absolute");
+        setActiveTab("description");
+    }
+
+    function buttonInfoRight() {
+        setColorButton2({ color: "#fff", boolean: true });
+        setColorButton({ color: "#a7a7a7", boolean: false });
+        setClassInfo("w-[50%] h-full rounded-[20px] z-[0] bg-gradient-to-r from-[#463bce] to-[#463bce] z-[-1] transition-all duration-300 translate-x-full absolute");
+        setActiveTab("chapters");
+    }
 
     const handleChapter = (chapter) => {
         navigate(`/chapter/${chapter._id}`);
@@ -248,18 +266,21 @@ function Manga() {
                                         </span>
                                     </div>
                                 </div>
+                                <div className="minW min-w-80 h-[28px] rounded-[20px] flex mt-[1.5rem] shadow-[0_0px_7px_0px_rgba(0,0,0,0.15)] relative">
 
-                                <div className="w-full md:w-fit bg-gray-100 p-1.5 md:p-2 rounded-full flex gap-1 md:gap-2 justify-between md:justify-start">
-                                    <TabButton
-                                        active={activeTab === "description"}
-                                        onClick={() => setActiveTab("description")}
-                                        text="Manga"
-                                    />
-                                    <TabButton
-                                        active={activeTab === "chapters"}
-                                        onClick={() => setActiveTab("chapters")}
-                                        text="Chapters"
-                                    />
+                                    <div className={classInfo}></div>
+                                    <button
+                                        style={{ color: colorButton.color }}
+                                        onClick={buttonInfoLeft}
+                                        className="w-[50%] rounded-[20px] text-[10px] z-[1] font-montserrat font-normal text-center transition-all duration-300">
+                                        Manga
+                                    </button>
+                                    <button style={{ color: colorButton2.color }}
+                                        onClick={buttonInfoRight}
+                                        className="w-[50%] z-[1] rounded-[20px] text-[10px] font-montserrat font-normal text-center transition-all duration-300">
+                                        Chapters
+                                    </button>
+
                                 </div>
 
                                 <div className="mt-4 md:mt-6">
