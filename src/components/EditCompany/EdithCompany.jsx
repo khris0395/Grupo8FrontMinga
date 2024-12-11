@@ -6,13 +6,17 @@ import Navbar from '../../components/Navbar/Navbar'
 import AuthorProfile from "../../pages/AuthorProfile";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
-
-
-
-
 import './EdithCompany.css'
 
+
 const EdithCompany = () => {
+
+  const { companyId } = useParams(); // Captura la ID desde la URL
+    const dispatch = useDispatch();
+    const company = useSelector((state) => state.authStore.user.company); // Ajusta según tu store
+    const token = useSelector((state) => state.authStore.token);
+
+
   const [formData, setFormData] = useState({
     name: "Toei Animation",
     city: "United States",
@@ -76,7 +80,6 @@ const EdithCompany = () => {
                     className="w-full font-roboto border-b-2 border-gray-300 focus:border-green-500 outline-none text-gray-700 py-2"
                   />
                 </div>
-                
                 <div className="mb-5">
                   <input
                     type="text"

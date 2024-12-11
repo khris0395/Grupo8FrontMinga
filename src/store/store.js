@@ -4,13 +4,14 @@ import authReducer from "./reducer/authReducer";
 import { categoryReducer } from './reducer/categoryReducer';
 import { editChapter } from "./reducer/editChapterReducer"
 import { editAuthor } from "./reducer/edithAuthorReducer";
-import {editCompany} from "./reducer/edithCompanyReducer"
+import { editCompany } from "./reducer/edithCompanyReducer"
 import { authorReducer } from "./reducer/authorReducer";
 import { adminPanelReducer } from "./reducer/adminPanelReducer";
 import { companyReducer } from "./reducer/companyReducer";
 import { chapterReducer } from "./reducer/chapterReducer";
 import { commentReducer } from "./reducer/commentsReducer"
 import { managerReducer } from "./reducer/managerReducer";
+import { profilesReducer } from "./reducer/profilesReducer"
 
 
 const store = configureStore({
@@ -27,6 +28,7 @@ const store = configureStore({
     comment: commentReducer,
     manager: managerReducer,
     editCompany: editCompany,
+    profiles: profilesReducer,
 
   }
 });

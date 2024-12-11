@@ -33,6 +33,7 @@ export const fetchCompany = createAsyncThunk(
                     Authorization: `Bearer ${token}`
                 }
             }
+            
         );
         console.log("fetch company", response.data.response);
         return response.data.response;

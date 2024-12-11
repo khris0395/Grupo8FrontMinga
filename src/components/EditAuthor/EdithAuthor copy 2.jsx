@@ -23,6 +23,7 @@ const EditProfile = () => {
       dispatch(fetchAuthor(id));
     }
   }, [dispatch, id]);
+
   const [formData, setFormData] = useState({
     name: "",
     last_name: "",
@@ -30,6 +31,7 @@ const EditProfile = () => {
     date: "",
     photo: "https://via.placeholder.com/100",
   });
+
   useEffect(() => {
     if (author) {
       setFormData({
@@ -41,6 +43,7 @@ const EditProfile = () => {
       });
     }
   }, [author]);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({

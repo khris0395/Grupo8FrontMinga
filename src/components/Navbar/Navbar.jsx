@@ -9,11 +9,11 @@ import AuthorProfile from "../../pages/AuthorProfile";
 
 function Navbar() {
 
-const userl = useSelector((state) => state.ediy);
+    const userl = useSelector((state) => state.ediy);
 
-const userId = userl?._id;
-  
-    
+    const userId = userl?._id;
+
+
 
     const location = useLocation();
 
@@ -114,15 +114,22 @@ const userId = userl?._id;
                                 <div className="p-6">
                                     {token ? (
                                         <div className="flex items-center gap-4 mb-8">
-                                            
-                                            <Link to={`/companyProfile/:companyId`}>
-                                            <img
-                                                src={user.photo}
-                                                alt="Profile"
-                                                className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                                            
-                                            />
-                                            </Link>
+
+                                            {(token && (role === 1 || role === 2)) && (
+                                                <Link
+                                                    to="/profiles"
+                                                    onClick={() => setIsOpen(false)} className="">
+                                                    <img
+                                                        src={user.photo || "https://via.placeholder.com/48"}
+                                                        alt={`${user.name || "Usuario"}'s Profile`}
+                                                        className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+
+                                                    />
+                                                </Link>
+                                            )}
+
+
+
                                             <div>
                                                 <p className="text-white flex-1 truncate">{user.email}</p>
                                                 <button className="bg-slate-800 hover:bg-slate-500 text-white text-sm px-2 py-1 rounded"
@@ -153,7 +160,7 @@ const userId = userl?._id;
                                     )}
 
                                     <div className="flex flex-col gap-6">
-                                        <Link to="/"  onClick={() => setIsOpen(false)}  className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                        <Link to="/" onClick={() => setIsOpen(false)} className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                             Home
                                         </Link>
                                         {(token && role === 3) && (

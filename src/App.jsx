@@ -16,6 +16,7 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Mangas from './pages/Mangas'
 import Manager from './pages/Manager'
+import Profile from './pages/Profile'
 import EditChapter from './pages/EditChapter'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
       {
         path: '/manager',
         element: <PrivateManager><Manager /></PrivateManager>
+
+      },
+      {
+        path: '/profiles',
+        element: <Profile />
 
       },
       {
