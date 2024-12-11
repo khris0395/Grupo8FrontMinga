@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { reactionsById, deleteReaction } from "../store/actions/reactionsActions";
-import MangaNotFound from "../assets/images/anime-girl.gif"
-import Favourites from "../assets/images/Favourites.jpg"
-
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
@@ -63,12 +60,12 @@ const Favorites = () => {
     return (
         <div className="min-h-screen relative">
             <div className="relative flex items-center justify-center">
-                <h1 className="text-white text-4xl font-bold absolute top-40 md:top-20 text-center z-20">Favourites</h1>
+                <h1 className="text-white text-4xl font-bold absolute top-40 md:top-60 text-center z-20">Favourites</h1>
             </div>
             <div className="relative">
                 <div className="w-full h-[40vh] md:h-[50vh]">
                     <img
-                        src={Favourites}
+                        src="https://s3-alpha-sig.figma.com/img/e99b/5da8/a52db4fd64894930c7407e9673bb78ee?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=qxbNGaT5-bW02GCx8ckcxSi3jM4pdUPNL~MAyT0wMpdMDd90S9tLm6KHdzYissk0FqHDczvbUF7JdHNh3B49AjnMkTvNV99XG2IH-x-oNdOyb~Petkn~r11VFzoOphhYk1Q6CwMd3OvB4AyVofVPsOM0mx9wBMqgqeuMoWP7dQ1~C9BmeJlAR~gc2Snw91HzSoBPcpQmXdabcZdFyF4K7H7T-7x6tgZK7owzCVs-GKlG~feC6D0YMHImKJ3rbm~KIRLjZ7bkPm2iC1RlfbRWl9GvW0ZpUcpzKOjYinHxkxGXaSO4P4SdvkVMiA~5P9RkZPpLIm~RhCDlo-uMOIGbDg__"
                         alt="Mangas"
                         className="w-full h-full object-cover object-center"
                     />
@@ -83,7 +80,7 @@ const Favorites = () => {
                                 <div
                                     key={favorite.manga_id._id}
                                     onClick={() => handleNavigateToManga(favorite.manga_id._id)}
-                                    className="w-[280px] h-[90px] md:w-[325px] md:h-[120px] lg:w-[450px] lg:h-36 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative flex items-center m-2 md:m-4 hover:-translate-y-1 cursor-pointer"
+                                    className="w-[280px] h-[90px] md:w-[325px] md:h-[120px] lg:w-[380px] lg:h-[140px] bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden relative flex items-center m-2 md:m-4 hover:-translate-y-1 cursor-pointer"
                                 >
                                     <button
                                         onClick={(e) => {
@@ -106,7 +103,7 @@ const Favorites = () => {
                                         </span>
                                     </div>
 
-                                    <div className="w-[80px]  md:w-[100px] lg:w-[120px] h-36 relative flex-shrink-0">
+                                    <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] relative flex-shrink-0">
                                         <div className="w-[120px] h-[80px] md:w-[140px] md:h-[100px] lg:w-[160px] lg:h-[120px] overflow-hidden relative">
                                             <img
                                                 src={favorite.manga_id?.cover_photo || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
