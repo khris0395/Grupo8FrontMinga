@@ -249,6 +249,14 @@ function Manga() {
                                         selectedReaction={selectedReaction}
                                     />
                                 </div>
+                                <div className="mt-4 md:mt-6">
+                                    <button
+                                        className="w-full px-6 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
+                                        onClick={() => navigate("/favourites")}
+                                    >
+                                        Go to Favourites
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -257,7 +265,7 @@ function Manga() {
                             <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8 space-y-4 md:space-y-6">
                                 <div className="space-y-3 md:space-y-4">
                                     <h1 className="text-3xl md:text-5xl font-bold text-[#222222]">{manga.title}</h1>
-                                    <div className="flex flex-wrap items-center gap-2 md:gap-4">
+                                    <div className="flex flex-wrap items-center justify-around">
                                         <span className="px-3 md:px-4 py-1.5 md:py-2 bg-[#FFE0DF] rounded-full text-[#EF8481] text-sm md:text-base font-medium">
                                             {categoryName || 'Category'}
                                         </span>
@@ -324,12 +332,6 @@ function Manga() {
                             </div>
                         </div>
                     </div>
-                    <button
-                        className="mt-4 px-6 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
-                        onClick={() => navigate("/favourites")}
-                    >
-                        Go to Favourites
-                    </button>
                 </div>
             </div>
         </main>
