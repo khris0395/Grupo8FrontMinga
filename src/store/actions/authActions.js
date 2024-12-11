@@ -9,6 +9,7 @@ const setUser = createAction("setUser", (datos) => {
 
 })
 
+
 const logOut = createAsyncThunk(
   "logOut",
   async ( token, { rejectWithValue }) => {
@@ -66,8 +67,6 @@ const loginWithGoogle = createAction("loginWithGoogle", () => {
 const findAuthor = createAsyncThunk(
   "author/fetchAuthor",
   async ({ user_id, token }) => {
-
-    console.log(user_id, token);
     
     const response = await axios.post(
       `http://localhost:8080/api/authors/findAuthor`, // Enviamos una solicitud POST
@@ -87,15 +86,15 @@ const findCompany = createAsyncThunk(
   "findCompany",
   async ({ user_id, token }) => {
     const response = await axios.post(
-      `http://localhost:8080/api/companies/findCompany`, // Enviamos una solicitud POST
-      { user_id }, // Pasa el user_id en el cuerpo
+      `http://localhost:8080/api/companies/findCompany`,
+      { user_id },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log("fetch company", response.data.response);
+
     return response.data.response;
   }
 );
@@ -171,5 +170,15 @@ const updateRole = createAsyncThunk(
     }
 );
 
+const clearTokenConditionally = createAction("auth/clearTokenConditionally")
 
-export {login, setUser, logOut, registerUser, loginWithGoogle, updateRole,findAuthor, findCompany, initializeAuth};
+export {login,
+        clearTokenConditionally, 
+        setUser, 
+        logOut, 
+        registerUser, 
+        loginWithGoogle, 
+        updateRole,
+        findAuthor, 
+        findCompany, 
+        initializeAuth};

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { findAuthor, findCompany, login } from "../store/actions/authActions";
+import { findAuthor, findCompany, login, clearTokenConditionally } from "../store/actions/authActions";
 import { NavLink } from "react-router-dom";
 import { loginWithGoogle } from "../store/actions/authActions";
 
@@ -14,13 +14,53 @@ const SignInComponent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Inicia sesión
-      const loginResponse = await dispatch(login({ email, password })).unwrap()
-      
-      if (loginResponse.token && loginResponse.user.role===1) {
-        dispatch(findAuthor({ user_id: loginResponse.user._id, token: loginResponse.token }));
-      }else if(loginResponse.token && loginResponse.user.role===2){
-        dispatch(findCompany({ user_id: loginResponse.user._id, token: loginResponse.token }))
+      // Intentar iniciar sesión
+      const loginResponse = await dispatch(login({ email, password })).unwrap();
+
+      if (loginResponse.token) {
+        const { role, _id: userId } = loginResponse.user;
+        const token = loginResponse.token;
+
+        let userData = null;
+        let userType = null;
+
+        switch (role) {
+          case 1: // Autor
+            userType = "author";
+            userData = await dispatch(findAuthor({ user_id: userId, token })).unwrap();
+            break;
+
+          case 2:
+            userType = "company";
+            userData = await dispatch(findCompany({ user_id: userId, token })).unwrap();
+            break;
+
+          case 0:
+            console.info("Inicio de sesión como userio plano.");
+            return;
+          
+          case 3:
+            console.info("Inicio de sesión como admin.");
+            return;
+          
+          default:
+            console.error("Rol no reconocido.");
+            return;
+        }
+
+        const isActive = userData?.user?.[userType]?.active;
+        if (!isActive) {
+          dispatch(clearTokenConditionally("clear"));
+          console.warn("El usuario no está activo. Token limpiado.");
+          
+          Swal.fire({
+            icon: "error",
+            title: "Access denied...",
+            text: "Your account has been disabled, please contact the administrator!"
+          });
+
+          return;
+        }
       }
     } catch (error) {
       console.error("Error en el inicio de sesión:", error);

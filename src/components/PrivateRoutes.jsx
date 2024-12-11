@@ -5,6 +5,7 @@ function PrivateLogin({ children }) {
   const token = useSelector((state) => state.authStore.token);
 
   if (token) {
+    
     return <Navigate to="/home" replace />;
   }
   return children;
