@@ -23,6 +23,6 @@ const store = configureStore({
     comment: commentReducer,
     manager: managerReducer
   }
-});
+})
 
 export default store;

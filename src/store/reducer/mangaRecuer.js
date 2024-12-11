@@ -22,7 +22,7 @@ const initialState = {
     search: '',
     loading: false,
     error: null,
-    selectedManga: null,
+    selectedManga: [],
     createSuccess: false
 };
 

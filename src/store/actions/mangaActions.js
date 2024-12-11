@@ -17,12 +17,16 @@ export const fetchMangas = createAsyncThunk("mangas/fetchMangas",
 export const deleteManga = createAsyncThunk(
     'mangas/deleteManga',
     async (id) => {
+       try {
         const token = localStorage.getItem('token')
         const response = await axios.delete(`http://localhost:8080/api/mangas/delete/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
+       } catch (error) {
+        return 'error'
+       }
     }
 )
 
@@ -51,7 +55,7 @@ export const fetchMangaDetails = createAsyncThunk(
                 'Authorization': `Bearer ${token}`
             }
         });
-        return response.data.response;
+        return response.data.response
     }
 );
 
