@@ -9,7 +9,6 @@ import ButtonEdit2Manga from "./buttons/buttonEdit2Manga.jsx";
 import { get_categories, setSelectedCategories } from "../store/actions/categoryActions.js";
 import imgNotFound from '../assets/images/noResulsFoundimg.jpg'
 import ButtonAddManga from "./buttons/buttonAddManga.jsx";
-import MangaNotFound from "../assets/images/anime-girl.gif";
 
 export default function MangaCard({ mangas, isManager, profile }) {
     const dispatch = useDispatch(); // Necesario para despachar la acción
@@ -43,14 +42,13 @@ export default function MangaCard({ mangas, isManager, profile }) {
         <div className="w-full h-full mx-auto mt-3 -translate-y-24  bg-gray-300 flex justify-center items-center">
 
             <div className="w-11/12 bg-white h-full px-4 mx-4 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
-            <div className="w-11/12 bg-white h-full pb-4 px-4 mx-4 my-3 -translate-y-12 rounded-xl flex flex-col justify-around items-center">
 
                 <div className="flex justify-around   py-3 w-full">
                     <div className="flex flex-wrap gap-4 py-3 w-full">
                     {categories.map((category, index) => (
                         <label
                             key={index}
-                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all select-none duration-300 ${category.bg}   ${category.text}  ${category.hover} ${category.checked} `}
+                            className={`flex items-center cursor-pointer px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${category.bg}   ${category.text}  ${category.hover} ${category.checked} `}
                         >
                             <input
                                 type="checkbox"
@@ -77,37 +75,17 @@ export default function MangaCard({ mangas, isManager, profile }) {
                             src={imgNotFound}
                             alt="notFound" />
                         : filteredMangas.map((manga, index) => (
-                    {loading && filteredMangas.length === 0 ?
-                        <div className="loading-indicator">Loading...</div>
-                        : filteredMangas.length === 0 && !loading ?
-
-                            <div className="m-10">
-                                <h2 className="text-xl font-bold text-[#4338ca]">Sorry, No mangas were found. Please try a new search.. 🔍</h2>
-                                <img
-                                    src={MangaNotFound}
-                                    alt="Manga-Not-Found"
-                                    className="object-cover rounded-l-full w-full h-auto"
-                                />
-                            </div>
-                            : filteredMangas.map((manga, index) => (
 
                             <div className="w-full h-44  mx-6 mt-4 flex items-center bg-white shadow-md rounded-xl overflow-hidden max-w-sm" key={index}>
-                                <div className="w-full h-44  mx-6 mt-4 flex items-center bg-white shadow-md rounded-xl overflow-hidden max-w-sm" key={index}>
 
 
                                 {/* Contenido de la tarjeta */}
-                                    {/* Contenido de la tarjeta */}
 
                                 <div className={`p-4 w-2/3 border-l-4 ${manga.category_id.border}`}>
                                     <div className="flex gap-4">
                                         {isManager && <ButtonAddChapter mangaId={manga._id} />}
                                         {isManager && <ButtonEdit2Manga mangaId={manga._id}></ButtonEdit2Manga>}
                                     </div>
-                                    <div className={`p-4 w-2/3 border-l-4 ${manga.category_id.border}`}>
-                                        <div className="flex gap-4">
-                                            {isManager && <ButtonAddChapter mangaId={manga._id} />}
-                                            {isManager && <ButtonEdit2Manga mangaId={manga._id}></ButtonEdit2Manga>}
-                                        </div>
 
                                     <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
                                     <p className={`text-sm ${manga.category_id.text}`}>{manga.category_id.name}</p>
@@ -116,13 +94,6 @@ export default function MangaCard({ mangas, isManager, profile }) {
                                         <>
                                             <ButtonEditManga mangaId={manga._id} />
                                             <ButtonDeleteManga mangaId={manga._id} isEditChapter={false} />
-                                        <h3 className="text-lg mb-3 font-bold text-gray-800">{manga.title}</h3>
-                                        <p className={`text-sm ${manga.category_id.text}`}>{manga.category_id.name}</p>
-                                        {/* Si es Manager, mostrar botones adicionales */}
-                                        {isManager ? (
-                                            <>
-                                                <ButtonEditManga mangaId={manga._id} />
-                                                <ButtonDeleteManga mangaId={manga._id} />
 
                                         </>
                                     ) : (
@@ -130,12 +101,6 @@ export default function MangaCard({ mangas, isManager, profile }) {
                                     )}
                                 </div>
                                 {/* Imagen del Manga */}
-                                            </>
-                                        ) : (
-                                            <ButtonReadManga mangaId={manga._id} bgColor={manga.category_id.bg} textColor={manga.category_id.text} hover={manga.category_id.hover} />
-                                        )}
-                                    </div>
-                                    {/* Imagen del Manga */}
 
                                 <div className="w-2/3 relative">
                                     <img
@@ -145,17 +110,8 @@ export default function MangaCard({ mangas, isManager, profile }) {
                                     />
                                 </div>
                             </div>
-                                    <div className="w-2/3 relative">
-                                        <img
-                                            src={manga.cover_photo ? manga.cover_photo : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
-                                            alt={manga.title}
-                                            className="object-cover rounded-l-full w-full h-auto"
-                                        />
-                                    </div>
-                                </div>
 
                         ))
-                            ))
                     }
 
 
