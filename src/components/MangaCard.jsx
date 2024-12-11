@@ -16,6 +16,7 @@ export default function MangaCard({ mangas, isManager, profile }) {
     const { categories, categorySelet } = useSelector((state) => state.categories)
     
     console.log('data prop: ', profile);
+    console.log('data prop mangas: ', mangas);
     
     // Cambiar las categorías seleccionadas
     const handleCategoryChange = (category) => {

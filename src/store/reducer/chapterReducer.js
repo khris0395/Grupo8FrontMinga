@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit"
-import { getChapter, fetchComments, createComment, updateChapter, getAllChapters, deleteChapter } from "../actions/chapterActions"
+import { getChapter, fetchComments, createComment, updateChapter, getAllChapters, deleteChapter, fetchCommentFromChapter } from "../actions/chapterActions"
 
 const initialState = {
     chapter: null,

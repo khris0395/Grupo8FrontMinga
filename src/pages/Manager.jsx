@@ -3,7 +3,6 @@ import MangaCard from "../components/MangaCard";
 import { useEffect } from "react";
 import { getManagerProfile } from "../store/actions/managerActions";
 import { useNavigate } from "react-router-dom";
-import managerImg from "../assets/images/manager.jpg"
 
 
 export default function Manager() {
@@ -32,7 +31,7 @@ export default function Manager() {
                     {/* Imagen de fondo */}
                     <div className="w-full h-screen">
                         <img
-                            src={managerImg}
+                            src="https://s3-alpha-sig.figma.com/img/6fbb/1740/a9480f18c06165fca03fd747dbab2cfe?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=lU72pnNByYu1Zg0dlYtQSRHBlOPi-i5ESs5e55zj0a4TUI3tYshxNghwxCcgOWee4p1JE2WGn6zRZ8Fbv4-Tuc8zV2zNOSDckcEqvDoHjHbzwN9xdcDeF1WWzmbjNA3MMK6jnpBi10ZWRpL6Q-YTXCasMq5nvgBfeam82QWUPBgoHvVXz2v7kV3AgKrvlqJaLI2MSVwHEgThxauQGcoPCM9hX5tC3tEejJlMoYRnQw3DpaTGni451x5Q~3XLLVBxHQnokwyhskVQ6NCIAuuFJeIpgqJepDB9om38A9ekEcirEftjd7zXz8lEWC857Tnr3A2g1txqFMHfwHrLM4LAtw__"
                             alt="Mangas"
                             className="w-full h-full object-cover object-center"
                         />

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     fetchMangaDetails,
     fetchChapters,
@@ -20,6 +21,43 @@ const getReactionType = (emoji) => {
     }
 };
 
+const ReactionButton = ({ emoji, mangaId, onReact }) => {
+    const dispatch = useDispatch();
+
+    const isActive = useMemo(() => {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        return favorites.some(f =>
+            f.mangaId === mangaId &&
+            f.reaccion === getReactionType(emoji)
+        );
+    }, [mangaId, emoji]);
+
+    const handleClick = async () => {
+        try {
+            const reactionData = {
+                manga_id: mangaId,
+                author_id: "674a404f2c593fb14a0d09b4",
+                company_id: "674a404f2c593fb14a0d09b6",
+                reaccion: getReactionType(emoji)
+            };
+            await dispatch(createReaction(reactionData)).unwrap();
+            onReact();
+        } catch (error) {
+            console.error('Error creating reaction:', error);
+        }
+    };
+
+    return (
+        <button
+            onClick={handleClick}
+            className={`w-[72px] h-[72px] rounded-full shadow-md border flex items-center justify-center text-4xl
+                ${isActive ? 'bg-blue-100 border-blue-500' : 'bg-white border-gray-200'} hover:bg-gray-50 transition-colors`}
+        >
+            {emoji}
+        </button>
+    );
+};
+
 const StatItem = ({ value, label }) => (
     <div className="flex flex-col items-center">
         <span className="text-2xl text-[#424242] font-poppins">{value}</span>
@@ -29,84 +67,67 @@ const StatItem = ({ value, label }) => (
 
 const TabButton = ({ active, onClick, text }) => (
     <button
-        className={`px-8 py-3 rounded-full font-medium text-lg transition-all duration-300 ${active
-            ? "bg-[#4338CA] text-white shadow-md"
-            : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+        className={`pb-4 px-4 text-lg font-medium relative ${active
+            ? "text-[#4338CA]"
+            : "text-[#9D9D9D] hover:text-gray-700"
             }`}
         onClick={onClick}
     >
         {text}
+        {active && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#4338CA]" />}
     </button>
 );
-
-const ReactionButton = ({ emoji, mangaId, onReact, selectedReaction }) => {
-    const dispatch = useDispatch();
-
-    const handleClick = async (e) => {
-        e.preventDefault();
-        try {
-            const reactionData = {
-                manga_id: mangaId,
-                reaccion: getReactionType(emoji)
-            };
-            await dispatch(createReaction(reactionData)).unwrap();
-            onReact(getReactionType(emoji));
-        } catch (error) {
-            console.error('Error creating reaction:', error);
-        }
-    };
-
-    const isSelected = selectedReaction === getReactionType(emoji);
-
-    return (
-        <button
-            onClick={handleClick}
-            className={`w-[72px] h-[72px] rounded-full shadow-md border flex items-center justify-center text-4xl
-                ${isSelected ? 'bg-[#4338CA] text-white border-[#4338CA]' : 'bg-white border-gray-200'} 
-                hover:bg-gray-50 transition-colors duration-300`}
-        >
-            {emoji}
-        </button>
-    );
-};
 
 function Manga() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { id } = useParams();
-
-    const [activeTab, setActiveTab] = useState("description");
-    const [isLoading, setIsLoading] = useState(true);
-    const [selectedReaction, setSelectedReaction] = useState(() => {
-        const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
-        return savedReactions[id] || null;
-    });
-
     const loading = useSelector((state) => state.mangas.loading);
     const error = useSelector((state) => state.mangas.error);
     const manga = useSelector((state) => state.mangas.selectedManga);
     const chapters = useSelector((state) => state.mangas.chapters);
     const categories = useSelector((state) => state.mangas.categories);
     const authors = useSelector((state) => state.mangas.authors);
-    const token = useSelector((state) => state.authStore);
+    const [activeTab, setActiveTab] = useState("description");
+    const [isLoading, setIsLoading] = useState(true);
+
+    const handleChapter = (chapter) => {
+        navigate(`/chapter/${chapter._id}`);
+    };
+
+    const ChapterCard = ({ chapter }) => (
+        <div className="flex items-center justify-between p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+            <div className="flex items-center gap-6">
+                <img
+                    src={chapter.cover_photo}
+                    alt={chapter.title}
+                    className="w-20 h-20 object-cover rounded-lg shadow"
+                />
+                <div>
+                    <h3 className="text-xl font-semibold">{chapter.title}</h3>
+                    <p className="text-[#9D9D9D]">{chapter.pages?.length || 0} pages</p>
+                </div>
+            </div>
+            <button
+                className="px-8 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
+                onClick={() => handleChapter(chapter)}
+            >
+                Read
+            </button>
+        </div>
+    );
 
     useEffect(() => {
         const loadData = async () => {
-
-            console.log("token entrando a usse", token);
             try {
                 setIsLoading(true);
                 if (id) {
                     await Promise.all([
                         dispatch(fetchCategories()),
-                        dispatch(fetchAuthors({ token })),
+                        dispatch(fetchAuthors()),
                         dispatch(fetchMangaDetails(id)),
                         dispatch(fetchChapters(id))
                     ]);
-                    const savedReactions = JSON.parse(localStorage.getItem('userReactions') || '{}');
-                    if (savedReactions[id]) {
-                        setSelectedReaction(savedReactions[id]);
-                    }
                 }
             } finally {
                 setIsLoading(false);
@@ -126,132 +147,96 @@ function Manga() {
     const categoryName = categories.find(c => c._id === manga.category_id)?.name;
     const authorName = authors.find(a => a._id === manga.author_id)?.name;
 
+    const handleReaction = () => {
+        console.log('Reaction handled');
+    };
+
     return (
-        <main className="bg-[#EBEBEB] min-h-screen">
-            <div className="container mx-auto px-4 py-4 md:py-8 mt-16 md:mt-24">
+        <div className="bg-[#EBEBEB] min-h-screen">
+            <div className="container mx-auto px-4 py-8">
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid md:grid-cols-12 gap-4 md:gap-8">
+                    <div className="grid lg:grid-cols-12 gap-8">
                         {/* Left Column */}
-                        <div className="md:col-span-4 space-y-4 md:space-y-6">
+                        <div className="lg:col-span-4 space-y-6">
                             <img
                                 src={manga.cover_photo}
                                 alt={manga.title}
-                                className="w-full h-[300px] md:h-[500px] object-cover rounded-xl md:rounded-2xl shadow-lg"
+                                className="w-full h-[500px] object-cover rounded-2xl shadow-lg"
                             />
 
-                            <div className="bg-white p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg">
+                            <div className="bg-white p-6 rounded-2xl shadow-lg">
                                 <div className="flex justify-between">
                                     <StatItem value="4.5/5" label="Rating" />
                                     <div className="w-px bg-[#9D9D9D]" />
-                                    <StatItem value={chapters?.length || 0} label="Chapters" />
+                                    <StatItem value="265" label="Chapters" />
                                     <div className="w-px bg-[#9D9D9D]" />
                                     <StatItem value="Eng" label="Language" />
                                 </div>
                             </div>
 
                             <div className="space-y-4">
-                                <div className="grid grid-cols-4 gap-2 md:gap-4">
+                                <div className="grid grid-cols-4 gap-4">
                                     <ReactionButton
                                         emoji="👍"
-                                        mangaId={manga._id}
+                                        mangaId={manga?._id}
                                         onReact={handleReaction}
-                                        selectedReaction={selectedReaction}
                                     />
                                     <ReactionButton
                                         emoji="👎"
-                                        mangaId={manga._id}
+                                        mangaId={manga?._id}
                                         onReact={handleReaction}
-                                        selectedReaction={selectedReaction}
                                     />
                                     <ReactionButton
                                         emoji="😮"
-                                        mangaId={manga._id}
+                                        mangaId={manga?._id}
                                         onReact={handleReaction}
-                                        selectedReaction={selectedReaction}
                                     />
                                     <ReactionButton
                                         emoji="😍"
-                                        mangaId={manga._id}
+                                        mangaId={manga?._id}
                                         onReact={handleReaction}
-                                        selectedReaction={selectedReaction}
                                     />
-                                </div>
-                                <div className="mt-4 md:mt-6">
-                                    <button
-                                        className="w-full px-6 py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
-                                        onClick={() => navigate("/favourites")}
-                                    >
-                                        Go to Favourites
-                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Column */}
-                        <div className="md:col-span-8">
-                            <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-8 space-y-4 md:space-y-6">
-                                <div className="space-y-3 md:space-y-4">
-                                    <h1 className="text-3xl md:text-5xl font-bold text-[#222222]">{manga.title}</h1>
-                                    <div className="flex flex-wrap items-center justify-around">
-                                        <span className="px-3 md:px-4 py-1.5 md:py-2 bg-[#FFE0DF] rounded-full text-[#EF8481] text-sm md:text-base font-medium">
+                        <div className="lg:col-span-8">
+                            <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+                                <div className="space-y-4">
+                                    <h1 className="text-5xl font-bold text-[#222222]">{manga.title}</h1>
+                                    <div className="flex items-center gap-4">
+                                        <span className="px-4 py-2 bg-[#FFE0DF] rounded-full text-[#EF8481] font-medium">
                                             {categoryName || 'Category'}
                                         </span>
-                                        <span className="text-[#9D9D9D] text-sm md:text-lg">
-                                            By: {authorName || 'Unknown Author'}
-                                        </span>
+                                        <span className="text-[#9D9D9D] text-lg">{authorName || 'Author'}</span>
                                     </div>
                                 </div>
-                                <div className="minW min-w-80 h-[28px] rounded-[20px] flex mt-[1.5rem] shadow-[0_0px_7px_0px_rgba(0,0,0,0.15)] relative">
 
-                                    <div className={classInfo}></div>
-                                    <button
-                                        style={{ color: colorButton.color }}
-                                        onClick={buttonInfoLeft}
-                                        className="w-[50%] rounded-[20px] text-[10px] z-[1] font-montserrat font-normal text-center transition-all duration-300">
-                                        Manga
-                                    </button>
-                                    <button style={{ color: colorButton2.color }}
-                                        onClick={buttonInfoRight}
-                                        className="w-[50%] z-[1] rounded-[20px] text-[10px] font-montserrat font-normal text-center transition-all duration-300">
-                                        Chapters
-                                    </button>
-
+                                <div className="border-b border-gray-200">
+                                    <div className="flex gap-8">
+                                        <TabButton
+                                            active={activeTab === "description"}
+                                            onClick={() => setActiveTab("description")}
+                                            text="Manga"
+                                        />
+                                        <TabButton
+                                            active={activeTab === "chapters"}
+                                            onClick={() => setActiveTab("chapters")}
+                                            text="Chapters"
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className="mt-4 md:mt-6">
+                                <div className="mt-6">
                                     {activeTab === "description" ? (
-                                        <p className="text-base md:text-lg leading-relaxed text-[#424242]">
+                                        <p className="text-lg leading-relaxed text-[#424242]">
                                             {manga.description}
                                         </p>
                                     ) : (
-                                        <div className="grid gap-3 md:gap-4">
+                                        <div className="grid gap-4">
                                             {chapters?.map((chapter) => (
-                                                <div
-                                                    key={chapter._id}
-                                                    className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 md:p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
-                                                >
-                                                    <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-0">
-                                                        <img
-                                                            src={chapter.cover_photo}
-                                                            alt={chapter.title}
-                                                            className="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg shadow"
-                                                        />
-                                                        <div>
-                                                            <h3 className="text-lg md:text-xl font-semibold">
-                                                                {chapter.title}
-                                                            </h3>
-                                                            <p className="text-sm md:text-base text-[#9D9D9D]">
-                                                                {chapter.pages?.length || 0} pages
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        className="w-full md:w-auto px-6 md:px-8 py-2.5 md:py-3 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
-                                                        onClick={() => handleChapter(chapter)}
-                                                    >
-                                                        Read
-                                                    </button>
-                                                </div>
+                                                <ChapterCard key={chapter._id} chapter={chapter} />
                                             ))}
                                         </div>
                                     )}
@@ -261,7 +246,7 @@ function Manga() {
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }
 

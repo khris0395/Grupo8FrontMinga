@@ -127,7 +127,7 @@ const router = createBrowserRouter([
 				element: <PrivateManager><MangaForm /></PrivateManager>
 			},
 			{
-				path: '/chapterForm',
+				path: '/chapterForm/:id',
 				element: <PrivateManager><ChapterForm /></PrivateManager>
 			},
 			{
