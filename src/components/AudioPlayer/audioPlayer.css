@@ -1,0 +1,24 @@
+.custom-audio-player {
+    width: 100%; /* Predeterminado a pantalla completa */
+    max-width: 400px; /* Limita el ancho máximo */
+    margin: 0 auto; /* Centra el componente */
+}
+
+.custom-audio-player .audio-player-container {
+    display: flex;
+    flex-direction: column; /* Para ajustar todos los elementos internos */
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* Espaciado interno */
+    font-size: 14px; /* Cambia el tamaño de fuente */
+}
+
+@media (max-width: 768px) {
+    .custom-audio-player {
+        max-width: 90%; /* Ajusta el tamaño en vista móvil */
+    }
+
+    .custom-audio-player .audio-player-container {
+        font-size: 12px; /* Reduce el tamaño del texto en pantallas pequeñas */
+    }
+}

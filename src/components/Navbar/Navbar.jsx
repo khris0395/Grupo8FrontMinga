@@ -5,6 +5,10 @@ import { logOut } from "../../store/actions/authActions";
 import '@madzadev/audio-player/dist/index.css';
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import { useLocation } from "react-router-dom";
+import { FaRegPlayCircle } from "react-icons/fa";
+import { FaRegStopCircle } from "react-icons/fa";
+import "../AudioPlayer/audioPlayer.css"
+
 
 function Navbar() {
 
@@ -49,6 +53,9 @@ function Navbar() {
         };
     }, []);
 
+    let play = <FaRegStopCircle className="text-red-500 hover:text-red-700 text-4xl transition ease-in duration-150" />;
+    let stop = <FaRegPlayCircle className="text-blue-500 hover:text-blue-700 text-4xl transition ease-in duration-150" />;
+
     return (
         <nav className="absolute top-0 left-0 w-full z-20 bg-transparent">
             <div className="w-full">
@@ -61,26 +68,28 @@ function Navbar() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <div className="flex gap-2 sm:gap-20 items-center">
+                    <div className="flex gap-2 sm:gap-20">
                         {/* Play/Stop button */}
-                        <div className="bg-white rounded-lg pb-1 z-50">
+                        <div className="rounded-lg z-50 flex">
                             <button
                                 onClick={() => setIsPlaying(!isPlaying)}
                                 className="text-2xl focus:outline-none"
                             >
-                                {isPlaying ? "⏹️" : "▶️"}
+                                {isPlaying ? play : stop}
                             </button>
                         </div>
                         {/* AudioPlayer */}
                         <div
                             ref={audioRef}
-                            className="fixed"
+                            className={`fixed transition-all duration-700 ease-in-out ${isPlaying ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-10"
+                                }`}
                             style={{
-                                left: `750px`,
-                                top: `-30px`,
+                                width: "400px", 
+                                height: "auto", 
+                                left: `65%`,
+                                top: `-50%`,
                                 zIndex: 40,
-                                cursor: "no-drop",
-                                display: isPlaying ? "block" : "none"  // Controla la visibilidad
+                                pointerEvents: isPlaying ? "auto" : "none",
                             }}
                         >
                             <AudioPlayer />
@@ -142,7 +151,7 @@ function Navbar() {
                                     )}
 
                                     <div className="flex flex-col gap-6">
-                                        <Link to="/"  onClick={() => setIsOpen(false)}  className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
+                                        <Link to="/" onClick={() => setIsOpen(false)} className="bg-white text-[#4338CA] py-4 px-6 rounded-lg text-xl">
                                             Home
                                         </Link>
                                         {(token && role === 3) && (
