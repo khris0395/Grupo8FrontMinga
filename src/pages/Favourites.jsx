@@ -1,48 +1,64 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { reactionsById, deleteReaction } from "../store/actions/reactionsActions";
 
 const Favorites = () => {
     const [favorites, setFavorites] = useState([]);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user, token } = useSelector((state) => state.authStore);
+    const idUser = user?._id
 
     useEffect(() => {
-        const savedReactions = JSON.parse(localStorage.getItem("userReactions") || "{}");
-        const mangaList = Object.entries(savedReactions)
-            .filter(([_, reaction]) => reaction === "liked" || reaction === "love")
-            .map(([mangaId, reaction]) => {
-                const mangaData = JSON.parse(localStorage.getItem("mangaData") || "{}");
-                const mangaInfo = mangaData[mangaId] || {};
-                return {
-                    mangaId,
-                    title: mangaInfo.title || "Unknown Title",
-                    cover_photo: mangaInfo.cover_photo || "",
-                    reaccion: reaction,
-                };
-            });
-        setFavorites(mangaList);
+        // Función auxiliar asincrónica para cargar las reacciones
+        const fetchFavorites = async () => {
+            if (!idUser || !token) return; // Validación previa
 
-    }, []);
-
-    console.log(favorites);
+            console.log("token entrando a fetchFavotites",token);
+            
     
+            try {
+
+                const response = await dispatch(
+                    reactionsById({ id: idUser, token })
+                ).unwrap(); // Desenrolla la promesa para obtener el payload directamente
+
+                const filteredReactions = response.reactions.filter(
+                    (reaction) => reaction.reaccion === "liked" || reaction.reaccion === "love"
+                );
+
+                setFavorites(filteredReactions);
+
+            } catch (error) {
+                console.error("Error fetching reactions:", error); // Manejo de errores
+            }
+        };
+    
+        fetchFavorites();
+    }, [dispatch, idUser, token]);
+
     const handleNavigateToManga = (mangaId) => {
         navigate(`/manga/${mangaId}`);
     };
 
-    const handleRemoveFavorite = (mangaId) => {
-        const userReactions = JSON.parse(localStorage.getItem("userReactions") || "{}");
-        delete userReactions[mangaId];
-        localStorage.setItem("userReactions", JSON.stringify(userReactions));
+    const handleRemoveFavorite = async (mangaId) => {
 
-        const storedFavorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-        const updatedFavorites = storedFavorites.filter(favorite => favorite.mangaId !== mangaId);
-        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        try {
+            await dispatch(deleteReaction({
+                id: mangaId,
+                token
+            })).unwrap();
 
-        setFavorites(updatedFavorites);
+            setFavorites((prevFavorites) =>
+                prevFavorites.filter((favorite) => favorite._id !== mangaId)
+            );
+
+        } catch (error) {
+            console.error(error);
+        }
+        
     };
-
-    console.log(favorites);
-
 
     if (!favorites.length) {
         return <div className="text-center p-4 mt-24">No favorites yet!</div>;
@@ -68,16 +84,16 @@ const Favorites = () => {
 
                             {favorites.map((favorite) => (
                                 <div
-                                    key={favorite.mangaId}
+                                    key={favorite.manga_id._id}
                                     className="w-full h-40 mx-6 mt-4 flex items-center bg-white shadow-md rounded-xl overflow-hidden max-w-sm"
                                 >
-                                    <div className={`p-4 w-2/3 border-l-4 ${favorite.category_id?.text ? `border-${favorite.category_id.text}-500` : 'border-gray-500'}`}>
-                                        <h3 className="text-lg mb-3 font-bold text-gray-800">{favorite.title}</h3>
+                                    <div className={`p-4 w-2/3 border-l-4 ${favorite.manga_id?.category_id?.text ? `${favorite.manga_id.category_id.border}` : 'border-gray-500'}`}>
+                                        <h3 className="text-lg mb-3 font-bold text-gray-800">{favorite.manga_id.title}</h3>
                                     </div>
                                     <div className="w-2/3 relative">
                                         <img
-                                            src={favorite.cover_photo || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
-                                            alt={favorite.title}
+                                            src={favorite.manga_id.cover_photo || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo79b2l7teWYiI5GuEHf1XohsdANW1y5X9jA&s'}
+                                            alt={favorite.manga_id.title}
                                             className="object-cover rounded-l-full w-full h-auto"
                                         />
                                     </div>
@@ -85,13 +101,13 @@ const Favorites = () => {
 
                                     <div className="flex justify-between items-center">
                                         <button
-                                            onClick={() => handleNavigateToManga(favorite.mangaId)}
+                                            onClick={() => handleNavigateToManga(favorite.manga_id._id)}
                                             className="px-6 py-2.5 bg-[#4338CA] text-white rounded-lg hover:bg-[#5E52F3] transition-colors"
                                         >
                                             View Manga
                                         </button>
                                         <button
-                                            onClick={() => handleRemoveFavorite(favorite.mangaId)}
+                                            onClick={() => handleRemoveFavorite(favorite._id)}
                                             className="px-4 py-2 text-black hover:text-gray-400"
                                         >
                                             ⊗
