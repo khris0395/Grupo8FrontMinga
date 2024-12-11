@@ -184,8 +184,8 @@ export default function App() {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const audioRef = useRef(null);
 
-	let play = <FaRegStopCircle className="text-[#b621f2] hover:text-[#7b3497] text-4xl transition ease-in duration-150" />;
-	let stop = <FaRegPlayCircle className="text-blue-500 hover:text-blue-700 text-4xl transition ease-in duration-150" />;
+	let play = <FaRegStopCircle className="text-[#c35deb] hover:text-[#7b3497] text-4xl transition ease-in duration-200" />;
+	let stop = <FaRegPlayCircle className="text-blue-400 hover:text-blue-700 text-4xl transition ease-in duration-200" />;
 
 
 	return (
