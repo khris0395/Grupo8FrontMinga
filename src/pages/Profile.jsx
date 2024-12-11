@@ -2,13 +2,8 @@ import EdithAuthor from "../components/EditAuthor/EdithAuthor";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import MangaCard from "../components/MangaCard"
-
-import { getProfile } from "../store/actions/profilesActions"
-
 import React, { useState, useEffect } from "react";
-
-//import { fetchAuthor, updateAuthor, deleteAuthor } from "../../store/actions/edithAuthorAction";
-
+import { updateAuthor, updateCompany, getProfile  } from "../store/actions/profilesActions";
 import { format } from "date-fns";
 import Navbar from '../components/Navbar/Navbar'
 //import AuthorProfile from "../../pages/AuthorProfile";
@@ -79,66 +74,8 @@ export default function Profiles() {
             [name]: name === "date" ? format(new Date(value), "yyyy-MM-dd") : value,
         });
     };
-/* 
-    const handleSave = () => {
-        // Validación de campos requeridos
-        if (!formData.name || !formData.last_name || !formData.city) {
-          Swal.fire({
-            title: "Incomplete Form",
-            text: "Please fill out all required fields.",
-            icon: "warning",
-            confirmButtonText: "OK",
-          });
-          return;
-        }
-    
-        const token = localStorage.getItem("token");
-        if (!token) {
-          Swal.fire({
-            title: "No Token Found",
-            text: "Please log in before making changes.",
-            icon: "error",
-            confirmButtonText: "Log In",
-          });
-          return;
-        }
-    
-        dispatch(
-          updateAuthor({
-            author: { ...formData },
-            token,
-            id,
-          })
-        )
-          .then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
-              Swal.fire({
-                title: "Profile Updated",
-                text: "Your profile was updated successfully.",
-                icon: "success",
-                confirmButtonText: "OK",
-              });
-            } else {
-              Swal.fire({
-                title: "Update Failed",
-                text: `Error: ${response.error.message || "Unknown error"}`,
-                icon: "error",
-                confirmButtonText: "Try Again",
-              });
-            }
-          })
-          .catch((err) => {
-            Swal.fire({
-              title: "Error",
-              text: `An error occurred: ${err.message}`,
-              icon: "error",
-              confirmButtonText: "OK",
-            });
-          });
-      };
-    
-     */
-
+      
+     
       const handleSave = () => {
         // Validación de campos requeridos
         if (role === "Author") {
@@ -174,18 +111,22 @@ export default function Profiles() {
           return;
         }
       
+        // Construcción del payload dinámico según el rol
         const payload = {
           token,
-          _id, // Este ID debe estar definido en el scope adecuado.
-          ...(role === "Author" && { Author: { ...formData } }),
-          ...(role === "Company" && { Company: { ...formData } }),
+          id: _id, // Asegúrate de que _id esté correctamente definido.
+          ...(role === "Author" && { author: { ...formData } }),
+          ...(role === "Company" && { company: { ...formData } }),
         };
       
+        // Acción de actualización dinámica según el rol
         const updateAction = role === "Author" ? updateAuthor : updateCompany;
       
         dispatch(updateAction(payload))
           .then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
+            console.log("Response:", response); // Depuración de la respuesta
+      
+            if (response.meta?.requestStatus === "fulfilled") {
               Swal.fire({
                 title: "Profile Updated",
                 text: "Your profile was updated successfully.",
@@ -193,15 +134,19 @@ export default function Profiles() {
                 confirmButtonText: "OK",
               });
             } else {
+              const errorMessage =
+                response.payload?.message || response.error?.message || "Unknown error";
+              console.error("Error Response:", response);
               Swal.fire({
                 title: "Update Failed",
-                text: `Error: ${response.error.message || "Unknown error"}`,
+                text: `Error: ${errorMessage}`,
                 icon: "error",
                 confirmButtonText: "Try Again",
               });
             }
           })
           .catch((err) => {
+            console.error("Catch Error:", err); // Depuración de errores
             Swal.fire({
               title: "Error",
               text: `An error occurred: ${err.message}`,
@@ -210,7 +155,7 @@ export default function Profiles() {
             });
           });
       };
-
+    
       
     const handleDelete = () => {
         const token = localStorage.getItem("token");

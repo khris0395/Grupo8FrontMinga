@@ -63,60 +63,94 @@ const AuthorProfiles = () => {
 
     const handleSave = () => {
         // Validación de campos requeridos
-        if (!formData.name || !formData.last_name || !formData.city) {
+        if (role === "Author") {
+          if (!formData.name || !formData.last_name || !formData.city) {
             Swal.fire({
-                title: "Incomplete Form",
-                text: "Please fill out all required fields.",
-                icon: "warning",
-                confirmButtonText: "OK",
+              title: "Incomplete Form",
+              text: "Please fill out all required fields.",
+              icon: "warning",
+              confirmButtonText: "OK",
             });
             return;
+          }
+        } else if (role === "Company") {
+          if (!formData.name || !formData.website || !formData.description) {
+            Swal.fire({
+              title: "Incomplete Form",
+              text: "Please fill out all required fields.",
+              icon: "warning",
+              confirmButtonText: "OK",
+            });
+            return;
+          }
         }
-
+      
         const token = localStorage.getItem("token");
         if (!token) {
-            Swal.fire({
-                title: "No Token Found",
-                text: "Please log in before making changes.",
-                icon: "error",
-                confirmButtonText: "Log In",
-            });
-            return;
+          Swal.fire({
+            title: "No Token Found",
+            text: "Please log in before making changes.",
+            icon: "error",
+            confirmButtonText: "Log In",
+          });
+          return;
         }
-
-        dispatch(
-            updateAuthor({
-                author: { ...formData },
-                token,
-                id,
-            })
-        )
-            .then((response) => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    Swal.fire({
-                        title: "Profile Updated",
-                        text: "Your profile was updated successfully.",
-                        icon: "success",
-                        confirmButtonText: "OK",
-                    });
-                } else {
-                    Swal.fire({
-                        title: "Update Failed",
-                        text: `Error: ${response.error.message || "Unknown error"}`,
-                        icon: "error",
-                        confirmButtonText: "Try Again",
-                    });
-                }
-            })
-            .catch((err) => {
-                Swal.fire({
-                    title: "Error",
-                    text: `An error occurred: ${err.message}`,
-                    icon: "error",
-                    confirmButtonText: "OK",
-                });
+      
+        if (!_id) {
+          Swal.fire({
+            title: "Error",
+            text: "No ID found. Please try again later.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+      
+        // Construcción del payload dinámico según el rol
+        const payload = {
+          token,
+          id: _id, // Asegúrate de que _id esté definido.
+          ...(role === "Author" && { author: { ...formData } }),
+          ...(role === "Company" && { company: { ...formData } }),
+        };
+      
+        // Acción de actualización dinámica según el rol
+        const updateAction = role === "Author" ? updateAuthor : updateCompany;
+      
+        dispatch(updateAction(payload))
+          .then((response) => {
+            console.log("Response:", response); // Depuración de la respuesta
+      
+            if (response.meta?.requestStatus === "fulfilled") {
+              Swal.fire({
+                title: "Profile Updated",
+                text: "Your profile was updated successfully.",
+                icon: "success",
+                confirmButtonText: "OK",
+              });
+            } else {
+              const errorMessage =
+                response.payload?.message || response.error?.message || "An unknown error occurred.";
+              console.error("Error Response:", response);
+              Swal.fire({
+                title: "Update Failed",
+                text: `Error: ${errorMessage}`,
+                icon: "error",
+                confirmButtonText: "Try Again",
+              });
+            }
+          })
+          .catch((err) => {
+            console.error("Catch Error:", err); // Depuración de errores
+            Swal.fire({
+              title: "Error",
+              text: `An unexpected error occurred: ${err.message}`,
+              icon: "error",
+              confirmButtonText: "OK",
             });
-    };
+          });
+      };
+      
 
 
 
